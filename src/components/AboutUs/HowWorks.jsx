@@ -5,25 +5,25 @@ const HowWorks = () => {
   const working = [
     {
       icon: <FaTaxi className="border rounded-full group-hover:bg-[#FFEE02] w-[70px] h-[70px] p-3" />,
-      title: "Book in Just 2 Taps",
-      description: "Easily book your taxi with just two taps using our user-friendly app.",
+      title: "Rezervă în doar 2 atingeri",
+      description: "Rezervează cu ușurință un taxi folosind aplicația noastră prietenoasă, în doar două atingeri.",
     },
     {
       icon: <FaMapMarkerAlt className="border rounded-full group-hover:bg-[#FFEE02] w-[70px] h-[70px] p-3" />,
-      title: "Track Your Driver",
-      description: "Monitor your ride in real-time and get accurate arrival estimates.",
+      title: "Urmează-ți șoferul",
+      description: "Monitorizează-ți călătoria în timp real și primește estimări exacte ale timpului de sosire.",
     },
     {
       icon: <FaCheckCircle className="border rounded-full group-hover:bg-[#FFEE02] w-[70px] h-[70px] p-3" />,
-      title: "Pick & Arrive Safely",
-      description: "Enjoy a safe and comfortable journey to your destination.",
+      title: "Călătorește în siguranță",
+      description: "Bucură-te de o călătorie sigură și confortabilă până la destinația ta.",
     },
   ];
 
   return (
     <div className="container mx-auto my-20 text-center">
-      <p className="uppercase">Order Taxi Online</p>
-      <h1 className="text-3xl md:text-5xl font-bold">How It Works</h1>
+      <p className="uppercase">Comandă un taxi online</p>
+      <h1 className="text-3xl md:text-5xl font-bold">Cum Funcționează</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3">
         {working.map((item, index) => (

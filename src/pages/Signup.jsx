@@ -11,12 +11,11 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    role:"",
+    role: "",
     password: "",
     rememberMe: false,
   });
 
-  // Handle Input Changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
@@ -25,17 +24,16 @@ export default function RegisterPage() {
     }));
   };
 
-  // Handle Form Submission
   const handleRegister = async (e) => {
     e.preventDefault();
     if (isLoading) return;
     const response = await userRegistration(formData);
     if (response.error) {
-      toast.error(response.error.data?.message || "Registration failed!", {
+      toast.error(response.error.data?.message || "Înregistrarea a eșuat!", {
         position: "top-center",
       });
     } else {
-      toast.success(response.data?.message || "Registration successful!", {
+      toast.success(response.data?.message || "Înregistrare reușită!", {
         position: "top-center",
       });
       navigate("/user-verification", { state: { user: formData } });
@@ -49,7 +47,7 @@ export default function RegisterPage() {
         <div className="hidden md:flex w-1/2 bg-gray-50 items-center justify-center">
           <img
             src={signup}
-            alt="Signup Illustration"
+            alt="Ilustrație înregistrare"
             className="w-[80%] object-cover rounded-lg shadow-lg"
           />
         </div>
@@ -60,18 +58,18 @@ export default function RegisterPage() {
           onSubmit={handleRegister}
         >
           <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
-            Create an Account
+            Creează un Cont
           </h2>
 
           <div className="mb-4">
             <label className="block text-gray-700 text-md font-medium">
-              Full Name
+              Nume complet
             </label>
             <input
               type="text"
               name="name"
               className="w-full border border-gray-300 p-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your full name"
+              placeholder="Introdu numele complet"
               value={formData.name}
               onChange={handleChange}
               required
@@ -86,7 +84,7 @@ export default function RegisterPage() {
               type="email"
               name="email"
               className="w-full border border-gray-300 p-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your email"
+              placeholder="Introdu adresa de email"
               value={formData.email}
               onChange={handleChange}
               required
@@ -95,21 +93,22 @@ export default function RegisterPage() {
 
           <div className="mb-4">
             <label className="block text-gray-700 text-md font-medium">
-              Password
+              Parolă
             </label>
             <input
               type="password"
               name="password"
               className="w-full border border-gray-300 p-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your password"
+              placeholder="Introdu parola"
               value={formData.password}
               onChange={handleChange}
               required
             />
           </div>
+
           <div className="mb-4">
             <label className="block text-gray-700 text-md font-medium">
-              Select Role
+              Selectează rolul
             </label>
             <select
               name="role"
@@ -119,10 +118,10 @@ export default function RegisterPage() {
               required
             >
               <option value="" disabled>
-                -- Select Role --
+                -- Selectează rolul --
               </option>
-              <option value="User">User</option>
-              <option value="Transporter">Transporter</option>
+              <option value="User">Utilizator</option>
+              <option value="Transporter">Transportator</option>
             </select>
           </div>
 
@@ -140,7 +139,7 @@ export default function RegisterPage() {
                 htmlFor="remember"
                 className="text-gray-600 cursor-pointer text-sm"
               >
-                Remember me
+                Ține-mă minte
               </label>
             </div>
           </div>
@@ -152,12 +151,12 @@ export default function RegisterPage() {
             }`}
             disabled={isLoading}
           >
-            {isLoading ? "Loading..." : "Create Account"}
+            {isLoading ? "Se încarcă..." : "Creează cont"}
           </button>
 
           <div className="flex items-center my-6">
             <div className="flex-grow h-px bg-gray-300"></div>
-            <span className="px-3 text-gray-500">OR</span>
+            <span className="px-3 text-gray-500">SAU</span>
             <div className="flex-grow h-px bg-gray-300"></div>
           </div>
 
@@ -170,7 +169,7 @@ export default function RegisterPage() {
               <FaGoogle className="text-white" />
             </div>
             <span className="ml-3 text-gray-700 font-medium">
-              Sign up with Google
+              Înscrie-te cu Google
             </span>
           </button>
         </form>

@@ -10,9 +10,9 @@ const ContactForm = () => {
       <div className="flex flex-col md:flex-row gap-10">
         {/* Left Section (Form) */}
         <div className="w-full md:w-[48%]">
-          <p className="uppercase text-gray-600">Send us email</p>
+          <p className="uppercase text-gray-600">Trimite-ne un mesaj</p>
           <h1 className="text-3xl md:text-5xl font-semibold">
-            Feel free to write
+            Scrie-ne fără ezitare
           </h1>
           <form
             type="submit"
@@ -21,35 +21,35 @@ const ContactForm = () => {
             <input
               type="text"
               name="name"
-              placeholder="Enter Name"
+              placeholder="Nume complet"
               className="w-full md:w-[48%] p-3 bg-[#F4F5F8] rounded outline-none focus:ring-2 focus:ring-[#FFEE02] transition duration-300"
             />
             <input
               type="email"
               name="email"
-              placeholder="Enter Email"
+              placeholder="Adresă de email"
               className="w-full md:w-[48%] p-3 bg-[#F4F5F8] rounded outline-none focus:ring-2 focus:ring-[#FFEE02] transition duration-300"
             />
             <input
               type="text"
               name="subject"
-              placeholder="Enter Subject"
+              placeholder="Subiectul mesajului"
               className="w-full md:w-[48%] p-3 bg-[#F4F5F8] rounded outline-none focus:ring-2 focus:ring-[#FFEE02] transition duration-300"
             />
             <input
               type="number"
               name="phone"
-              placeholder="Enter Phone"
+              placeholder="Număr de telefon"
               className="w-full md:w-[48%] p-3 bg-[#F4F5F8] rounded outline-none focus:ring-2 focus:ring-[#FFEE02] transition duration-300"
             />
             <textarea
               name="message"
-              placeholder="Enter Message"
+              placeholder="Scrie mesajul tău aici..."
               className="w-full min-h-[150px] p-3 bg-[#F4F5F8] rounded outline-none focus:ring-2 focus:ring-[#FFEE02] transition duration-300"
             />
             <div className="w-full">
               <Button
-                text="Discover More"
+                text="Trimite"
                 bgHover="black"
                 textHover="white"
                 cutHover="white"
@@ -60,30 +60,30 @@ const ContactForm = () => {
 
         {/* Right Section (Contact Details) */}
         <div className="w-full md:w-[48%]">
-          <p className="uppercase text-gray-600">Need any help?</p>
-          <h1 className="text-3xl md:text-5xl font-bold">Get in touch with us</h1>
+          <p className="uppercase text-gray-600">Ai nevoie de ajutor?</p>
+          <h1 className="text-3xl md:text-5xl font-bold">
+            Ia legătura cu echipa noastră
+          </h1>
           <p className="text-gray-600 text-sm my-4">
-            Lorem ipsum is simply free text available dolor sit amet consectetur
-            notted adipisicing elit sed do eiusmod tempor incididunt simply dolore
-            magna.
+            Suntem aici pentru a te ajuta cu informații despre trenurile din România și Italia. Scrie-ne pentru bilete, orare sau suport.
           </p>
 
           {/* Contact Info */}
           <div className="flex flex-col gap-5">
             <ContactInfo
               icon={<FiPhoneMissed />}
-              title="Have any question?"
-              text="Free +92 (020)-9850"
+              title="Ai întrebări?"
+              text="+40 123 456 789"
             />
             <ContactInfo
               icon={<MdEmail />}
-              title="Write email"
-              text="needhelp@company.com"
+              title="Scrie-ne pe email"
+              text="contact@bursatrains.ro"
             />
             <ContactInfo
               icon={<BsCursor />}
-              title="Visit anytime"
-              text="66 Brooklyn Golden Street, New York"
+              title="Ne găsești aici"
+              text="Str. Principală 99, București / Roma"
             />
           </div>
         </div>

@@ -22,13 +22,13 @@ export default function LoginPage() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" }); // Clear errors when user types
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
   const validateForm = () => {
     let tempErrors = {};
-    if (!formData.email) tempErrors.email = "Email is required";
-    if (!formData.password) tempErrors.password = "Password is required";
+    if (!formData.email) tempErrors.email = "Emailul este obligatoriu";
+    if (!formData.password) tempErrors.password = "Parola este obligatorie";
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
@@ -40,18 +40,18 @@ export default function LoginPage() {
     try {
       const resp = await loginUser(formData);
       if (resp.error) {
-        toast.error(resp.error.data?.message || "Login failed", {
+        toast.error(resp.error.data?.message || "Autentificare eșuată", {
           position: "top-center",
         });
       } else {
-        toast.success(resp.data?.message || "Login successful", {
+        toast.success(resp.data?.message || "Autentificare reușită", {
           position: "top-center",
         });
         dispatch(setProfile(resp.data?.user));
         navigate("/");
       }
     } catch (error) {
-      toast.error("An unexpected error occurred", { position: "top-center" });
+      toast.error("A apărut o eroare neașteptată", { position: "top-center" });
     }
   };
 
@@ -59,26 +59,28 @@ export default function LoginPage() {
     setGoogleLoading(true);
     setTimeout(() => {
       setGoogleLoading(false);
-      toast.info("Google Sign-in coming soon!", { position: "top-center" });
+      toast.info("Autentificarea cu Google va fi disponibilă în curând!", {
+        position: "top-center",
+      });
     }, 2000);
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white shadow-lg rounded-xl overflow-hidden">
-        
+
         {/* Left Side - Login Form */}
         <div className="w-full md:w-1/2 flex flex-col p-8">
           <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
-            Welcome Back
+            Bine ai revenit
           </h2>
           <p className="text-gray-600 text-sm text-center mb-6">
-            Start your journey with us. Don’t have an account?{" "}
+            Începe-ți călătoria cu noi. Nu ai un cont?{" "}
             <Link
               to="/sign-up"
               className="text-red-600 hover:underline font-semibold cursor-pointer"
             >
-              Sign up
+              Creează cont
             </Link>
           </p>
 
@@ -91,7 +93,7 @@ export default function LoginPage() {
                 type="email"
                 name="email"
                 className="w-full border border-gray-300 p-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter your email"
+                placeholder="Introdu adresa de email"
                 value={formData.email}
                 onChange={handleChange}
               />
@@ -100,14 +102,14 @@ export default function LoginPage() {
 
             <div className="mb-4 relative">
               <label className="block text-gray-700 text-md font-medium">
-                Password
+                Parolă
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   className="w-full border border-gray-300 p-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
-                  placeholder="Enter your password"
+                  placeholder="Introdu parola"
                   value={formData.password}
                   onChange={handleChange}
                 />
@@ -125,14 +127,14 @@ export default function LoginPage() {
               <div className="flex items-center">
                 <input type="checkbox" id="remember" className="mr-2" />
                 <label htmlFor="remember" className="text-gray-600 text-sm">
-                  Remember me
+                  Ține-mă minte
                 </label>
               </div>
               <Link
                 to="/forgot-password"
                 className="text-red-600 hover:underline font-medium cursor-pointer text-sm"
               >
-                Forgot password?
+                Ai uitat parola?
               </Link>
             </div>
 
@@ -143,13 +145,13 @@ export default function LoginPage() {
               }`}
               disabled={isLoading}
             >
-              {isLoading ? "Signing in..." : "Sign in to your account"}
+              {isLoading ? "Se conectează..." : "Conectează-te la contul tău"}
             </button>
           </form>
 
           <div className="flex items-center my-6">
             <div className="flex-grow h-px bg-gray-300"></div>
-            <span className="px-3 text-gray-500">OR</span>
+            <span className="px-3 text-gray-500">SAU</span>
             <div className="flex-grow h-px bg-gray-300"></div>
           </div>
 
@@ -163,7 +165,7 @@ export default function LoginPage() {
               <FaGoogle className="text-white" />
             </div>
             <span className="ml-3 text-gray-700 font-medium">
-              {googleLoading ? "Signing in with Google..." : "Sign in with Google"}
+              {googleLoading ? "Se conectează cu Google..." : "Conectează-te cu Google"}
             </span>
           </button>
         </div>
@@ -172,7 +174,7 @@ export default function LoginPage() {
         <div className="hidden md:flex w-1/2 bg-gray-50 items-center justify-center">
           <img
             src={loginImage}
-            alt="Login Illustration"
+            alt="Ilustrație autentificare"
             className="w-[80%] object-cover rounded-lg shadow-lg"
           />
         </div>

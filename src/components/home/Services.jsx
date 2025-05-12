@@ -6,40 +6,43 @@ import service7 from "../../assets/home/service5-3.jpg";
 const Services = () => {
   const services = [
     {
-      title: "Business Transfer",
+      title: "Transfer de Afaceri",
       description:
-        "Lorem ipsum dolor sit amet, consectne auctor aliquet Aenean solli lorem tim bibendum auctor.",
+        "Oferim transferuri rapide și sigure pentru afaceri, asigurându-ne că ajungi la destinație în timp util și în confort.",
       image: service5,
     },
     {
-      title: "Online Booking",
+      title: "Rezervare Online",
       description:
-        "Lorem ipsum dolor sit amet, consectne auctor aliquet Aenean solli lorem tim bibendum auctor.",
+        "Rezervă taxiul sau serviciul dorit direct de pe site-ul nostru, rapid și simplu, oricând și de oriunde.",
       image: service6,
     },
     {
-      title: "City Transport",
+      title: "Transport Urban",
       description:
-        "Lorem ipsum dolor sit amet, consectne auctor aliquet Aenean solli lorem tim bibendum auctor.",
+        "Oferim transport urban eficient și confortabil, asigurându-ne că ajungi la destinație într-un timp scurt și fără stres.",
       image: service7,
     },
   ];
   return (
     <div className="bg-[#F5F5F5] text-center mt-20 py-16">
       <p className="text-lg text-amber-500 font-semibold tracking-wide">
-        LATEST SERVICES
+        SERVICIILE NOASTRE
       </p>
       <h1 className="text-3xl md:text-5xl font-bold w-full md:w-[50%] mx-auto leading-tight text-gray-900">
-        Check Out Our All-Time Best Services
+        Descoperă cele mai bune servicii de pe site-ul nostru
       </h1>
 
       {/* Services Grid */}
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-12 px-6 md:px-12">
-        {services.map((data,index) => (
-          <div key={index} className=" transition-all group duration-500 overflow-hidden relative"
-          style={{
-            clipPath: "polygon(0 12%, 100% 0, 100% 100%, 0% 100%)",
-          }}>
+        {services.map((data, index) => (
+          <div
+            key={index}
+            className=" transition-all group duration-500 overflow-hidden relative"
+            style={{
+              clipPath: "polygon(0 12%, 100% 0, 100% 100%, 0% 100%)",
+            }}
+          >
             <div
               className="bg-[#ffee02cd] group-hover:bg-black transition-all duration-500 w-full mx-auto h-[220px] top-10 absolute"
               style={{
@@ -48,7 +51,7 @@ const Services = () => {
             ></div>
             <img
               src={data.image}
-              alt="Service"
+              alt="Serviciu"
               className="h-60 w-full object-cover transition-all duration-500 group-hover:scale-110"
               style={{
                 clipPath: "polygon(0 19%, 100% 0, 100% 79%, 0% 100%)",
@@ -58,9 +61,7 @@ const Services = () => {
               <h2 className="text-2xl font-semibold text-gray-800">
                 {data.title}
               </h2>
-              <p className="text-gray-700 mt-3 text-sm">
-                {data.description}
-              </p>
+              <p className="text-gray-700 mt-3 text-sm">{data.description}</p>
             </div>
           </div>
         ))}

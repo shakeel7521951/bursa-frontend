@@ -5,7 +5,7 @@ import Header from "../components/contact/Header";
 const Services = () => {
   return (
     <div>
-      <Header name="Services" title="Services" />
+      <Header name="Servicii" title="Servicii" />
       <OurServices />
     </div>
   );

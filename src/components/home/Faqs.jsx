@@ -8,19 +8,19 @@ const Faqs = () => {
 
   const faqs = [
     {
-      question: "How to book a taxi cab in a city tour?",
+      question: "Cum să rezerv un taxi pentru un tur al orașului?",
       answer:
-        "Sed perspiciatis unde omnis iste natus voluptatem accusantium doloremque laudantium, totam aperiam eaque quae inventore veritatis et quasi architecto beatae vitae dicta.",
+        "Este simplu! Poți rezerva un taxi pentru tururi ale orașului direct de pe platforma noastră, alegând data, ora și destinația dorită.",
     },
     {
-      question: "What are the payment options available?",
+      question: "Ce opțiuni de plată sunt disponibile?",
       answer:
-        "We accept credit cards, debit cards, and digital wallets for a seamless transaction experience.",
+        "Acceptăm carduri de credit, carduri de debit și portofele digitale pentru o experiență de tranzacționare rapidă și sigură.",
     },
     {
-      question: "Can I cancel my booking?",
+      question: "Pot anula rezervarea?",
       answer:
-        "Yes, you can cancel your booking up to 24 hours before your scheduled ride without any charges.",
+        "Da, poți anula rezervarea cu până la 24 de ore înainte de călătoria programată, fără taxe suplimentare.",
     },
   ];
 
@@ -30,11 +30,11 @@ const Faqs = () => {
 
   return (
     <div className="container flex gap-20 my-5 mx-auto md:h-[90vh] items-center">
-      {/* FAQ Section */}
+      {/* Secțiunea FAQ */}
       <div className="w-[100%] md:w-[50%] mx-5 pt-20">
-        <p className="mb-2">Have you any question?</p>
+        <p className="mb-2">Ai vreo întrebare?</p>
         <h1 className="text-3xl md:text-5xl font-bold mb-6">
-          Frequently Asked Questions?
+          Întrebări Frecvente
         </h1>
 
         <div className="mt-10">
@@ -61,7 +61,7 @@ const Faqs = () => {
         </div>
       </div>
 
-      {/* Image Section */}
+      {/* Secțiunea Imagini */}
       <div className="hidden md:flex w-[50%] items-center justify-center relative">
         <div
           className="bg-black h-[220px] w-[150px] mr-[-120px] left-0 -translate-y-1/2"

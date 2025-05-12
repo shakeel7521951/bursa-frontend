@@ -10,9 +10,9 @@ const ServicesSection = () => {
   const services = [
     {
       id: 1,
-      title: "Regular Transport",
+      title: "Transport Regulat",
       description:
-        "Reliable and affordable transport for your everyday commute, ensuring a comfortable and smooth journey.",
+        "Transport fiabil și accesibil pentru deplasările tale zilnice, asigurând o călătorie confortabilă și lină.",
       image: services1,
       icon: (
         <FaTaxi className="text-black text-3xl group-hover:text-white transition-all duration-500" />
@@ -20,9 +20,9 @@ const ServicesSection = () => {
     },
     {
       id: 2,
-      title: "Business Transport",
+      title: "Transport de Afaceri",
       description:
-        "Executive business transport with luxury vehicles, offering professionalism and comfort for corporate needs.",
+        "Transport de afaceri cu vehicule de lux, oferind profesionalism și confort pentru nevoile corporative.",
       image: services1,
       icon: (
         <FaBusinessTime className="text-black text-3xl group-hover:text-white transition-all duration-500" />
@@ -30,9 +30,9 @@ const ServicesSection = () => {
     },
     {
       id: 3,
-      title: "Tour Transport",
+      title: "Transport pentru Tururi",
       description:
-        "Enjoy seamless and guided tour transport services, making your travel experience safe and memorable.",
+        "Bucură-te de servicii de transport pentru tururi ghidate, făcând experiența ta de călătorie sigură și memorabilă.",
       image: services1,
       icon: (
         <FaMapMarkedAlt className="text-black text-3xl group-hover:text-white transition-all duration-500" />
@@ -42,7 +42,7 @@ const ServicesSection = () => {
 
   return (
     <div className="bg-[#F5F5F5] py-10">
-      <h1 className="text-3xl md:text-5xl text-center">Popular Services</h1>
+      <h1 className="text-3xl md:text-5xl text-center">Servicii Populare</h1>
       <div className="container md:w-[85%] mx-auto my-10 grid grid-cols-1 md:grid-cols-3 gap-10">
         {services.map((service) => (
           <Link to="/services">

@@ -7,7 +7,7 @@ import Header from "../components/contact/Header";
 const Blogs = () => {
   return (
     <div>
-      <Header title="Blogs" name="Our Blogs"/>
+      <Header title="Bloguri" name="Blogurile noastre"/>
       <Heading />
       <div className="grid grid-cols-3">
         <div className="md:col-span-1">

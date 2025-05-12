@@ -11,27 +11,26 @@ import { FaFacebook } from "react-icons/fa";
 const Footer = () => {
   return (
     <div className="bg-black px-10 pt-10 mt-10">
-      {/* Top Section */}
+      {/* Secțiunea de Sus */}
       <div className="flex flex-col md:flex-row justify-between gap-6">
         {/* Logo */}
         <div className="w-full md:w-[20%] flex justify-center md:justify-start">
           <img
             src={logo}
-            alt="company logo"
+            alt="sigla companiei"
             loading="lazy"
             className="w-fit h-12"
           />
         </div>
 
-        {/* Description */}
+        {/* Descriere */}
         <div className="w-full md:w-[30%] text-center md:text-left">
           <p className="text-white">
-            Logo Authoritatively simplify open-source resources via backend
-            visualize business e-markets before parallel.
+            Bursa Trans România-Italia oferă servicii rapide și sigure de transport persoane și colete între România și Italia. Ne mândrim cu punctualitatea, confortul și profesionalismul echipei noastre.
           </p>
         </div>
 
-        {/* Call for Taxi */}
+        {/* Apel Taxi */}
         <div className="w-full md:w-[30%] relative">
           <div
             className="max-w-[300px] h-[60px] md:h-[70px] bg-[#FFEE02]"
@@ -41,7 +40,7 @@ const Footer = () => {
             <HiOutlineDevicePhoneMobile className="text-4xl me-2" />
             <div>
               <p className="uppercase text-sm md:font-semibold">
-                Call for Taxi
+                Sună pentru rezervare
               </p>
               <p className="text-md md:text-xl lg:text-2xl">5267-214-392</p>
             </div>
@@ -49,46 +48,46 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Section */}
+      {/* Secțiunea de Jos */}
       <div className="container mt-10 mx-auto flex flex-col md:flex-row justify-between">
-        {/* Download Mobile App */}
+        {/* Descărcare Aplicație Mobilă */}
         <div className="flex mt-5 text-white">
           <div className="max-w-[300px]">
-            <h3 className="font-bold text-2xl">Download Mobile App</h3>
+            <h3 className="font-bold text-2xl">Descarcă Aplicația</h3>
             <div className="relative mt-2">
               <hr className="w-[90%] border-gray-500" />
               <hr className="w-[30%] bg-[#FFEE02] h-1 rounded-full mt-[-2px]" />
             </div>
             <p className="mt-2 text-sm text-gray-400">
-              Competently re-engineer cross-media breed meta-services.
+              Administrează rezervările și urmărește cursele cu aplicația noastră.
             </p>
             <div className="flex gap-4 mt-5">
               <img
                 src={appStore}
                 className="w-32 h-12 cursor-pointer"
-                alt="Download from App Store"
+                alt="Descarcă din App Store"
                 loading="lazy"
               />
               <img
                 src={googlePlay}
                 className="w-32 h-12 cursor-pointer"
-                alt="Download from Google Play"
+                alt="Descarcă din Google Play"
                 loading="lazy"
               />
             </div>
           </div>
         </div>
 
-        {/* Useful Links */}
+        {/* Linkuri Utile */}
         <div className="flex mt-5 text-white">
           <div className="max-w-[300px]">
-            <h3 className="font-bold text-2xl uppercase">Useful Links</h3>
+            <h3 className="font-bold text-2xl uppercase">Linkuri Utile</h3>
             <div className="relative mt-2">
               <hr className="w-[90%] border-gray-500" />
               <hr className="w-[30%] bg-[#FFEE02] h-1 rounded-full mt-[-2px]" />
             </div>
             <div className="flex flex-col gap-3 mt-2">
-              {["Home", "Services", "About Us", "Contact Us"].map((item, index) => (
+              {["Acasă", "Servicii", "Despre Noi", "Contact"].map((item, index) => (
                 <div key={index} className="flex gap-2 items-center">
                   <LuChevronsLeft className="mt-0.5" />
                   <Link
@@ -112,15 +111,15 @@ const Footer = () => {
               <hr className="w-[30%] bg-[#FFEE02] h-1 rounded-full mt-[-2px]" />
             </div>
             <p className="my-2 text-sm text-gray-400">
-              Signup for our weekly Newsletter updates.
+              Abonează-te pentru a primi cele mai recente oferte și noutăți.
             </p>
             <div>
               <input
                 type="email"
                 className="p-3 mb-4 border border-gray-300 w-full max-w-[250px] rounded-md outline-none"
-                placeholder="Enter your email"
+                placeholder="Introdu adresa ta de email"
               />
-              <Button text="Subscribe" />
+              <Button text="Abonează-te" />
             </div>
           </div>
         </div>
@@ -129,7 +128,7 @@ const Footer = () => {
       <div className="container mx-auto mt-4 pb-4 flex justify-between items-center">
         <div>
           <p className="text-white">
-            © Copyright Citycar Reserved By Kodesolution.com
+            © Drepturi rezervate Bursa Trans România-Italia
           </p>
         </div>
         <div>

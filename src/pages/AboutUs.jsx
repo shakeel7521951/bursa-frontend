@@ -9,7 +9,7 @@ import GetApp from "../components/AboutUs/GetApp";
 const About1 = () => {
   return (
     <>
-      <Header title="About" name="About Us" />
+      <Header title="Despre" name="Despre noi" />
       <TrustedCabService />
       <HowWorks />
       <Drivers />

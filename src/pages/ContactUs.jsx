@@ -6,7 +6,7 @@ const ContactUs = () => {
       
   return (
     <div>
-      <Header name="Contact Us" title="Contact"/>
+      <Header name="Contactaţi-ne" title="Contact"/>
       <ContactForm />
       <Map />
     </div>
