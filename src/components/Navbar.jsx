@@ -5,7 +5,8 @@ import { selectUserProfile, clearProfile } from "../redux/slices/UserSlice";
 import { useLogoutMutation } from "../redux/slices/UserApi";
 import { toast } from "react-toastify";
 // import logo from "../assets/logo-2.png";
-import logo from "../assets/logo.png";
+// import logo from "../assets/logo.png";
+import logo from "../assets/companyLogo.png";
 import { IoMdMenu, IoMdClose } from "react-icons/io";
 import Button from "./Button";
 
@@ -39,7 +40,7 @@ const Navbar = () => {
       <div className="container mx-auto py-4 flex justify-between items-center">
         <div>
           <Link to="/">
-            <img src={logo} alt="Company Logo" className="w-24 h-12" />
+            <img src={logo} alt="Company Logo" className="h-12" />
           </Link>
         </div>
 
@@ -122,7 +123,7 @@ const Navbar = () => {
                           setDropdownOpen(false);
                         }}
                       >
-                        Dashboard
+                        Admin
                       </li>
                     )}
                     {userProfile.role === "Transporter" && (
