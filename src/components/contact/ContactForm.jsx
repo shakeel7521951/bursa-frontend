@@ -1,4 +1,3 @@
-import React from "react";
 import { FiPhoneMissed } from "react-icons/fi";
 import { MdEmail } from "react-icons/md";
 import { BsCursor } from "react-icons/bs";
@@ -65,7 +64,7 @@ const ContactForm = () => {
             Ia legătura cu echipa noastră
           </h1>
           <p className="text-gray-600 text-sm my-4">
-            Suntem aici pentru a te ajuta cu informații despre trenurile din România și Italia. Scrie-ne pentru bilete, orare sau suport.
+            Suntem aici pentru a te ajuta cu informații despre transporturi între România și Italia. Scrie-ne pentru detalii despre curse, bilete sau orare.
           </p>
 
           {/* Contact Info */}

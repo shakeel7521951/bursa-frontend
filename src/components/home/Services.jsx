@@ -6,31 +6,32 @@ import service7 from "../../assets/home/service5-3.jpg";
 const Services = () => {
   const services = [
     {
-      title: "Transfer de Afaceri",
+      title: "Transport Persoane România - Italia",
       description:
-        "Oferim transferuri rapide și sigure pentru afaceri, asigurându-ne că ajungi la destinație în timp util și în confort.",
+        "Găsește curse disponibile postate de transportatori și rezervă-ți locul ușor pentru o călătorie confortabilă.",
       image: service5,
     },
     {
-      title: "Rezervare Online",
+      title: "Trimite Colete Rapid",
       description:
-        "Rezervă taxiul sau serviciul dorit direct de pe site-ul nostru, rapid și simplu, oricând și de oriunde.",
+        "Trimite pachete între România și Italia în siguranță. Transportatori reali și comunicare directă.",
       image: service6,
     },
     {
-      title: "Transport Urban",
+      title: "Platformă de Rezervare",
       description:
-        "Oferim transport urban eficient și confortabil, asigurându-ne că ajungi la destinație într-un timp scurt și fără stres.",
+        "Rezervă-ți locul într-o cursă sau trimite un colet. Transportatorul acceptă sau refuză cererea ta.",
       image: service7,
     },
   ];
+
   return (
     <div className="bg-[#F5F5F5] text-center mt-20 py-16">
       <p className="text-lg text-amber-500 font-semibold tracking-wide">
         SERVICIILE NOASTRE
       </p>
-      <h1 className="text-3xl md:text-5xl font-bold w-full md:w-[50%] mx-auto leading-tight text-gray-900">
-        Descoperă cele mai bune servicii de pe site-ul nostru
+      <h1 className="text-3xl md:text-5xl font-bold w-full md:w-[70%] mx-auto leading-tight text-gray-900">
+        Conectăm pasagerii și transportatorii pentru curse România - Italia
       </h1>
 
       {/* Services Grid */}
@@ -38,7 +39,7 @@ const Services = () => {
         {services.map((data, index) => (
           <div
             key={index}
-            className=" transition-all group duration-500 overflow-hidden relative"
+            className="transition-all group duration-500 overflow-hidden relative"
             style={{
               clipPath: "polygon(0 12%, 100% 0, 100% 100%, 0% 100%)",
             }}
@@ -51,7 +52,7 @@ const Services = () => {
             ></div>
             <img
               src={data.image}
-              alt="Serviciu"
+              alt={data.title}
               className="h-60 w-full object-cover transition-all duration-500 group-hover:scale-110"
               style={{
                 clipPath: "polygon(0 19%, 100% 0, 100% 79%, 0% 100%)",

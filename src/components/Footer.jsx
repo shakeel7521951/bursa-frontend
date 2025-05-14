@@ -26,7 +26,9 @@ const Footer = () => {
         {/* Descriere */}
         <div className="w-full md:w-[30%] text-center md:text-left">
           <p className="text-white">
-            Bursa Trans România-Italia oferă servicii rapide și sigure de transport persoane și colete între România și Italia. Ne mândrim cu punctualitatea, confortul și profesionalismul echipei noastre.
+            Bursa Trans România-Italia oferă servicii rapide și sigure de
+            transport persoane și colete între România și Italia. Ne mândrim cu
+            punctualitatea, confortul și profesionalismul echipei noastre.
           </p>
         </div>
 
@@ -59,7 +61,8 @@ const Footer = () => {
               <hr className="w-[30%] bg-[#FFEE02] h-1 rounded-full mt-[-2px]" />
             </div>
             <p className="mt-2 text-sm text-gray-400">
-              Administrează rezervările și urmărește cursele cu aplicația noastră.
+              Administrează rezervările și urmărește cursele cu aplicația
+              noastră.
             </p>
             <div className="flex gap-4 mt-5">
               <img
@@ -87,17 +90,19 @@ const Footer = () => {
               <hr className="w-[30%] bg-[#FFEE02] h-1 rounded-full mt-[-2px]" />
             </div>
             <div className="flex flex-col gap-3 mt-2">
-              {["Acasă", "Servicii", "Despre Noi", "Contact"].map((item, index) => (
-                <div key={index} className="flex gap-2 items-center">
-                  <LuChevronsLeft className="mt-0.5" />
-                  <Link
-                    to={`/${item.toLowerCase().replace(" ", "-")}`}
-                    className="relative text-white transition-all duration-300 ease-in-out after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-[#FFEE02] after:transition-all after:duration-300 hover:after:w-full rounded-full"
-                  >
-                    {item}
-                  </Link>
-                </div>
-              ))}
+              {["Acasă", "Servicii", "Despre Noi", "Contact"].map(
+                (item, index) => (
+                  <div key={index} className="flex gap-2 items-center">
+                    <LuChevronsLeft className="mt-0.5" />
+                    <Link
+                      to={`/${item.toLowerCase().replace(" ", "-")}`}
+                      className="relative text-white transition-all duration-300 ease-in-out after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-[#FFEE02] after:transition-all after:duration-300 hover:after:w-full rounded-full"
+                    >
+                      {item}
+                    </Link>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </div>

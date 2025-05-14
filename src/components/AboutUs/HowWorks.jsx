@@ -1,28 +1,28 @@
 import React from "react";
-import { FaTaxi, FaMapMarkerAlt, FaCheckCircle } from "react-icons/fa";
+import { FaMapMarkerAlt, FaCalendarAlt, FaCheckCircle } from "react-icons/fa";
 
 const HowWorks = () => {
   const working = [
     {
-      icon: <FaTaxi className="border rounded-full group-hover:bg-[#FFEE02] w-[70px] h-[70px] p-3" />,
-      title: "Rezervă în doar 2 atingeri",
-      description: "Rezervează cu ușurință un taxi folosind aplicația noastră prietenoasă, în doar două atingeri.",
+      icon: <FaMapMarkerAlt className="border rounded-full group-hover:bg-[#FFEE02] w-[70px] h-[70px] p-3" />,
+      title: "Călătorește între România și Italia",
+      description: "Găsește curse planificate între orașele din România și Italia, disponibile pentru rezervare în avans.",
     },
     {
-      icon: <FaMapMarkerAlt className="border rounded-full group-hover:bg-[#FFEE02] w-[70px] h-[70px] p-3" />,
-      title: "Urmează-ți șoferul",
-      description: "Monitorizează-ți călătoria în timp real și primește estimări exacte ale timpului de sosire.",
+      icon: <FaCalendarAlt className="border rounded-full group-hover:bg-[#FFEE02] w-[70px] h-[70px] p-3" />,
+      title: "Rezervă-ți locul din timp",
+      description: "Alege data și destinația dorită pentru a rezerva locul în minibusul sau autobuzul preferat.",
     },
     {
       icon: <FaCheckCircle className="border rounded-full group-hover:bg-[#FFEE02] w-[70px] h-[70px] p-3" />,
-      title: "Călătorește în siguranță",
-      description: "Bucură-te de o călătorie sigură și confortabilă până la destinația ta.",
+      title: "Călătorește confortabil și în siguranță",
+      description: "Bucură-te de un transport sigur, planificat, cu locuri disponibile și condiții optime pentru călătorii lungi.",
     },
   ];
 
   return (
     <div className="container mx-auto my-20 text-center">
-      <p className="uppercase">Comandă un taxi online</p>
+      <p className="uppercase">Transport planificat între România și Italia</p>
       <h1 className="text-3xl md:text-5xl font-bold">Cum Funcționează</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3">
