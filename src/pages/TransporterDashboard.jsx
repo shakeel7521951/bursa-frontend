@@ -2,15 +2,16 @@ import { motion } from "framer-motion";
 import { Edit, Search, Trash2 } from "lucide-react";
 import { useState } from "react";
 import AddNewService from "../components/transporterDashboard/AddNewService";
-import { useDeleteServiceMutation, useGetIndividualServicesQuery } from "../redux/slices/ServiceApi";
+import {
+  useDeleteServiceMutation,
+  useGetIndividualServicesQuery,
+} from "../redux/slices/ServiceApi";
 import UpdateService from "../components/dashboard/products/UpdateProduct";
 import AlertDialog from "../components/dashboard/alert/AlertDialog";
-// import AlertDialog from "../alert/AlertDialog";
-// import { toast } from "react-toastify";
 
 const TransporterDashboard = () => {
   const { data, isLoading, isError } = useGetIndividualServicesQuery();
-
+  console.log(data);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [addProductOpen, setAddProductOpen] = useState(false);
@@ -18,12 +19,14 @@ const TransporterDashboard = () => {
   const [isOpenUpdate, setOpenUpdate] = useState(false);
   const [deleteService] = useDeleteServiceMutation();
 
-  // Filter products based on search
-  const filteredProducts = (data?.services || []).filter(
-    (service) =>
-      service.serviceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      service.serviceCategory.toLowerCase().includes(searchTerm.toLowerCase())
+  // Filter services based on search
+  const filteredServices = (data?.services || []).filter(
+    ({ serviceName, serviceCategory, destinationFrom, destinationTo }) =>
+      [serviceName, serviceCategory, destinationFrom, destinationTo].some(
+        (field) => field.toLowerCase().includes(searchTerm.toLowerCase())
+      )
   );
+
   const handleDelete = async () => {
     try {
       if (selectedProduct?._id) {
@@ -76,12 +79,14 @@ const TransporterDashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-blue-700">Services List</h2>
-          <div className="relative">
+        <div className="flex flex-col gap-4 sm:flex-row justify-between items-center mb-6">
+          <h2 className="text-xl font-semibold text-blue-700 me-auto">
+            Services List
+          </h2>
+          <div className="relative ms-auto">
             <input
               type="text"
-              placeholder="Search cars..."
+              placeholder="Search services..."
               className="bg-white text-blue-700 placeholder-blue-700 rounded-lg pl-10 pr-4 border py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               onChange={(e) => setSearchTerm(e.target.value)}
               value={searchTerm}
@@ -94,10 +99,13 @@ const TransporterDashboard = () => {
         </div>
 
         <div className="overflow-x-auto overflow-y-auto">
-          {filteredProducts.length > 0 ? (
+          {filteredServices.length > 0 ? (
             <table className="min-w-full divide-y divide-gray-700">
               <thead>
                 <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">
+                    Image
+                  </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">
                     Name
                   </th>
@@ -107,8 +115,14 @@ const TransporterDashboard = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">
                     Price
                   </th>
+                  <th className="px-6 py-3 text-left text-nowrap text-xs font-medium text-blue-700 uppercase">
+                    Available Seats
+                  </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">
-                    Passengers
+                    Route
+                  </th>
+                  <th className="px-6 py-3 text-left text-nowrap text-xs font-medium text-blue-700 uppercase">
+                    Departure Time
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">
                     Actions
@@ -116,7 +130,7 @@ const TransporterDashboard = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-700">
-                {filteredProducts.map((service) => (
+                {filteredServices.map((service) => (
                   <motion.tr
                     key={service._id}
                     initial={{ opacity: 0 }}
@@ -129,8 +143,10 @@ const TransporterDashboard = () => {
                           service.servicePic || "https://via.placeholder.com/50"
                         }
                         alt={service.serviceName}
-                        className="size-10 rounded-full"
+                        className="w-10 h-10 rounded-full"
                       />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
                       {service.serviceName}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
@@ -140,8 +156,15 @@ const TransporterDashboard = () => {
                       ${service.price}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                      {service.passengers}
+                      {service.availableSeats} / {service.totalSeats}
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
+                      {service.destinationFrom} → {service.destinationTo}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
+                      {service.departureTime}{" "}
+                    </td>
+
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
                       <button
                         className="text-indigo-500 cursor-pointer hover:text-indigo-300 mr-2"

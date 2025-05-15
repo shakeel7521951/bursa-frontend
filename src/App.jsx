@@ -9,7 +9,7 @@ import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Signup";
 import EmailOTPForm from "./pages/VerifyOtp";
 import About from "./pages/AboutUs";
-import Booking from "./pages/Booking";
+import BookingModal from "./pages/Booking";
 import VerifyUser from "./pages/VerifyUser";
 import MyProfile from "./pages/MyProfile";
 import UpdatePassword from "./pages/UpdatePassword";
@@ -69,7 +69,7 @@ const router = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "/home", element: <Home /> },
       { path: "/services", element: <Services /> },
-      { path: "/booking/:id", element: <Booking /> },
+      { path: "/booking/:id", element: <BookingModal /> },
       { path: "/contact-us", element: <ContactUs /> },
       { path: "/about-us", element: <About /> },
       { path: "/my-profile", element: <MyProfile /> },

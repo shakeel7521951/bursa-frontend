@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useCreateOrderMutation } from "../../redux/slices/OrderSlices";
 import { toast } from "react-toastify";
 
-const Modal = () => {
+const BookingModal = () => {
   const location = useLocation();
   const service = location.state?.service;
   const navigate = useNavigate();
@@ -185,4 +185,4 @@ const Modal = () => {
   );
 };
 
-export default Modal;
+export default BookingModal;
