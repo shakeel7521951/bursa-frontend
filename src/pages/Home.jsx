@@ -12,7 +12,7 @@ const Home = () => {
       <Header />
       <TrustedCabService />
       <Services />
-      <Plan />
+      {/* <Plan /> */}
       <PopularServices />
       <Faqs />
     </div>

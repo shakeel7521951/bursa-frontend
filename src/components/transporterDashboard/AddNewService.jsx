@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useCreateServiceMutation } from "../../redux/slices/ServiceApi";
 import { toast } from "react-toastify";
 
-const AddNewService = ({ isOpen, onClose }) => {
+const AddNewService = ({ isOpen, onClose, userId }) => {
   const [createService, { isLoading }] = useCreateServiceMutation();
 
   const [product, setProduct] = useState({
@@ -13,9 +13,10 @@ const AddNewService = ({ isOpen, onClose }) => {
     destinationTo: "",
     totalSeats: "",
     availableSeats: "",
-    price: "",
+    pricePerSeat: "",
     servicePic: null,
     departureTime: "",
+    travelDate: "",
   });
 
   const [imagePreview, setImagePreview] = useState(null);
@@ -61,8 +62,15 @@ const AddNewService = ({ isOpen, onClose }) => {
       formData.append("destinationTo", product.destinationTo);
       formData.append("totalSeats", product.totalSeats);
       formData.append("availableSeats", product.availableSeats);
-      formData.append("price", product.price);
+      formData.append("pricePerSeat", product.pricePerSeat);
       formData.append("departureTime", product.departureTime);
+      formData.append("travelDate", product.travelDate);
+
+      // Add transporter from props or context
+      if (userId) {
+        formData.append("transporter", userId);
+      }
+
       if (product.servicePic) {
         formData.append("servicePic", product.servicePic);
       }
@@ -142,35 +150,26 @@ const AddNewService = ({ isOpen, onClose }) => {
                 >
                   <option value="">Select a category</option>
                   <option value="Bus">Bus</option>
-                  <option value="Taxi">Taxi</option>
                   <option value="Shared Ride">Shared Ride</option>
                   <option value="Rental">Rental</option>
                   <option value="Cargo">Cargo</option>
                 </select>
               </div>
 
-              {/* Other Fields */}
-              {[
-                { label: "From (City)", name: "destinationFrom", type: "text" },
-                { label: "To (City)", name: "destinationTo", type: "text" },
-                { label: "Total Seats", name: "totalSeats", type: "number" },
-                { label: "Available Seats", name: "availableSeats", type: "number" },
-                { label: "Price", name: "price", type: "number" },
-              ].map((field, idx) => (
-                <div key={idx}>
-                  <label className="block text-sm font-medium text-gray-700">
-                    {field.label}:
-                  </label>
-                  <input
-                    type={field.type}
-                    name={field.name}
-                    value={product[field.name]}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                    required
-                  />
-                </div>
-              ))}
+              {/* Travel Date */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Travel Date:
+                </label>
+                <input
+                  type="date"
+                  name="travelDate"
+                  value={product.travelDate}
+                  onChange={handleChange}
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  required
+                />
+              </div>
 
               {/* Departure Time */}
               <div>
@@ -186,6 +185,37 @@ const AddNewService = ({ isOpen, onClose }) => {
                   required
                 />
               </div>
+
+              {/* Other Fields */}
+              {[
+                { label: "From (City)", name: "destinationFrom", type: "text" },
+                { label: "To (City)", name: "destinationTo", type: "text" },
+                { label: "Total Seats", name: "totalSeats", type: "number" },
+                {
+                  label: "Available Seats",
+                  name: "availableSeats",
+                  type: "number",
+                },
+                {
+                  label: "Price Per Seat",
+                  name: "pricePerSeat",
+                  type: "number",
+                },
+              ].map((field, idx) => (
+                <div key={idx}>
+                  <label className="block text-sm font-medium text-gray-700">
+                    {field.label}:
+                  </label>
+                  <input
+                    type={field.type}
+                    name={field.name}
+                    value={product[field.name]}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    required
+                  />
+                </div>
+              ))}
             </div>
 
             {/* Image Upload */}
@@ -212,6 +242,7 @@ const AddNewService = ({ isOpen, onClose }) => {
                   accept="image/*"
                   onChange={handleImageChange}
                   className="w-full p-2 border border-gray-300 rounded-lg cursor-pointer"
+                  required
                 />
               </div>
             </div>

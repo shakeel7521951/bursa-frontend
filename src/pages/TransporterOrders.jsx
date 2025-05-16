@@ -1,19 +1,17 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Search, Eye } from "lucide-react";
-// import OrderDetailModal from "./OrderDetailModel";
 import { useGetAllOrdersQuery } from "../redux/slices/OrderSlices";
 import OrderDetailModal from "../components/dashboard/orders/OrderDetailModel";
 
 const TransporterOrders = () => {
   const { data, isLoading } = useGetAllOrdersQuery();
   const orders = Array.isArray(data?.orders) ? data.orders : [];
+  console.log(orders);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [showDetailModel, setShowDetailModel] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
-
-  console.log(orders);
 
   useEffect(() => {
     setFilteredOrders(orders);
@@ -25,7 +23,7 @@ const TransporterOrders = () => {
     const filtered = orders.filter(
       (order) =>
         order._id.toLowerCase().includes(term) ||
-        order.customerId?.name.toLowerCase().includes(term)
+        order.customerId?.name?.toLowerCase().includes(term)
     );
     setFilteredOrders(filtered);
   };
@@ -46,12 +44,12 @@ const TransporterOrders = () => {
 
   return (
     <motion.div
-      className="bg-white bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-blue-700"
+      className="bg-white bg-opacity-50 container mx-auto my-14 backdrop-blur-md shadow-lg rounded-xl p-6 border border-blue-700"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4 }}
     >
-      <div className="flex justify-between items-center mb-6">
+      <div className=" flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-blue-700">Order List</h2>
         <div className="relative">
           <input
@@ -66,40 +64,31 @@ const TransporterOrders = () => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-700">
+        <table className="min-w-full divide-y divide-gray-300">
           <thead>
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                Customer Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                Customer Email
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                Total
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                Time
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                Date
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                Pickup Location
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                Dropoff Location
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">
-                Actions
-              </th>
+              {[
+                "Customer",
+                "Email",
+                "Travel Date",
+                "From",
+                "To",
+                "Seats",
+                "Total",
+                "Payment",
+                "View",
+              ].map((heading) => (
+                <th
+                  key={heading}
+                  className="px-4 py-3 text-left text-xs font-semibold text-blue-700 uppercase tracking-wider"
+                >
+                  {heading}
+                </th>
+              ))}
             </tr>
           </thead>
 
-          <tbody className="divide divide-gray-700">
+          <tbody className="divide-y divide-gray-200">
             {filteredOrders.map((order) => (
               <motion.tr
                 key={order._id}
@@ -107,53 +96,39 @@ const TransporterOrders = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
+                <td className="px-4 py-3 text-sm text-black">
                   {order.customerId?.name || "N/A"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
+                <td className="px-4 py-3 text-sm text-black">
                   {order.customerId?.email || "N/A"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
-                  ${order.price ? order.price.toFixed(2) : "0.00"}
+                <td className="px-4 py-3 text-sm text-black">
+                  {order.serviceId?.travelDate
+                    ? new Date(order.serviceId.travelDate).toLocaleDateString(
+                        "en-GB"
+                      )
+                    : "N/A"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-500">
-                  <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      order.orderStatus === "Fulfilled"
-                        ? "bg-green-100 text-green-800"
-                        : order.orderStatus === "Pending"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : order.orderStatus === "Shipped"
-                        ? "bg-blue-100 text-blue-800"
-                        : "bg-red-100 text-red-800"
-                    }`}
-                  >
-                    {order.orderStatus}
-                  </span>
+                <td className="px-4 py-3 text-sm text-black">
+                  {order.serviceId?.destinationFrom || "N/A"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                  {new Date(order.pickupTime).toLocaleString("en-US", {
-                    hour: "numeric",
-                    minute: "2-digit",
-                    hour12: true,
-                  })}
+                <td className="px-4 py-3 text-sm text-black">
+                  {order.serviceId?.destinationTo || "N/A"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                  {new Date(order.createdAt).toLocaleDateString()}
+                <td className="px-4 py-3 text-sm text-black">
+                  {order.seatsBooked || 0}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                  {order.pickupLocation ? order.pickupLocation : ""}
+                <td className="px-4 py-3 text-sm text-black">
+                  ₹{order.totalPrice}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                  {order.dropoffLocation ? order.dropoffLocation : ""}
+                <td className="px-4 py-3 text-sm text-black">
+                  {order.isPaid || "N/A"}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                  <button
+                <td className="px-4 py-3 text-sm text-blue-700">
+                  <Eye
+                    className="cursor-pointer"
                     onClick={() => openModal(order)}
-                    className="text-indigo-400 cursor-pointer hover:text-indigo-300 mr-2"
-                  >
-                    <Eye size={18} />
-                  </button>
+                  />
                 </td>
               </motion.tr>
             ))}
@@ -162,7 +137,11 @@ const TransporterOrders = () => {
       </div>
 
       {showDetailModel && selectedOrder && (
-        <OrderDetailModal order={selectedOrder} onClose={closeModal} />
+        <OrderDetailModal
+          isOpen={showDetailModel}
+          closeModal={closeModal}
+          order={selectedOrder}
+        />
       )}
     </motion.div>
   );

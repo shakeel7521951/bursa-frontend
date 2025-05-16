@@ -9,8 +9,8 @@ export const OrderApi = createApi({
   tagTypes: ["Order"],
   endpoints: (builder) => ({
     createOrder: builder.mutation({
-      query: ({ id, data }) => ({
-        url: `/create-order/${id}`,
+      query: ({ serviceId, data }) => ({
+        url: `/create-order/${serviceId}`,
         method: "POST",
         body: data,
       }),
@@ -67,5 +67,5 @@ export const {
   useUpdateOrderStatusMutation,
   useMyOrdersQuery,
   useUpdateOrderMutation,
-  useDeleteOrderMutation
+  useDeleteOrderMutation,
 } = OrderApi;

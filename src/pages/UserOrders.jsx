@@ -12,34 +12,30 @@ const UserOrders = () => {
   const { data, isLoading } = useMyOrdersQuery();
   const orders = Array.isArray(data?.orders) ? data.orders : [];
 
-  // Filter out orders where deletedBy="user"
-
   const [searchTerm, setSearchTerm] = useState("");
   const [finalFilteredOrders, setFinalFilteredOrders] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [filteredOrders, setFilteredOrders] = useState([])
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const navigate = useNavigate();
   const [deleteOrder] = useDeleteOrderMutation();
 
+  // Filter out deleted orders by user on load
   useEffect(() => {
-    setFinalFilteredOrders(filteredOrders);
-  }, []);
-  useEffect(() => {
-      
-    const filteredOrders = orders.filter((order) => order.deletedBy !== "user");
-    setFilteredOrders(filteredOrders)
-    setFinalFilteredOrders(filteredOrders)
+    const filtered = orders.filter((order) => order.deletedBy !== "user");
+    setFilteredOrders(filtered);
+    setFinalFilteredOrders(filtered);
+  }, [orders]);
 
-  }, [isLoading])
-  
-
+  // Search filter effect
   useEffect(() => {
     setFinalFilteredOrders(
       filteredOrders.filter(
         (order) =>
           order._id.toLowerCase().includes(searchTerm) ||
-          order.customerId?.name.toLowerCase().includes(searchTerm)
+          order.customerId?.name.toLowerCase().includes(searchTerm) ||
+          order.customerId?.email.toLowerCase().includes(searchTerm) ||
+          order.serviceId?.serviceName.toLowerCase().includes(searchTerm)
       )
     );
   }, [searchTerm, filteredOrders]);
@@ -53,13 +49,9 @@ const UserOrders = () => {
       alert("You cannot edit a fulfilled or rejected order.");
       return;
     }
-
-    const formattedOrder = {
-      ...order,
-      pickupTime: new Date(order.pickupTime).toISOString(),
-    };
+    // Format any date if needed here
     navigate(`/update-order/${order._id}`, {
-      state: { order: formattedOrder },
+      state: { order },
     });
   };
 
@@ -75,7 +67,8 @@ const UserOrders = () => {
           orderId: selectedOrder._id,
           status: selectedOrder.orderStatus,
         }).unwrap();
-        handleDeleteCancel();
+        setIsModalOpen(false);
+        setSelectedOrder(null);
         toast.success(response.message || "Order deleted successfully", {
           position: "top-center",
         });
@@ -88,7 +81,7 @@ const UserOrders = () => {
   };
 
   const handleDeleteCancel = () => {
-    setIsModalOpen(false); 
+    setIsModalOpen(false);
     setSelectedOrder(null);
   };
 
@@ -153,10 +146,7 @@ const UserOrders = () => {
               value={searchTerm}
               onChange={handleSearch}
             />
-            <Search
-              className="absolute left-3 top-2.5 text-[#000]"
-              size={18}
-            />
+            <Search className="absolute left-3 top-2.5 text-[#000]" size={18} />
           </div>
         </div>
 
@@ -165,14 +155,13 @@ const UserOrders = () => {
             <thead>
               <tr>
                 {[
-                  "Car Name",
+                  "Service Name",
                   "Customer Email",
-                  "Total Cost",
+                  "Seats Booked",
+                  "Luggage Quantity",
+                  "Total Price",
                   "Order Status",
                   "Order Date",
-                  "Pickup Time",
-                  "Pickup Location",
-                  "Dropoff Location",
                   "Actions",
                 ].map((header) => (
                   <th
@@ -186,6 +175,17 @@ const UserOrders = () => {
             </thead>
 
             <tbody className="divide-y divide-gray-700">
+              {finalFilteredOrders.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={8}
+                    className="text-center py-4 text-gray-500 text-sm"
+                  >
+                    No orders found.
+                  </td>
+                </tr>
+              )}
+
               {finalFilteredOrders.map((order) => (
                 <motion.tr
                   key={order._id}
@@ -194,13 +194,19 @@ const UserOrders = () => {
                   transition={{ duration: 0.3 }}
                 >
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
-                    {order.customerId?.name || "N/A"}
+                    {order.serviceId?.serviceName || "N/A"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
                     {order.customerId?.email || "N/A"}
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                    {order.seatsBooked ?? 0}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                    {order.luggageQuantity ?? 0}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
-                    ${order.price ? order.price.toFixed(2) : "0.00"}
+                    ${order.totalPrice?.toFixed(2) ?? "0.00"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <span
@@ -219,22 +225,6 @@ const UserOrders = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-[#000]">
                     {new Date(order.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[#000]">
-                    {new Date(order.pickupTime).toLocaleTimeString("en-US", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      second: "2-digit",
-                      hour12: true,
-                      timeZone:
-                        Intl.DateTimeFormat().resolvedOptions().timeZone,
-                    })}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[#000]">
-                    {order.pickupLocation ? order.pickupLocation : ""}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-[#000]">
-                    {order.dropoffLocation ? order.dropoffLocation : ""}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <button
