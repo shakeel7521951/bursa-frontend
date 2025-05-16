@@ -11,7 +11,6 @@ import AlertDialog from "../components/dashboard/alert/AlertDialog";
 
 const TransporterDashboard = () => {
   const { data, isLoading, isError } = useGetIndividualServicesQuery();
-  console.log(data);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [addProductOpen, setAddProductOpen] = useState(false);
@@ -113,7 +112,7 @@ const TransporterDashboard = () => {
                     Category
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">
-                    Price
+                    Price(Seat)
                   </th>
                   <th className="px-6 py-3 text-left text-nowrap text-xs font-medium text-blue-700 uppercase">
                     Available Seats
@@ -153,7 +152,7 @@ const TransporterDashboard = () => {
                       {service.serviceCategory}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                      ${service.price}
+                      ${service.pricePerSeat}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
                       {service.availableSeats} / {service.totalSeats}
