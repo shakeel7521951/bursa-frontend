@@ -1,5 +1,5 @@
-import React from "react";
-import trusted1 from "../../assets/home/trusted1.jpg";
+// import trusted1 from "../../assets/home/trusted1.jpg";
+import Bursa_Trans_Homepage_HD from "../../assets/home/Bursa_Trans_Homepage_HD.webp";
 import about2 from "../../assets/home/about1-2.png";
 import about3 from "../../assets/home/about1-3.png";
 import { CiCalendarDate } from "react-icons/ci";
@@ -12,11 +12,12 @@ const TrustedTransportService = () => {
       {/* Image Section */}
       <div className="w-full md:w-[50%] relative flex justify-center">
         <img
-          src={trusted1}
+          // src={trusted1}
+          src={Bursa_Trans_Homepage_HD}
           alt="Transport de încredere"
-          className="relative w-full max-w-[90%] h-auto md:h-[30rem]"
+          className="relative w-full max-w-[90%] h-auto md:h-[30rem] rounded-xl"
         />
-        <img
+        {/* <img
           src={about2}
           alt="Despre transport"
           className="absolute right-[-15px] md:right-0 top-5 md:top-10 w-[40%] max-w-[150px]"
@@ -25,7 +26,7 @@ const TrustedTransportService = () => {
           src={about3}
           alt="Despre transport"
           className="absolute bottom-[-50px] right-0 md:right-0 w-[40%] max-w-[150px]"
-        />
+        /> */}
       </div>
 
       {/* Content Section */}

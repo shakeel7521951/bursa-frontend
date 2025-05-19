@@ -1,7 +1,9 @@
 import React from "react";
-import service5 from "../../assets/home/service5-1.jpg";
+// import service5 from "../../assets/home/service5-1.jpg";
+import service5 from "../../assets/home/Bursa_Trans_Steaguri_HD.webp"
 import service6 from "../../assets/home/service5-2.jpg";
-import service7 from "../../assets/home/service5-3.jpg";
+// import service7 from "../../assets/home/service5-3.jpg";
+import service7 from "../../assets/home/Transport_Auto_HD.webp";
 
 const Services = () => {
   const services = [
@@ -18,9 +20,9 @@ const Services = () => {
       image: service6,
     },
     {
-      title: "Platformă de Rezervare",
+      title: "Transport Autovehicule oriunde",
       description:
-        "Rezervă-ți locul într-o cursă sau trimite un colet. Transportatorul acceptă sau refuză cererea ta.",
+        "Puteți găsi aici platforme pentru transportul autovehiculelor dumneavoastră de la adresă la adresă, în condiții de siguranță și profesionalism.",
       image: service7,
     },
   ];
