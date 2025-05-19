@@ -1,6 +1,7 @@
 import React from "react";
 import header from "../../assets/home/header.jpg";
 import Button from "../Button";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -34,7 +35,9 @@ const Header = () => {
         </p>
 
         <div className="w-fit flex-nowrap mt-6 flex sm:justify-start justify-center">
-          <Button text="Vezi cursele disponibile" />
+          <Link to="/services">
+            <Button text="Vezi cursele disponibile" />
+          </Link>
         </div>
       </div>
     </div>

@@ -63,7 +63,7 @@ const Navbar = () => {
 
         {/* Buttons + profile */}
         <div className="hidden md:flex items-center gap-4">
-          {userProfile ? <Button text={"Rezervă un taxi"} /> : ""}
+          {userProfile ? <Link to="/services"><Button text={"Rezervă Călătorie"} /></Link> : ""}
 
           {userProfile ? (
             <div className="relative">
