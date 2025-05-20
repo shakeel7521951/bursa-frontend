@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import header from "../../assets/home/header.jpg";
 import Button from "../Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLoginRedirect = () => {
+    setIsModalOpen(false);
+    navigate("/login");
+  };
+
   return (
     <div className="relative w-full max-h-screen">
       {/* Background Image */}
@@ -35,11 +43,31 @@ const Header = () => {
         </p>
 
         <div className="w-fit flex-nowrap mt-6 flex sm:justify-start justify-center">
-          <Link to="/services">
+          <button onClick={() => setIsModalOpen(true)}>
             <Button text="Vezi cursele disponibile" />
-          </Link>
+          </button>
         </div>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-[#02020290] bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full text-center">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
+              NE PARE RĂU, PENTRU A PUTEA VEDEA CURSELE DISPONIBILE ESTE NEVOIE
+              DE A VĂ CREA UN CONT SAU DE A VĂ AUTENTIFICA.
+            </h2>
+            <Link to="/login">
+              <Button
+                text="Log in"
+                bgHover="black"
+                textHover="white"
+                cutHover="white"
+              />
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -4,7 +4,7 @@ const Button = ({ text,bgHover="white",textHover="black" , cutHover="black",onCl
   return (
     <div>
       <button
-        className="relative overflow-hidden bg-[#FFEE02] w-fit px-10 py-3 cursor-pointer font-semibold text-black transition-all duration-500 group"
+        className="relative overflow-hidden bg-[#FFEE02] min-w-[150px] w-fit px-10 py-3 cursor-pointer font-semibold text-black transition-all duration-500 group"
         style={{ clipPath: "polygon(100% 0, 85% 100%, 0 100%, 0 0)" }}
       >
         <div

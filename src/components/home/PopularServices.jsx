@@ -1,5 +1,8 @@
 import React from "react";
-import services1 from "../../assets/services/service3-1.jpg";
+// import services1 from "../../assets/services/service3-1.jpg";
+import services1 from "../../assets/home/1000001836.webp";
+import services2 from "../../assets/home/1000001841.jpg";
+import services3 from "../../assets/home/1000001843.webp";
 import { LuChevronsLeft } from "react-icons/lu";
 import { FaBoxOpen, FaBusAlt, FaClipboardCheck } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -21,7 +24,7 @@ const ServicesSection = () => {
       title: "Trimite Colete",
       description:
         "Trimite colete în siguranță cu transportatori de încredere care operează curse regulate.",
-      image: services1,
+      image: services2,
       icon: (
         <FaBoxOpen className="text-black text-3xl group-hover:text-white transition-all duration-500" />
       ),
@@ -30,8 +33,8 @@ const ServicesSection = () => {
       id: 3,
       title: "Gestionare Cereri",
       description:
-        "Transportatorii pot accepta sau respinge cererile de locuri și colete direct din platformă.",
-      image: services1,
+        "Transportatorii pot gestiona ușor cererile de curse și colete direct din platformă.",
+      image: services3,
       icon: (
         <FaClipboardCheck className="text-black text-3xl group-hover:text-white transition-all duration-500" />
       ),
@@ -52,7 +55,7 @@ const ServicesSection = () => {
                   src={service.image}
                   alt={service.title}
                   loading="lazy"
-                  className="group-hover:scale-110 transition-all duration-500 ease-in-out"
+                  className="group-hover:scale-110 transition-all duration-500 ease-in-out w-full max-h-[13rem]"
                 />
               </div>
               <div
