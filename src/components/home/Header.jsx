@@ -31,17 +31,15 @@ const Header = () => {
         <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight">
           Găsește transport între România și Italia
         </h1>
-
         <p className="mt-4 text-sm sm:text-base md:text-lg max-w-2xl">
           Platformă de transport planificat: rezervă locuri pentru persoane sau
           colete în curse internaționale.
         </p>
-
         <p className="mt-2 text-sm sm:text-base md:text-lg max-w-2xl">
           <strong>Bursa Trans România - Italia:</strong> Descoperă curse
           regulate, filtrează după oraș, dată și locuri disponibile.
         </p>
-
+        //update button text
         <div className="w-fit flex-nowrap mt-6 flex sm:justify-start justify-center">
           <button onClick={() => setIsModalOpen(true)}>
             <Button text="Vezi cursele disponibile" />
