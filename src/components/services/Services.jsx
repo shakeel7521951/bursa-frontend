@@ -2,9 +2,15 @@ import { useState } from "react";
 import { useGetAllServicesQuery } from "../../redux/slices/ServiceApi";
 import { FaSearch, FaUser, FaCarSide, FaDoorOpen } from "react-icons/fa";
 import { MdMenuOpen, MdOutlineElectricBike } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Button from "../Button";
+import { selectUserProfile } from "../../redux/slices/UserSlice";
+import { useSelector } from "react-redux";
+import AddNewService from "../transporterDashboard/AddNewService";
 
 const OurServices = () => {
+  const userProfile = useSelector(selectUserProfile);
+  const [addProductOpen, setAddProductOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedService, setSelectedService] = useState(null);
@@ -19,7 +25,8 @@ const OurServices = () => {
     const query = searchQuery.toLowerCase();
     return (
       (selectedCategory === "All" ||
-        service.serviceCategory?.toLowerCase() === selectedCategory.toLowerCase()) &&
+        service.serviceCategory?.toLowerCase() ===
+          selectedCategory.toLowerCase()) &&
       [
         service.serviceName,
         service.serviceCategory,
@@ -54,23 +61,44 @@ const OurServices = () => {
   };
 
   // Loading and error states
-  if (isLoading) return <p className="text-center mt-10">Loading services...</p>;
-  if (error) return <p className="text-center mt-10 text-red-600">Error loading services</p>;
+  if (isLoading)
+    return <p className="text-center mt-10">Loading services...</p>;
+  if (error)
+    return (
+      <p className="text-center mt-10 text-red-600">Error loading services</p>
+    );
 
   return (
     <div className="w-full my-7 flex flex-col items-center px-6 md:px-0">
       {/* Search bar */}
-      <div className="flex items-center bg-gray-100 p-3 rounded-lg shadow-md w-[80%] mb-5">
-        <FaSearch className="text-gray-500 mr-2" />
-        <input
-          type="text"
-          placeholder="Search for a service..."
-          className="w-full bg-transparent outline-none text-gray-700"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
+      <div className="container flex flex-col md:flex-row items-center justify-between gap-4 mb-6 w-full">
+        {/* Search Input */}
+        <div className="flex mx-auto items-center w-full md:max-w-md bg-white border border-gray-300 rounded-lg px-4 py-2 shadow-sm">
+          <FaSearch className="text-gray-400 mr-3" />
+          <input
+            type="text"
+            placeholder="Search for a service..."
+            className="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
 
+        {/* Add New Trip Button */}
+        {userProfile?.role === "Transporter" && (
+          <Button
+            onClick={() => setAddProductOpen(true)}
+            text="Add New Trip"
+            bgHover="black"
+            textHover="white"
+            cutHover="white"
+          />
+        )}
+      </div>
+      <AddNewService
+        isOpen={addProductOpen}
+        onClose={() => setAddProductOpen(false)}
+      />
       {/* Category filter buttons */}
       <div className="flex gap-4 mb-5 flex-wrap justify-center">
         {categories.map(({ name, icon }) => (
@@ -105,7 +133,9 @@ const OurServices = () => {
                 />
               </div>
               <div className="md:w-[60%] px-4 py-6 flex flex-col justify-between">
-                <h2 className="text-2xl font-bold text-gray-900">{service.serviceName}</h2>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  {service.serviceName}
+                </h2>
                 <div className="grid grid-cols-2 gap-2 mt-3 text-gray-700 text-sm">
                   <div className="flex items-center gap-2">
                     <FaUser className="w-5 h-5" />
@@ -128,7 +158,9 @@ const OurServices = () => {
                 <div className="mt-4 flex items-center justify-between">
                   <div>
                     <p className="text-gray-600 text-sm">Price</p>
-                    <h3 className="text-2xl font-semibold text-gray-900">${service.pricePerSeat}/trip</h3>
+                    <h3 className="text-2xl font-semibold text-gray-900">
+                      ${service.pricePerSeat}/trip
+                    </h3>
                   </div>
                   <button
                     onClick={(e) => {
@@ -160,24 +192,55 @@ const OurServices = () => {
               &times;
             </button>
 
-            <h2 className="text-2xl font-bold mb-4">{selectedService.serviceName}</h2>
+            <h2 className="text-2xl font-bold mb-4">
+              {selectedService.serviceName}
+            </h2>
             <img
               src={selectedService.servicePic}
               alt={selectedService.serviceName}
               className="w-full h-52 object-cover rounded mb-4"
             />
 
-            <p><strong>Transporter:</strong> {selectedService.transporter?.name || "N/A"}</p>
-            <p><strong>Email:</strong> {selectedService.transporter?.email || "N/A"}</p>
-            <p><strong>From:</strong> {selectedService.destinationFrom}</p>
-            <p><strong>To:</strong> {selectedService.destinationTo}</p>
-            <p><strong>Departure Time:</strong> {selectedService.departureTime}</p>
-            <p><strong>Travel Date:</strong> {new Date(selectedService.travelDate).toLocaleDateString()}</p>
-            <p><strong>Arrival Date:</strong> {new Date(selectedService.arrivalDate).toLocaleDateString()}</p>
-            <p><strong>Available Seats:</strong> {selectedService.availableSeats} / {selectedService.totalSeats}</p>
-            <p><strong>Price per Seat:</strong> ${selectedService.pricePerSeat}</p>
-            <p><strong>Route Cities:</strong> {selectedService.routeCities?.join(", ") || "N/A"}</p>
-            <p><strong>Pickup Option:</strong> {selectedService.pickupOption || "N/A"}</p>
+            <p>
+              <strong>Transporter:</strong>{" "}
+              {selectedService.transporter?.name || "N/A"}
+            </p>
+            <p>
+              <strong>Email:</strong>{" "}
+              {selectedService.transporter?.email || "N/A"}
+            </p>
+            <p>
+              <strong>From:</strong> {selectedService.destinationFrom}
+            </p>
+            <p>
+              <strong>To:</strong> {selectedService.destinationTo}
+            </p>
+            <p>
+              <strong>Departure Time:</strong> {selectedService.departureTime}
+            </p>
+            <p>
+              <strong>Travel Date:</strong>{" "}
+              {new Date(selectedService.travelDate).toLocaleDateString()}
+            </p>
+            <p>
+              <strong>Arrival Date:</strong>{" "}
+              {new Date(selectedService.arrivalDate).toLocaleDateString()}
+            </p>
+            <p>
+              <strong>Available Seats:</strong> {selectedService.availableSeats}{" "}
+              / {selectedService.totalSeats}
+            </p>
+            <p>
+              <strong>Price per Seat:</strong> ${selectedService.pricePerSeat}
+            </p>
+            <p>
+              <strong>Route Cities:</strong>{" "}
+              {selectedService.routeCities?.join(", ") || "N/A"}
+            </p>
+            <p>
+              <strong>Pickup Option:</strong>{" "}
+              {selectedService.pickupOption || "N/A"}
+            </p>
 
             <div className="flex justify-end mt-6 gap-4">
               <button
