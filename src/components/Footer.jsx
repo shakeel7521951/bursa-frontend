@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { LuChevronsLeft } from "react-icons/lu";
 import Button from "../components/Button.jsx";
 import { FaFacebook } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const Footer = () => {
   return (
@@ -124,7 +125,7 @@ const Footer = () => {
                 className="p-3 mb-4 border border-gray-300 w-full max-w-[250px] rounded-md outline-none"
                 placeholder="Introdu adresa ta de email"
               />
-              <Button text="Abonează-te" />
+              <Button onClick={()=>toast("Thank you for your trust!")} text="Abonează-te" />
             </div>
           </div>
         </div>

@@ -41,9 +41,9 @@ const Header = () => {
         </p>
         //update button text
         <div className="w-fit flex-nowrap mt-6 flex sm:justify-start justify-center">
-          <button onClick={() => setIsModalOpen(true)}>
+          <Link to="/services">
             <Button text="Vezi cursele disponibile" />
-          </button>
+          </Link>
         </div>
       </div>
 

@@ -5,6 +5,7 @@ import about3 from "../../assets/home/about1-3.png";
 import { CiCalendarDate } from "react-icons/ci";
 import { FaHeadset } from "react-icons/fa";
 import Button from "../Button";
+import { Link } from "react-router-dom";
 
 const TrustedTransportService = () => {
   return (
@@ -36,10 +37,12 @@ const TrustedTransportService = () => {
           Transport planificat România – Italia
         </h1>
         <p className="text-gray-600 my-3">
-          Descoperă curse regulate de persoane și colete între România și Italia. Alege data, orașul și locurile disponibile.
+          Descoperă curse regulate de persoane și colete între România și
+          Italia. Alege data, orașul și locurile disponibile.
         </p>
         <p className="text-gray-600">
-          Platforma noastră conectează pasageri și transportatori pentru o experiență sigură, planificată și eficientă.
+          Platforma noastră conectează pasageri și transportatori pentru o
+          experiență sigură, planificată și eficientă.
         </p>
 
         {/* Features */}
@@ -50,13 +53,22 @@ const TrustedTransportService = () => {
           </div>
           <div className="flex items-center gap-2">
             <FaHeadset className="text-2xl" />
-            <h4 className="text-xl">Suport 24/7 pentru pasageri și transportatori</h4>
+            <h4 className="text-xl">
+              Suport 24/7 pentru pasageri și transportatori
+            </h4>
           </div>
         </div>
 
         {/* Button */}
         <div className="flex justify-center mt-10 md:justify-start">
-          <Button text="Vezi cursele disponibile" bgHover="black" textHover="white" cutHover="white" />
+          <Link to="/services">
+            <Button
+              text="Vezi cursele disponibile"
+              bgHover="black"
+              textHover="white"
+              cutHover="white"
+            />
+          </Link>
         </div>
       </div>
     </div>
