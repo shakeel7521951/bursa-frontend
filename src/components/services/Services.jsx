@@ -10,10 +10,12 @@ const OurServices = () => {
   const [selectedService, setSelectedService] = useState(null);
   const navigate = useNavigate();
 
+  // Fetch services data
   const { data, isLoading, error } = useGetAllServicesQuery();
   const services = data?.services || [];
 
-  const filteredDeals = services.filter((service) => {
+  // Filter services based on category and search query
+  const filteredServices = services.filter((service) => {
     const query = searchQuery.toLowerCase();
     return (
       (selectedCategory === "All" ||
@@ -27,6 +29,7 @@ const OurServices = () => {
     );
   });
 
+  // Generate categories with icons
   const categories = [
     { name: "All", icon: <MdMenuOpen /> },
     ...[...new Set(services.map((s) => s.serviceCategory))].map((category) => ({
@@ -42,14 +45,21 @@ const OurServices = () => {
     })),
   ];
 
+  // Handler for selecting a service (to open modal)
   const handleBookClick = (service) => setSelectedService(service);
+
+  // Handler to proceed to booking page
   const handleProceed = () => {
     navigate(`/booking/${selectedService._id}`, { state: { selectedService } });
   };
 
+  // Loading and error states
+  if (isLoading) return <p className="text-center mt-10">Loading services...</p>;
+  if (error) return <p className="text-center mt-10 text-red-600">Error loading services</p>;
+
   return (
     <div className="w-full my-7 flex flex-col items-center px-6 md:px-0">
-      {/* Search */}
+      {/* Search bar */}
       <div className="flex items-center bg-gray-100 p-3 rounded-lg shadow-md w-[80%] mb-5">
         <FaSearch className="text-gray-500 mr-2" />
         <input
@@ -61,8 +71,8 @@ const OurServices = () => {
         />
       </div>
 
-      {/* Category Filter */}
-      <div className="flex gap-4 mb-5">
+      {/* Category filter buttons */}
+      <div className="flex gap-4 mb-5 flex-wrap justify-center">
         {categories.map(({ name, icon }) => (
           <button
             key={name}
@@ -78,13 +88,14 @@ const OurServices = () => {
         ))}
       </div>
 
-      {/* Service Cards */}
+      {/* Service cards grid */}
       <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {filteredDeals.length > 0 ? (
-          filteredDeals.map((service) => (
+        {filteredServices.length > 0 ? (
+          filteredServices.map((service) => (
             <div
               key={service._id}
-              className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row transform transition hover:scale-105"
+              className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row transform transition hover:scale-105 cursor-pointer"
+              onClick={() => handleBookClick(service)}
             >
               <div className="md:w-[40%] my-auto">
                 <img
@@ -94,23 +105,21 @@ const OurServices = () => {
                 />
               </div>
               <div className="md:w-[60%] px-4 py-6 flex flex-col justify-between">
-                <h2 className="text-2xl font-bold text-gray-900">
-                  {service.serviceName}
-                </h2>
-                <div className="grid grid-cols-2 gap-2 mt-3">
-                  <div className="flex items-center gap-2 text-gray-700 text-sm">
+                <h2 className="text-2xl font-bold text-gray-900">{service.serviceName}</h2>
+                <div className="grid grid-cols-2 gap-2 mt-3 text-gray-700 text-sm">
+                  <div className="flex items-center gap-2">
                     <FaUser className="w-5 h-5" />
-                    <p>Available: {service.availableSeats}</p>
+                    <p>Available Seats: {service.availableSeats}</p>
                   </div>
-                  <div className="flex items-center gap-2 text-gray-700 text-sm">
+                  <div className="flex items-center gap-2">
                     <FaCarSide className="w-5 h-5" />
                     <p>Category: {service.serviceCategory}</p>
                   </div>
-                  <div className="flex items-center gap-2 text-gray-700 text-sm">
+                  <div className="flex items-center gap-2">
                     <FaDoorOpen className="w-5 h-5" />
                     <p>From: {service.destinationFrom}</p>
                   </div>
-                  <div className="flex items-center gap-2 text-gray-700 text-sm">
+                  <div className="flex items-center gap-2">
                     <FaDoorOpen className="w-5 h-5" />
                     <p>To: {service.destinationTo}</p>
                   </div>
@@ -119,12 +128,13 @@ const OurServices = () => {
                 <div className="mt-4 flex items-center justify-between">
                   <div>
                     <p className="text-gray-600 text-sm">Price</p>
-                    <h3 className="text-2xl font-semibold text-gray-900">
-                      ${service.pricePerSeat}/trip
-                    </h3>
+                    <h3 className="text-2xl font-semibold text-gray-900">${service.pricePerSeat}/trip</h3>
                   </div>
                   <button
-                    onClick={() => handleBookClick(service)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleBookClick(service);
+                    }}
                     className="bg-[#FFEE02] cursor-pointer text-black px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#ffee02d6] transition"
                   >
                     Book Now
@@ -138,37 +148,43 @@ const OurServices = () => {
         )}
       </div>
 
-      {/* Custom Modal */}
+      {/* Modal for selected service details */}
       {selectedService && (
-        <div className="fixed inset-0 bg-[#0000008a] bg-opacity-50 flex items-center justify-center overflow-y-auto z-999">
-          <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-lg relative mt-36">
+        <div className="fixed pt-10 inset-0 bg-[#0000008a] flex items-center justify-center overflow-y-auto z-[999] px-4">
+          <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-lg relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setSelectedService(null)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl"
+              className="absolute top-2 right-2 text-gray-500 hover:text-black text-3xl font-bold"
+              aria-label="Close modal"
             >
               &times;
             </button>
+
             <h2 className="text-2xl font-bold mb-4">{selectedService.serviceName}</h2>
             <img
               src={selectedService.servicePic}
               alt={selectedService.serviceName}
               className="w-full h-52 object-cover rounded mb-4"
             />
-            <p><strong>Transporter:</strong> {selectedService.transporter?.name}</p>
-            <p><strong>Email:</strong> {selectedService.transporter?.email}</p>
+
+            <p><strong>Transporter:</strong> {selectedService.transporter?.name || "N/A"}</p>
+            <p><strong>Email:</strong> {selectedService.transporter?.email || "N/A"}</p>
             <p><strong>From:</strong> {selectedService.destinationFrom}</p>
             <p><strong>To:</strong> {selectedService.destinationTo}</p>
-            <p><strong>Departure:</strong> {selectedService.departureTime}</p>
+            <p><strong>Departure Time:</strong> {selectedService.departureTime}</p>
             <p><strong>Travel Date:</strong> {new Date(selectedService.travelDate).toLocaleDateString()}</p>
-            <p><strong>Seats Available:</strong> {selectedService.availableSeats} / {selectedService.totalSeats}</p>
-            <p><strong>Price:</strong> ${selectedService.pricePerSeat}</p>
+            <p><strong>Arrival Date:</strong> {new Date(selectedService.arrivalDate).toLocaleDateString()}</p>
+            <p><strong>Available Seats:</strong> {selectedService.availableSeats} / {selectedService.totalSeats}</p>
+            <p><strong>Price per Seat:</strong> ${selectedService.pricePerSeat}</p>
+            <p><strong>Route Cities:</strong> {selectedService.routeCities?.join(", ") || "N/A"}</p>
+            <p><strong>Pickup Option:</strong> {selectedService.pickupOption || "N/A"}</p>
 
             <div className="flex justify-end mt-6 gap-4">
               <button
                 onClick={() => setSelectedService(null)}
                 className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
               >
-                Cancel
+                Close
               </button>
               <button
                 onClick={handleProceed}

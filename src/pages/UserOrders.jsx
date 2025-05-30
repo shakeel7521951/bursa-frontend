@@ -162,7 +162,6 @@ const UserOrders = () => {
                   "Total Price",
                   "Order Status",
                   "Order Date",
-                  "Actions",
                 ].map((header) => (
                   <th
                     key={header}
@@ -226,7 +225,7 @@ const UserOrders = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-[#000]">
                     {new Date(order.createdAt).toLocaleDateString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <button
                       onClick={() => handleEditOrder(order)}
                       title="Edit"
@@ -254,7 +253,7 @@ const UserOrders = () => {
                     >
                       <Trash2 size={18} />
                     </button>
-                  </td>
+                  </td> */}
                 </motion.tr>
               ))}
             </tbody>

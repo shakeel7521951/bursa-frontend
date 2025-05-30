@@ -58,7 +58,7 @@ const BookingModal = () => {
         });
       } else {
         toast.success("Booking successful!", { position: "top-center" });
-        navigate("/");
+        navigate("/my-orders");
       }
     } catch (error) {
       toast.error("Unexpected error occurred!", { position: "top-center" });
