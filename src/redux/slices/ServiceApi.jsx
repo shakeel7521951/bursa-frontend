@@ -26,7 +26,7 @@ export const serviceApi = createApi({
     }),
     getIndividualServices: builder.query({
       query: () => ({
-        url: "/get-all-services",
+        url: "/get-individual-services",
         method: "GET",
       }),
       providesTags: ["Service"],

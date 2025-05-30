@@ -1,9 +1,10 @@
 import React from "react";
 // import service5 from "../../assets/home/service5-1.jpg";
-import service5 from "../../assets/home/Bursa_Trans_Steaguri_HD.webp"
+import service5 from "../../assets/home/Bursa_Trans_Steaguri_HD.webp";
 import service6 from "../../assets/home/service5-2.jpg";
 // import service7 from "../../assets/home/service5-3.jpg";
 import service7 from "../../assets/home/Transport_Auto_HD.webp";
+import { Link } from "react-router-dom";
 
 const Services = () => {
   const services = [
@@ -24,6 +25,7 @@ const Services = () => {
       description:
         "Puteți găsi aici platforme pentru transportul autovehiculelor dumneavoastră de la adresă la adresă, în condiții de siguranță și profesionalism.",
       image: service7,
+      link: "/transporter-dashboard",
     },
   ];
 
@@ -39,34 +41,36 @@ const Services = () => {
       {/* Services Grid */}
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-12 px-6 md:px-12">
         {services.map((data, index) => (
-          <div
-            key={index}
-            className="transition-all group duration-500 overflow-hidden relative"
-            style={{
-              clipPath: "polygon(0 12%, 100% 0, 100% 100%, 0% 100%)",
-            }}
-          >
+          <Link to={data.link}>
             <div
-              className="bg-[#ffee02cd] group-hover:bg-black transition-all duration-500 w-full mx-auto h-[220px] top-10 absolute"
+              key={index}
+              className="transition-all group duration-500 overflow-hidden relative"
               style={{
-                clipPath: "polygon(0 17%, 100% 0, 100% 78%, 0% 100%)",
+                clipPath: "polygon(0 12%, 100% 0, 100% 100%, 0% 100%)",
               }}
-            ></div>
-            <img
-              src={data.image}
-              alt={data.title}
-              className="h-60 w-full object-cover transition-all duration-500 group-hover:scale-110"
-              style={{
-                clipPath: "polygon(0 19%, 100% 0, 100% 79%, 0% 100%)",
-              }}
-            />
-            <div className="p-6 text-center">
-              <h2 className="text-2xl font-semibold text-gray-800">
-                {data.title}
-              </h2>
-              <p className="text-gray-700 mt-3 text-sm">{data.description}</p>
+            >
+              <div
+                className="bg-[#ffee02cd] group-hover:bg-black transition-all duration-500 w-full mx-auto h-[220px] top-10 absolute"
+                style={{
+                  clipPath: "polygon(0 17%, 100% 0, 100% 78%, 0% 100%)",
+                }}
+              ></div>
+              <img
+                src={data.image}
+                alt={data.title}
+                className="h-60 w-full object-cover transition-all duration-500 group-hover:scale-110"
+                style={{
+                  clipPath: "polygon(0 19%, 100% 0, 100% 79%, 0% 100%)",
+                }}
+              />
+              <div className="p-6 text-center">
+                <h2 className="text-2xl font-semibold text-gray-800">
+                  {data.title}
+                </h2>
+                <p className="text-gray-700 mt-3 text-sm">{data.description}</p>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

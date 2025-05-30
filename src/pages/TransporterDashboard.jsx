@@ -46,9 +46,9 @@ const TransporterDashboard = () => {
   if (isLoading) {
     return <div className="text-center py-10 text-blue-700">Loading services...</div>;
   }
-
+console.log("Error......",isError)
   if (isError) {
-    return <div className="text-center py-10 text-red-500">Failed to fetch services. Please try again.</div>;
+    return <div className="text-center py-10 text-red-500">Access denied: not a Transporter</div>;
   }
 
   return (
