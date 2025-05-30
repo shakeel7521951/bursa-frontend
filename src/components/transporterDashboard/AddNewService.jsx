@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useCreateServiceMutation } from "../../redux/slices/ServiceApi";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const AddNewService = ({ isOpen, onClose, userId }) => {
   const [createService, { isLoading }] = useCreateServiceMutation();
-
+  const navigate = useNavigate();
   const [product, setProduct] = useState({
     serviceName: "",
     serviceCategory: "",
@@ -140,7 +141,6 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
 
       // Send request using your RTK query mutation or axios
       const response = await createService(formData).unwrap();
-console.log(response)
       if (response.error) {
         toast.error(response.error?.message || "Error adding service", {
           position: "top-center",
@@ -149,6 +149,7 @@ console.log(response)
         toast.success(response.message || "Service added successfully", {
           position: "top-center",
         });
+        navigate("/transporter-dashboard")
         onClose();
         // setProduct({ ...initialState });
         // setImagePreview(null);
