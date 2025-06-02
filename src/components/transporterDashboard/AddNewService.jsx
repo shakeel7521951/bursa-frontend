@@ -25,7 +25,6 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
     pricePerSeat: "",
     servicePic: null,
   });
-
   const [imagePreview, setImagePreview] = useState(null);
 
   // Close modal on Escape key press
@@ -141,6 +140,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
 
       // Send request using your RTK query mutation or axios
       const response = await createService(formData).unwrap();
+      console.log(response);
       if (response.error) {
         toast.error(response.error?.message || "Error adding service", {
           position: "top-center",
@@ -151,8 +151,6 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
         });
         navigate("/transporter-dashboard")
         onClose();
-        // setProduct({ ...initialState });
-        // setImagePreview(null);
       }
     } catch (err) {
       console.error("Error adding service:", err);
