@@ -12,12 +12,12 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
     serviceCategory: "",
     destinationFrom: "",
     destinationTo: "",
-    routeCities: "", // comma separated string input
+    routeCities: "",
     travelDate: "",
     departureTime: "",
     arrivalDate: "",
-    availabilityDaysRomania: "", // comma separated string input for Romania days
-    availabilityDaysItaly: "", // comma separated string input for Italy days
+    availabilityDaysRomania: "", 
+    availabilityDaysItaly: "",
     totalSeats: "",
     availableSeats: "",
     parcelLoadCapacity: "",
