@@ -91,7 +91,6 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
       formData.append("destinationFrom", product.destinationFrom);
       formData.append("destinationTo", product.destinationTo);
 
-      // Handle route cities as array
       const routeCitiesArray = product.routeCities
         .split(",")
         .map((city) => city.trim())
