@@ -7,15 +7,17 @@ import OrderDetailModal from "../components/dashboard/orders/OrderDetailModel";
 const TransporterOrders = () => {
   const { data, isLoading } = useGetAllOrdersQuery();
   const orders = Array.isArray(data?.orders) ? data.orders : [];
-  console.log(orders);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [showDetailModel, setShowDetailModel] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
+  // Set filteredOrders when orders change, but only if no searchTerm is active
   useEffect(() => {
-    setFilteredOrders(orders);
-  }, [orders]);
+    if (searchTerm === "") {
+      setFilteredOrders(orders);
+    }
+  }, [orders, searchTerm]);
 
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
@@ -122,7 +124,7 @@ const TransporterOrders = () => {
                   ₹{order.totalPrice}
                 </td>
                 <td className="px-4 py-3 text-sm text-black">
-                  {order.isPaid || "N/A"}
+                  {order.isPaid ? "Paid" : "Not Paid"}
                 </td>
                 <td className="px-4 py-3 text-sm text-blue-700">
                   <Eye
