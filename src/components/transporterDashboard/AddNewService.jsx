@@ -9,7 +9,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
   const navigate = useNavigate();
   const [product, setProduct] = useState({
     serviceName: "",
-    serviceCategory: "",
+    serviceCategory: "people",
     destinationFrom: "",
     destinationTo: "",
     routeCities: "",
@@ -21,7 +21,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
     totalSeats: "",
     availableSeats: "",
     parcelLoadCapacity: "",
-    pickupOption: "", // e.g. "yes" or "no"
+    pickupOption: "no", // e.g. "yes" or "no"
     pricePerSeat: "",
     servicePic: null,
   });
@@ -88,7 +88,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
 
       const formData = new FormData();
       formData.append("serviceName", product.serviceName);
-      formData.append("serviceCategory", product.serviceCategory);
+      formData.append("serviceCategory", 'people');
       formData.append("destinationFrom", product.destinationFrom);
       formData.append("destinationTo", product.destinationTo);
 
@@ -128,7 +128,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
         formData.append("parcelLoadCapacity", "");
       }
 
-      formData.append("pickupOption", product.pickupOption);
+      formData.append("pickupOption", 'no');
       formData.append("pricePerSeat", product.pricePerSeat);
 
       if (userId) {
@@ -214,7 +214,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
               </div>
 
               {/* Service Category */}
-              <div>
+              {/* <div>
                 <label
                   htmlFor="serviceCategory"
                   className="block text-sm font-medium text-gray-700"
@@ -234,7 +234,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
                   <option value="parcels">Parcels</option>
                   <option value="vehicles">Vehicles</option>
                 </select>
-              </div>
+              </div> */}
 
               {/* Destination From */}
               <div>
@@ -456,7 +456,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
               )}
 
               {/* Pickup Option */}
-              <div className="md:col-span-2">
+              {/* <div className="md:col-span-2">
                 <label
                   htmlFor="pickupOption"
                   className="block text-sm font-medium text-gray-700"
@@ -475,7 +475,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
                   <option value="yes">Yes</option>
                   <option value="no">No</option>
                 </select>
-              </div>
+              </div> */}
 
               {/* Price Per Seat */}
               <div>
