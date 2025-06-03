@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import pageTitle from "../../assets/contact/page-title.png";
+// import pageTitle from "../../assets/contact/page-title.png";
+import pageTitle from "../../assets/services/bus_on_the_reoad.png";
 import { FaChevronRight } from "react-icons/fa";
 
 const Header = ({name,title}) => {
@@ -8,7 +9,7 @@ const Header = ({name,title}) => {
       <img
         src={pageTitle}
         alt="Contact page poster"
-        className="w-full h-auto min-h-[300px] object-cover"
+        className="w-full h-auto min-h-[300px] max-h-[400px] object-fit"
       />
 
       <div className="absolute inset-0 flex flex-col justify-center items-center bg-[#000000b3] bg-opacity-60 px-4">
