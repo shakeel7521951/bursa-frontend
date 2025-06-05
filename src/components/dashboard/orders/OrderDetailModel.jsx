@@ -11,6 +11,8 @@ const OrderDetailModal = ({ order, closeModal }) => {
   const [updateOrderStatus, { isLoading }] = useUpdateOrderStatusMutation();
   const { refetch } = useGetAllOrdersQuery();
 
+  if (!order) return null;
+
   const handleStatusChange = async () => {
     try {
       const response = await updateOrderStatus({
@@ -18,9 +20,19 @@ const OrderDetailModal = ({ order, closeModal }) => {
         newStatus: status,
       }).unwrap();
 
-      toast.success(response.message || "Order status updated successfully");
+      if (response?.message) {
+        toast.success(response.message);
+      } else {
+        toast.success("Order status updated successfully");
+      }
+
       refetch();
-      closeModal();
+
+      if (typeof closeModal === "function") {
+        closeModal();
+      } else {
+        console.warn("closeModal is not a function");
+      }
     } catch (error) {
       console.error("Update failed:", error);
       toast.error(
@@ -29,36 +41,35 @@ const OrderDetailModal = ({ order, closeModal }) => {
     }
   };
 
-  if (!order) return null;
+  console.log("closeModal prop:", closeModal);
 
   return (
     <motion.div
       className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
+      aria-modal="true"
+      role="dialog"
     >
       <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-lg relative">
+        {/* Close Button */}
+        <button
+          onClick={typeof closeModal === "function" ? closeModal : () => {}}
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
+          aria-label="Close"
+        >
+          &times;
+        </button>
+
         <h2 className="text-xl font-bold text-blue-700 mb-4">Order Details</h2>
 
         <div className="space-y-2 text-sm text-gray-800">
-          <p>
-            <strong>Order ID:</strong> {order._id}
-          </p>
-          <p>
-            <strong>Customer:</strong> {order.customerId?.name || "N/A"}
-          </p>
-          <p>
-            <strong>Email:</strong> {order.customerId?.email || "N/A"}
-          </p>
-          <p>
-            <strong>Total Price:</strong> ₹{order.price?.toFixed(2) || "N/A"}
-          </p>
-          <p>
-            <strong>Pickup Location:</strong> {order.pickupLocation || "N/A"}
-          </p>
-          <p>
-            <strong>Dropoff Location:</strong> {order.dropoffLocation || "N/A"}
-          </p>
+          <p><strong>Order ID:</strong> {order._id}</p>
+          <p><strong>Customer:</strong> {order.customerId?.name || "N/A"}</p>
+          <p><strong>Email:</strong> {order.customerId?.email || "N/A"}</p>
+          <p><strong>Total Price:</strong> ₹{order.price?.toFixed(2) || "N/A"}</p>
+          <p><strong>Pickup Location:</strong> {order.pickupLocation || "N/A"}</p>
+          <p><strong>Dropoff Location:</strong> {order.dropoffLocation || "N/A"}</p>
           <p>
             <strong>Date:</strong>{" "}
             {order.createdAt
@@ -84,7 +95,7 @@ const OrderDetailModal = ({ order, closeModal }) => {
 
         <div className="flex justify-end space-x-3 mt-6">
           <button
-            onClick={closeModal}
+            onClick={typeof closeModal === "function" ? closeModal : () => {}}
             className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
           >
             Cancel
@@ -92,11 +103,11 @@ const OrderDetailModal = ({ order, closeModal }) => {
           <button
             onClick={handleStatusChange}
             className={`px-4 py-2 text-white rounded-lg transition ${
-              isLoading
+              isLoading || status === order.orderStatus
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700"
             }`}
-            disabled={isLoading}
+            disabled={isLoading || status === order.orderStatus}
           >
             {isLoading ? "Updating..." : "Save"}
           </button>

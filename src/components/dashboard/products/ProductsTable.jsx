@@ -1,11 +1,10 @@
 import { motion } from "framer-motion";
 import { Edit, Search, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useDeleteServiceMutation, useGetAllServicesQuery } from "../../../redux/slices/ServiceApi";
 import AlertDialog from "../alert/AlertDialog";
 import AddProduct from "../popup/Add";
-import { useDeleteServiceMutation, useGetAllServicesQuery } from "../../../redux/slices/ServiceApi";
-import { toast } from "react-toastify";
 import UpdateService from "./UpdateProduct";
 
 const ProductsTable = () => {
@@ -25,24 +24,19 @@ const ProductsTable = () => {
     }
   }, [data]);
 
-  if (isLoading) return <p className="text-blue-700 text-lg">Loading services...</p>;
-
   const handleDelete = async () => {
     if (!selectedProduct) return;
-
     try {
       const response = await deleteService(selectedProduct._id);
-
       if (response.error) {
         toast.error(response.error.data?.message || "Failed to delete service", { position: "top-center" });
       } else {
         toast.success("Service deleted successfully", { position: "top-center" });
-        setServicesList((prev) => prev.filter((service) => service._id !== selectedProduct._id));
+        setServicesList((prev) => prev.filter((s) => s._id !== selectedProduct._id));
       }
     } catch (error) {
       toast.error("An error occurred while deleting", { position: "top-center" });
     }
-
     setDialogOpen(false);
     setSelectedProduct(null);
   };
@@ -58,6 +52,8 @@ const ProductsTable = () => {
       service.serviceCategory.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  if (isLoading) return <p className="text-blue-700 text-lg">Loading services...</p>;
+
   return (
     <>
       <motion.button
@@ -65,27 +61,27 @@ const ProductsTable = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
         onClick={() => setAddProductOpen(true)}
-        className="px-4 py-2 mb-10 bg-blue-700 cursor-pointer text-white rounded-lg hover:bg-blue-500 transition"
+        className="px-6 py-2 mb-6 bg-blue-700 text-white rounded-md hover:bg-blue-600 transition-all"
       >
         + Add New Service
       </motion.button>
 
-      {error && <p className="text-red-700 text-lg">Failed to fetch data.</p>}
+      {error && <p className="text-red-600 text-lg">Failed to fetch data.</p>}
 
       {!error && (
         <motion.div
-          className="bg-white backdrop-blur-md shadow-lg rounded-xl p-6 border border-blue-700 mb-8"
+          className="bg-white shadow-xl rounded-lg p-6 border border-blue-700 mb-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-blue-700">Cars List</h2>
-            <div className="relative">
+          <div className="flex justify-between items-center mb-4 ">
+            <h2 className="text-xl font-semibold text-blue-700">Service List</h2>
+            <div className="relative w-64">
               <input
                 type="text"
-                placeholder="Search cars..."
-                className="bg-white text-blue-700 placeholder-blue-700 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Search services..."
+                className="bg-white text-blue-700 border border-blue-300 rounded-lg pl-10 pr-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onChange={(e) => setSearchTerm(e.target.value)}
                 value={searchTerm}
               />
@@ -95,31 +91,62 @@ const ProductsTable = () => {
 
           <div className="overflow-x-auto">
             {filteredProducts.length > 0 ? (
-              <table className="min-w-full divide-y divide-gray-700">
-                <thead>
+              <table className="min-w-[1200px] w-full text-sm text-left text-blue-700 border-collapse">
+                <thead className="bg-blue-50 border-b border-blue-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Category</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Price</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Passengers</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Actions</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Name</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Category</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">From → To</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Price/Seat</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Seats</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Departure</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Route</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap text-center">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-700">
+                <tbody>
                   {filteredProducts.map((service) => (
-                    <motion.tr key={service._id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-700 flex gap-2 items-center">
-                        <img src={service.servicePic || "https://via.placeholder.com/50"} alt={service.serviceName} className="size-10 rounded-full" />
-                        {service.serviceName}
+                    <motion.tr
+                      key={service._id}
+                      className="border-b border-blue-100 hover:bg-blue-50 transition-all"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <td className="px-4 py-3 flex items-center gap-3">
+                        <img
+                          src={service.servicePic || "https://via.placeholder.com/50"}
+                          alt={service.serviceName}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                        <span className="font-medium">{service.serviceName}</span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">{service.serviceCategory}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">${service.price}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">{service.passengers}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                        <button className="text-indigo-500 cursor-pointer hover:text-indigo-300 mr-2" onClick={() => handleUpdate(service)}>
+                      <td className="px-4 py-3 whitespace-nowrap">{service.serviceCategory}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">{service.destinationFrom} → {service.destinationTo}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">Rs. {service.pricePerSeat}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {service.availableSeats}/{service.totalSeats}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {new Date(service.travelDate).toLocaleDateString()} at {service.departureTime}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {service.routeCities?.join(" → ")}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-center">
+                        <button
+                          className="text-indigo-500 hover:text-indigo-600 mr-2"
+                          onClick={() => handleUpdate(service)}
+                        >
                           <Edit size={18} />
                         </button>
-                        <button className="text-red-500 cursor-pointer hover:text-red-300" onClick={() => { setSelectedProduct(service); setDialogOpen(true); }}>
+                        <button
+                          className="text-red-500 hover:text-red-600"
+                          onClick={() => {
+                            setSelectedProduct(service);
+                            setDialogOpen(true);
+                          }}
+                        >
                           <Trash2 size={18} />
                         </button>
                       </td>
@@ -128,12 +155,13 @@ const ProductsTable = () => {
                 </tbody>
               </table>
             ) : (
-              <p className="text-center text-gray-500 py-4">No services found.</p>
+              <p className="text-center text-gray-500 py-6">No services found.</p>
             )}
           </div>
         </motion.div>
       )}
 
+      {/* Modals */}
       <UpdateService isOpen={isOpenUpdate} onClose={() => setOpenUpdate(false)} serviceData={selectedProduct} />
       <AddProduct isOpen={addProductOpen} onClose={() => setAddProductOpen(false)} />
       <AlertDialog isOpen={dialogOpen} onClose={() => setDialogOpen(false)} onConfirm={handleDelete} />

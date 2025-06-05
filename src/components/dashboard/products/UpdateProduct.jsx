@@ -16,8 +16,8 @@ console.log(updateService)
     travelDate: "",
     departureTime: "",
     arrivalDate: "",
-    availabilityDaysRomania: "", // comma separated string
-    availabilityDaysItaly: "", // comma separated string
+    availabilityDaysRomania: "", 
+    availabilityDaysItaly: "",
     totalSeats: "",
     availableSeats: "",
     parcelLoadCapacity: "",

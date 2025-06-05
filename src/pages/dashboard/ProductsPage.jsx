@@ -31,7 +31,7 @@ const ProductsPage = () => {
           transition={{ duration: 1 }}
         >
           <StatCard
-            name="Total Cars"
+            name="Total Services"
             icon={Car}
             value={services.length}
             color="#6366F1"

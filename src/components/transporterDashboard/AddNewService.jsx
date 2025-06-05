@@ -153,7 +153,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
       }
     } catch (err) {
       console.error("Error adding service:", err);
-      toast.error("Failed to add service", { position: "top-center" });
+      toast.error(err.data.message, { position: "top-center" });
     }
   };
 
