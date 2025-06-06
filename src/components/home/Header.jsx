@@ -1,8 +1,7 @@
-import { useState } from "react";
 import Button from "../Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import home1 from '../../assets/home/home3.png'
 import home2 from '../../assets/home/home2.png';
-import home1 from '../../assets/home/home3.png';
 
 const Header = () => {
   return (
@@ -10,14 +9,14 @@ const Header = () => {
       {/* Hero Section with Images */}
       <div className="flex flex-col lg:flex-row w-full max-w-7xl mx-auto">
         {/* Left Image with Overlay Text */}
-        <div className="relative w-full lg:w-1/2 h-96 lg:h-[500px] overflow-hidden">
+        <div className="relative w-full lg:w-1/2 h-96 lg:h-[500px] justify-center items-center overflow-hidden">
           <img 
             src={home1} 
             alt="Bus traveling between Romania and Italy" 
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center p-6">
-            <div className="text-white text-center max-w-md">
+          <div className="absolute inset-0 bg-black/40 flex justify-center items-center mt-auto mb-0 p-6">
+            <div className="text-white max-w-md ">
               <h1 className="text-3xl md:text-4xl font-bold mb-4">
                 Transport de încredere între România și Italia
               </h1>

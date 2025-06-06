@@ -177,7 +177,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Service Name */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiMapPin className="text-gray-500" />
                   Service Name
                 </label>
@@ -194,7 +194,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
 
               {/* Destination From */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiMapPin className="text-gray-500" />
                   From (Romania)
                 </label>
@@ -211,7 +211,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
 
               {/* Destination To */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiMapPin className="text-gray-500" />
                   To (Italy)
                 </label>
@@ -228,7 +228,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
 
               {/* Travel Date */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiCalendar className="text-gray-500" />
                   Travel Date
                 </label>
@@ -244,7 +244,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
 
               {/* Departure Time */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiClock className="text-gray-500" />
                   Departure Time
                 </label>
@@ -260,7 +260,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
 
               {/* Arrival Date */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiCalendar className="text-gray-500" />
                   Arrival Date
                 </label>
@@ -322,7 +322,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
 
               {/* Seats Information */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiUsers className="text-gray-500" />
                   Total Seats
                 </label>
@@ -338,7 +338,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiUsers className="text-gray-500" />
                   Available Seats
                 </label>
@@ -356,7 +356,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
 
               {/* Price */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiDollarSign className="text-gray-500" />
                   Price Per Seat (€)
                 </label>
@@ -374,7 +374,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
 
               {/* Image Upload */}
               <div className="md:col-span-2 space-y-2">
-                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiUpload className="text-gray-500" />
                   Vehicle Image
                 </label>
