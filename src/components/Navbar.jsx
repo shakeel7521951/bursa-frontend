@@ -39,7 +39,7 @@ const Navbar = () => {
       <div className="container mx-auto py-4 flex justify-between items-center">
         <div>
           <Link to="/">
-            <img src={logo} alt="Company Logo" className="h-12" />
+            <img src={logo} alt="Company Logo" className="h-8 md:h-12" />
           </Link>
         </div>
 
