@@ -15,7 +15,7 @@ const Navbar = () => {
   const [logout] = useLogoutMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  console.log(userProfile)
+  console.log(userProfile);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -45,26 +45,47 @@ const Navbar = () => {
 
         {/* Menu links */}
         <div className="hidden md:flex justify-center flex-1 text-white gap-5">
-          <Link to="/" className="relative text-white hover:after:w-full rounded-full">
+          <Link
+            to="/"
+            className="relative text-white hover:after:w-full rounded-full"
+          >
             Acasă
           </Link>
-          <Link to="/services" className="relative text-white hover:after:w-full rounded-full">
+          <Link
+            to="/services"
+            className="relative text-white hover:after:w-full rounded-full"
+          >
             Servicii
           </Link>
-          <Link to="/blogs" className="relative text-white hover:after:w-full rounded-full">
+          <Link
+            to="/blogs"
+            className="relative text-white hover:after:w-full rounded-full"
+          >
             Bloguri
           </Link>
-          <Link to="/about-us" className="relative text-white hover:after:w-full rounded-full">
+          <Link
+            to="/about-us"
+            className="relative text-white hover:after:w-full rounded-full"
+          >
             Despre noi
           </Link>
-          <Link to="/contact-us" className="relative text-white hover:after:w-full rounded-full">
+          <Link
+            to="/contact-us"
+            className="relative text-white hover:after:w-full rounded-full"
+          >
             Contact
           </Link>
         </div>
 
         {/* Buttons + profile */}
         <div className="hidden md:flex items-center gap-4">
-          {userProfile ? <Link to="/services"><Button text={"Rezervă Călătorie"} /></Link> : ""}
+          {userProfile ? (
+            <Link to="/services">
+              <Button text={"Rezervă Călătorie"} />
+            </Link>
+          ) : (
+            ""
+          )}
 
           {userProfile ? (
             <div className="relative">
@@ -88,45 +109,63 @@ const Navbar = () => {
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-30">
                   <ul className="py-2 text-gray-700">
-                    <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {
-                      navigate("/my-profile");
-                      setDropdownOpen(false);
-                    }}>
+                    <li
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => {
+                        navigate("/my-profile");
+                        setDropdownOpen(false);
+                      }}
+                    >
                       Profilul Meu
                     </li>
                     {userProfile.role === "Admin" && (
-                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {
-                        navigate("/dashboard");
-                        setDropdownOpen(false);
-                      }}>
+                      <li
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          navigate("/dashboard");
+                          setDropdownOpen(false);
+                        }}
+                      >
                         Admin
                       </li>
                     )}
                     {userProfile.role === "Transporter" && (
                       <>
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {
-                          navigate("/transporter-dashboard");
-                          setDropdownOpen(false);
-                        }}>
+                        <li
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            navigate("/transporter-dashboard");
+                            setDropdownOpen(false);
+                          }}
+                        >
                           Servicii
                         </li>
-                        <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {
-                          navigate("/transporter-orders");
-                          setDropdownOpen(false);
-                        }}>
+                        <li
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            navigate("/transporter-orders");
+                            setDropdownOpen(false);
+                          }}
+                        >
                           Comenzi
                         </li>
                       </>
                     )}
                     {userProfile.role === "User" && (
-                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {
-                        navigate("/my-orders");
-                        setDropdownOpen(false);
-                      }}>
+                      <li
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          navigate("/my-orders");
+                          setDropdownOpen(false);
+                        }}
+                      >
                         Comenzile Mele
                       </li>
                     )}
-                    <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
+                    <li
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={handleLogout}
+                    >
                       Deconectare
                     </li>
                   </ul>
@@ -163,13 +202,63 @@ const Navbar = () => {
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-30">
                   <ul className="py-2 text-gray-700">
-                    <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => {
-                      navigate("/my-profile");
-                      setDropdownOpen(false);
-                    }}>
+                    <li
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => {
+                        navigate("/my-profile");
+                        setDropdownOpen(false);
+                      }}
+                    >
                       Profilul Meu
                     </li>
-                    <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
+                    {userProfile.role === "Admin" && (
+                      <li
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          navigate("/dashboard");
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        Admin
+                      </li>
+                    )}
+                    {userProfile.role === "Transporter" && (
+                      <>
+                        <li
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            navigate("/transporter-dashboard");
+                            setDropdownOpen(false);
+                          }}
+                        >
+                          Servicii
+                        </li>
+                        <li
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            navigate("/transporter-orders");
+                            setDropdownOpen(false);
+                          }}
+                        >
+                          Comenzi
+                        </li>
+                      </>
+                    )}
+                    {userProfile.role === "User" && (
+                      <li
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          navigate("/my-orders");
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        Comenzile Mele
+                      </li>
+                    )}
+                    <li
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={handleLogout}
+                    >
                       Deconectare
                     </li>
                   </ul>
@@ -188,8 +277,10 @@ const Navbar = () => {
         </div>
 
         {showSidebar && (
-          <div className="fixed inset-0 bg-[#000000ab] bg-opacity-50 z-40"
-            onClick={() => setShowSidebar(false)}></div>
+          <div
+            className="fixed inset-0 bg-[#000000ab] bg-opacity-50 z-40"
+            onClick={() => setShowSidebar(false)}
+          ></div>
         )}
 
         <div
@@ -205,16 +296,32 @@ const Navbar = () => {
           </button>
 
           <ul className="flex flex-col gap-8 mt-20">
-            <Link to="/" className="font-bold text-2xl hover:text-[#FFEE02]" onClick={() => setShowSidebar(false)}>
+            <Link
+              to="/"
+              className="font-bold text-2xl hover:text-[#FFEE02]"
+              onClick={() => setShowSidebar(false)}
+            >
               Acasă
             </Link>
-            <Link to="/services" className="font-bold text-2xl hover:text-[#FFEE02]" onClick={() => setShowSidebar(false)}>
+            <Link
+              to="/services"
+              className="font-bold text-2xl hover:text-[#FFEE02]"
+              onClick={() => setShowSidebar(false)}
+            >
               Servicii
             </Link>
-            <Link to="/about-us" className="font-bold text-2xl hover:text-[#FFEE02]" onClick={() => setShowSidebar(false)}>
+            <Link
+              to="/about-us"
+              className="font-bold text-2xl hover:text-[#FFEE02]"
+              onClick={() => setShowSidebar(false)}
+            >
               Despre noi
             </Link>
-            <Link to="/contact-us" className="font-bold text-2xl hover:text-[#FFEE02]" onClick={() => setShowSidebar(false)}>
+            <Link
+              to="/contact-us"
+              className="font-bold text-2xl hover:text-[#FFEE02]"
+              onClick={() => setShowSidebar(false)}
+            >
               Contact
             </Link>
           </ul>
@@ -222,7 +329,11 @@ const Navbar = () => {
           {!userProfile && (
             <div className="mt-12 flex flex-col gap-6">
               <Link to="/login">
-                <Button text="Autentificare" bgHover="black" textHover="white" />
+                <Button
+                  text="Autentificare"
+                  bgHover="black"
+                  textHover="white"
+                />
               </Link>
               <Link to="/sign-up">
                 <Button text="Înregistrare" bgHover="black" textHover="white" />
