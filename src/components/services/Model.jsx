@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useCreateOrderMutation } from "../../redux/slices/OrderSlices";
 import { toast } from "react-toastify";
+import { FaChair, FaSuitcase, FaArrowRight } from "react-icons/fa";
 
 const BookingModal = () => {
   const location = useLocation();
@@ -39,7 +40,6 @@ const BookingModal = () => {
       return;
     }
 
-    // Calculate total price using pricePerSeat from service object
     const totalPrice = service.pricePerSeat * orderData.seatsBooked;
 
     try {
@@ -67,33 +67,78 @@ const BookingModal = () => {
 
   if (!service) {
     return (
-      <p className="text-center text-gray-500 text-xl">Service not found.</p>
+      <div className="flex items-center justify-center h-64">
+        <p className="text-xl text-gray-500">Service not found.</p>
+      </div>
     );
   }
 
   const totalPrice = service.pricePerSeat * orderData.seatsBooked;
 
   return (
-    <div className="flex items-center justify-center p-6 sm:p-12">
-      <div className="w-full max-w-[550px] bg-white p-6 rounded-lg shadow-lg">
-        <div className="relative flex flex-col items-center mb-6">
-          <img
-            src={service.servicePic}
-            alt={service.serviceName}
-            className="w-full h-[200px] object-cover rounded-lg"
-          />
-          <h2 className="absolute bottom-2 bg-black/60 text-white px-4 py-1 rounded text-xl font-semibold">
-            {service.serviceName}
-          </h2>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 sm:p-6">
+      <div className="w-full max-w-2xl bg-white rounded-xl shadow-2xl overflow-hidden">
+        {/* Header Section */}
+        <div className="bg-black text-white p-6">
+          <h1 className="text-2xl font-bold">Complete Your Booking</h1>
+          <div className="flex items-center mt-2 text-yellow-400">
+            <span className="font-medium">{service.destinationFrom}</span>
+            <FaArrowRight className="mx-2" />
+            <span className="font-medium">{service.destinationTo}</span>
+          </div>
         </div>
 
-        <form onSubmit={orderService}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-            <div>
+        {/* Service Overview */}
+        <div className="relative p-6 border-b border-gray-200">
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="w-full md:w-1/3 h-48 overflow-hidden rounded-lg">
+              <img
+                src={service.servicePic}
+                alt={service.serviceName}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.src = "https://via.placeholder.com/400x300?text=Bus+Image";
+                }}
+              />
+            </div>
+            <div className="w-full md:w-2/3">
+              <h2 className="text-xl font-bold text-gray-800 mb-2">
+                {service.serviceName}
+              </h2>
+              <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                <div>
+                  <p className="font-medium">Departure</p>
+                  <p>
+                    {new Date(service.travelDate).toLocaleDateString()} at{" "}
+                    {service.departureTime}
+                  </p>
+                </div>
+                <div>
+                  <p className="font-medium">Arrival</p>
+                  <p>{new Date(service.arrivalDate).toLocaleDateString()}</p>
+                </div>
+                <div>
+                  <p className="font-medium">Transporter</p>
+                  <p>{service.transporter?.name || "N/A"}</p>
+                </div>
+                <div>
+                  <p className="font-medium">Price per seat</p>
+                  <p>${service.pricePerSeat}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Booking Form */}
+        <form onSubmit={orderService} className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
               <label
                 htmlFor="seatsBooked"
-                className="text-sm font-medium text-gray-700"
+                className="flex items-center text-sm font-medium text-gray-700 mb-2"
               >
+                <FaChair className="mr-2 text-yellow-600" />
                 Seats to Book*
               </label>
               <input
@@ -106,19 +151,20 @@ const BookingModal = () => {
                 value={orderData.seatsBooked}
                 onChange={handleChange}
                 disabled={isLoading}
-                className="mt-1 w-full border rounded-md px-4 py-2 text-sm"
+                className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
               />
-              <p className="text-md text-gray-500 mt-3">
-                Available seats: {service.availableSeats}
+              <p className="text-sm text-gray-500 mt-2">
+                {service.availableSeats} seats available
               </p>
             </div>
 
-            <div>
+            <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
               <label
                 htmlFor="luggageQuantity"
-                className="text-sm font-medium text-gray-700"
+                className="flex items-center text-sm font-medium text-gray-700 mb-2"
               >
-                Luggage Quantity (optional)
+                <FaSuitcase className="mr-2 text-yellow-600" />
+                Luggage Quantity
               </label>
               <input
                 type="number"
@@ -128,29 +174,48 @@ const BookingModal = () => {
                 value={orderData.luggageQuantity}
                 onChange={handleChange}
                 disabled={isLoading}
-                className="mt-1 w-full border rounded-md px-4 py-2 text-sm"
+                className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
               />
             </div>
           </div>
 
-          <div className="flex justify-between items-center mb-6">
-            <p className="text-lg font-semibold text-gray-700">Total Price</p>
-            <p className="text-xl font-bold text-gray-900">
-              ${totalPrice.toFixed(2)}
-            </p>
+          {/* Price Summary */}
+          <div className="bg-gray-50 p-4 rounded-lg mb-6">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-gray-800">Total</h3>
+              <div className="text-right">
+                <p className="text-2xl font-bold text-yellow-600">
+                  ${totalPrice.toFixed(2)}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {orderData.seatsBooked} seat{orderData.seatsBooked !== 1 && "s"} × ${service.pricePerSeat}
+                </p>
+              </div>
+            </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`w-full py-3 rounded-full text-base font-bold transition ${
-              isLoading
-                ? "bg-yellow-300 cursor-not-allowed opacity-70"
-                : "bg-[#FFEE02] hover:bg-yellow-400"
-            }`}
-          >
-            {isLoading ? "Booking..." : "Book Now"}
-          </button>
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              disabled={isLoading}
+              className="px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-colors flex-1"
+            >
+              Back
+            </button>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`px-6 py-3 rounded-lg font-bold text-black transition-colors flex-1 ${
+                isLoading
+                  ? "bg-yellow-300 cursor-not-allowed"
+                  : "bg-yellow-400 hover:bg-yellow-500 shadow-md"
+              }`}
+            >
+              {isLoading ? "Processing..." : "Confirm Booking"}
+            </button>
+          </div>
         </form>
       </div>
     </div>

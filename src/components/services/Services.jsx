@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useGetAllServicesQuery } from "../../redux/slices/ServiceApi";
 import { FaSearch, FaUser, FaCarSide, FaDoorOpen } from "react-icons/fa";
 import { MdMenuOpen, MdOutlineElectricBike } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "../Button";
 import { selectUserProfile } from "../../redux/slices/UserSlice";
 import { useSelector } from "react-redux";
@@ -38,16 +38,16 @@ const OurServices = () => {
 
   // Generate categories with icons
   const categories = [
-    { name: "All", icon: <MdMenuOpen /> },
+    { name: "All", icon: <MdMenuOpen className="text-lg" /> },
     ...[...new Set(services.map((s) => s.serviceCategory))].map((category) => ({
       name: category,
       icon:
         category === "Bike" ? (
-          <MdOutlineElectricBike />
+          <MdOutlineElectricBike className="text-lg" />
         ) : category === "Taxi" ? (
-          <FaDoorOpen />
+          <FaDoorOpen className="text-lg" />
         ) : (
-          <MdMenuOpen />
+          <MdMenuOpen className="text-lg" />
         ),
     })),
   ];
@@ -62,19 +62,24 @@ const OurServices = () => {
 
   // Loading and error states
   if (isLoading)
-    return <p className="text-center mt-10">Loading services...</p>;
+    return (
+      <div className="flex justify-center items-center h-64">
+        <p className="text-lg">Loading services...</p>
+      </div>
+    );
   if (error)
     return (
-      <p className="text-center mt-10 text-red-600">Error loading services</p>
+      <div className="flex justify-center items-center h-64">
+        <p className="text-lg text-red-600">Error loading services</p>
+      </div>
     );
 
   return (
-    <div className="w-full my-7 flex flex-col items-center px-6 md:px-0">
-      {/* Search bar */}
+    <div className="w-full my-7 flex flex-col items-center px-4 sm:px-6">
+      {/* Search bar and add trip button */}
       <div className="container flex flex-col md:flex-row items-center justify-between gap-4 mb-6 w-full">
-        {/* Search Input */}
-        <div className="flex mx-auto items-center w-full md:max-w-md bg-white border border-gray-300 rounded-lg px-4 py-2 shadow-sm">
-          <FaSearch className="text-gray-400 mr-3" />
+        <div className="flex items-center w-full md:max-w-md bg-white border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus-within:ring-2 focus-within:ring-yellow-400 focus-within:border-transparent">
+          <FaSearch className="text-gray-400 mr-3 text-lg" />
           <input
             type="text"
             placeholder="Search for a service..."
@@ -84,7 +89,6 @@ const OurServices = () => {
           />
         </div>
 
-        {/* Add New Trip Button */}
         {userProfile?.role === "Transporter" && (
           <Button
             onClick={() => setAddProductOpen(true)}
@@ -95,23 +99,26 @@ const OurServices = () => {
           />
         )}
       </div>
+
       <AddNewService
         isOpen={addProductOpen}
         onClose={() => setAddProductOpen(false)}
       />
+
       {/* Category filter buttons */}
-      <div className="flex gap-4 mb-5 flex-wrap justify-center">
+      <div className="flex gap-3 mb-6 flex-wrap justify-center">
         {categories.map(({ name, icon }) => (
           <button
             key={name}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full shadow-md cursor-pointer ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-full shadow-md transition-all duration-200 ${
               selectedCategory === name
-                ? "bg-[#FFEE02] text-black"
-                : "bg-gray-200 text-gray-700"
-            } transition-all duration-300`}
+                ? "bg-yellow-400 text-black font-medium"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
             onClick={() => setSelectedCategory(name)}
           >
-            {icon} {name}
+            <span className="text-lg">{icon}</span>
+            <span>{name}</span>
           </button>
         ))}
       </div>
@@ -122,44 +129,49 @@ const OurServices = () => {
           filteredServices.map((service) => (
             <div
               key={service._id}
-              className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row transform transition hover:scale-105 cursor-pointer"
+              className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row transition-transform hover:scale-[1.02] cursor-pointer"
               onClick={() => handleBookClick(service)}
             >
-              <div className="md:w-[40%] my-auto">
+              <div className="md:w-[40%] h-48 md:h-auto">
                 <img
                   src={service.servicePic}
                   alt={service.serviceName}
-                  className="w-full object-cover h-full max-h-[200px]"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.src = "https://via.placeholder.com/400x200?text=Bus+Image";
+                    e.target.className = "w-full h-full object-cover bg-gray-100";
+                  }}
                 />
               </div>
-              <div className="md:w-[60%] px-4 py-6 flex flex-col justify-between">
-                <h2 className="text-2xl font-bold text-gray-900">
-                  {service.serviceName}
-                </h2>
-                <div className="grid grid-cols-2 gap-2 mt-3 text-gray-700 text-sm">
-                  <div className="flex items-center gap-2">
-                    <FaUser className="w-5 h-5" />
-                    <p>Available Seats: {service.availableSeats}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <FaCarSide className="w-5 h-5" />
-                    <p>Category: {service.serviceCategory}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <FaDoorOpen className="w-5 h-5" />
-                    <p>From: {service.destinationFrom}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <FaDoorOpen className="w-5 h-5" />
-                    <p>To: {service.destinationTo}</p>
+              <div className="md:w-[60%] px-4 py-5 flex flex-col justify-between">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">
+                    {service.serviceName}
+                  </h2>
+                  <div className="grid grid-cols-2 gap-3 text-gray-700 text-sm">
+                    <div className="flex items-center gap-2">
+                      <FaUser className="w-4 h-4 text-gray-500" />
+                      <span>Seats: {service.availableSeats}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <FaCarSide className="w-4 h-4 text-gray-500" />
+                      <span>{service.serviceCategory}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <FaDoorOpen className="w-4 h-4 text-gray-500" />
+                      <span>From: {service.destinationFrom}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <FaDoorOpen className="w-4 h-4 text-gray-500" />
+                      <span>To: {service.destinationTo}</span>
+                    </div>
                   </div>
                 </div>
-                <hr className="mt-2" />
-                <div className="mt-4 flex items-center justify-between">
+                <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
                   <div>
-                    <p className="text-gray-600 text-sm">Price</p>
-                    <h3 className="text-2xl font-semibold text-gray-900">
-                      ${service.pricePerSeat}/trip
+                    <p className="text-sm text-gray-500">Price per seat</p>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      ${service.pricePerSeat}
                     </h3>
                   </div>
                   <button
@@ -167,7 +179,7 @@ const OurServices = () => {
                       e.stopPropagation();
                       handleBookClick(service);
                     }}
-                    className="bg-[#FFEE02] cursor-pointer text-black px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#ffee02d6] transition"
+                    className="bg-yellow-400 hover:bg-yellow-500 text-black px-5 py-2 rounded-full text-sm font-semibold transition-colors"
                   >
                     Book Now
                   </button>
@@ -176,84 +188,159 @@ const OurServices = () => {
             </div>
           ))
         ) : (
-          <p className="text-center text-gray-500">No services found.</p>
+          <div className="col-span-2 flex flex-col items-center justify-center py-12">
+            <FaSearch className="text-gray-400 text-4xl mb-4" />
+            <p className="text-gray-500 text-lg">No services found</p>
+            <p className="text-gray-400 text-sm mt-2">
+              Try adjusting your search or filters
+            </p>
+          </div>
         )}
       </div>
 
-      {/* Modal for selected service details */}
+      {/* Service Details Modal */}
       {selectedService && (
-        <div className="fixed pt-10 inset-0 bg-[#0000008a] flex items-center justify-center overflow-y-auto z-[999] px-4">
-          <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-lg relative max-h-[90vh] overflow-y-auto">
-            <button
-              onClick={() => setSelectedService(null)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-black text-3xl font-bold"
-              aria-label="Close modal"
-            >
-              &times;
-            </button>
+        <div className="fixed inset-0 bg-[#000000c0] bg-opacity-70 flex items-center justify-center z-[999] px-4 py-10">
+          <div className="bg-white rounded-xl w-full max-w-lg shadow-2xl relative max-h-[90vh] flex flex-col">
+            {/* Modal Header */}
+            <div className="bg-black text-yellow-400 px-6 py-4 rounded-t-xl">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold tracking-tight">
+                  {selectedService.serviceName}
+                </h2>
+                <button
+                  onClick={() => setSelectedService(null)}
+                  className="text-yellow-400 hover:text-white text-3xl font-light transition-colors focus:outline-none"
+                  aria-label="Close modal"
+                >
+                  &times;
+                </button>
+              </div>
+              <div className="flex items-center mt-1">
+                <svg
+                  className="w-5 h-5 mr-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm text-white">
+                  {selectedService.destinationFrom} →{" "}
+                  {selectedService.destinationTo}
+                </span>
+              </div>
+            </div>
 
-            <h2 className="text-2xl font-bold mb-4">
-              {selectedService.serviceName}
-            </h2>
-            <img
-              src={selectedService.servicePic}
-              alt={selectedService.serviceName}
-              className="w-full h-52 object-cover rounded mb-4"
-            />
+            {/* Modal Content */}
+            <div className="p-6 overflow-y-auto flex-grow">
+              <div className="mb-5 overflow-hidden rounded-lg border border-gray-200">
+                <img
+                  src={selectedService.servicePic}
+                  alt={selectedService.serviceName}
+                  className="w-full h-48 object-cover"
+                  onError={(e) => {
+                    e.target.src = "https://via.placeholder.com/800x400?text=Bus+Image";
+                  }}
+                />
+              </div>
 
-            <p>
-              <strong>Transporter:</strong>{" "}
-              {selectedService.transporter?.name || "N/A"}
-            </p>
-            <p>
-              <strong>Email:</strong>{" "}
-              {selectedService.transporter?.email || "N/A"}
-            </p>
-            <p>
-              <strong>From:</strong> {selectedService.destinationFrom}
-            </p>
-            <p>
-              <strong>To:</strong> {selectedService.destinationTo}
-            </p>
-            <p>
-              <strong>Departure Time:</strong> {selectedService.departureTime}
-            </p>
-            <p>
-              <strong>Travel Date:</strong>{" "}
-              {new Date(selectedService.travelDate).toLocaleDateString()}
-            </p>
-            <p>
-              <strong>Arrival Date:</strong>{" "}
-              {new Date(selectedService.arrivalDate).toLocaleDateString()}
-            </p>
-            <p>
-              <strong>Available Seats:</strong> {selectedService.availableSeats}{" "}
-              / {selectedService.totalSeats}
-            </p>
-            <p>
-              <strong>Price per Seat:</strong> ${selectedService.pricePerSeat}
-            </p>
-            <p>
-              <strong>Route Cities:</strong>{" "}
-              {selectedService.routeCities?.join(", ") || "N/A"}
-            </p>
-            <p>
-              <strong>Pickup Option:</strong>{" "}
-              {selectedService.pickupOption || "N/A"}
-            </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-100">
+                  <p className="text-xs uppercase tracking-wider text-gray-500 font-medium mb-1">
+                    Transporter
+                  </p>
+                  <p className="font-semibold">
+                    {selectedService.transporter?.name || "N/A"}
+                  </p>
+                </div>
 
-            <div className="flex justify-end mt-6 gap-4">
+                <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-100">
+                  <p className="text-xs uppercase tracking-wider text-gray-500 font-medium mb-1">
+                    Contact
+                  </p>
+                  <p className="font-semibold">
+                    {selectedService.transporter?.email || "N/A"}
+                  </p>
+                </div>
+
+                <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-100">
+                  <p className="text-xs uppercase tracking-wider text-gray-500 font-medium mb-1">
+                    Departure
+                  </p>
+                  <p className="font-semibold">
+                    {new Date(selectedService.travelDate).toLocaleDateString()}{" "}
+                    at {selectedService.departureTime}
+                  </p>
+                </div>
+
+                <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-100">
+                  <p className="text-xs uppercase tracking-wider text-gray-500 font-medium mb-1">
+                    Arrival
+                  </p>
+                  <p className="font-semibold">
+                    {new Date(selectedService.arrivalDate).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-3 border-t border-gray-100 pt-4">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Available Seats:</span>
+                  <span className="font-medium">
+                    {selectedService.availableSeats} /{" "}
+                    {selectedService.totalSeats}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Price per Seat:</span>
+                  <span className="font-bold text-yellow-600">
+                    ${selectedService.pricePerSeat}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Pickup Option:</span>
+                  <span className="font-medium">
+                    {selectedService.pickupOption || "N/A"}
+                  </span>
+                </div>
+              </div>
+
+              {selectedService.routeCities && (
+                <div className="mt-4">
+                  <p className="text-xs uppercase tracking-wider text-gray-500 font-medium mb-2">
+                    Route Cities
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedService.routeCities.map((city, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-black text-white text-xs rounded-full"
+                      >
+                        {city}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="bg-gray-50 px-6 py-4 rounded-b-xl border-t border-gray-200 flex justify-end gap-3">
               <button
                 onClick={() => setSelectedService(null)}
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                className="px-5 py-2 border border-gray-300 rounded-lg font-medium hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-400"
               >
                 Close
               </button>
               <button
                 onClick={handleProceed}
-                className="px-4 py-2 bg-[#FFEE02] text-black font-semibold rounded hover:bg-[#e6d902]"
+                className="px-5 py-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded-lg shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-600"
               >
-                Proceed to Book
+                Book Now
               </button>
             </div>
           </div>

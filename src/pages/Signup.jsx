@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 export default function RegisterPage() {
   const [userRegistration, { isLoading }] = useUserRegistrationMutation();
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -27,6 +28,7 @@ export default function RegisterPage() {
   const handleRegister = async (e) => {
     e.preventDefault();
     if (isLoading) return;
+
     const response = await userRegistration(formData);
     if (response.error) {
       toast.error(response.error.data?.message || "Înregistrarea a eșuat!", {
@@ -41,136 +43,106 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white shadow-lg rounded-xl overflow-hidden">
-        {/* Left Side */}
-        <div className="hidden md:flex w-1/2 bg-gray-50 items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center p-4 bg-gradient-to-l from-black to-gray-900">
+      <div className="flex flex-col md:flex-row w-full max-w-5xl bg-white shadow-2xl rounded-2xl overflow-hidden border-t-[6px] border-[#FFCE00]">
+        {/* Image Side */}
+        <div className="hidden md:flex md:w-1/2 items-center justify-center bg-black">
           <img
             src={signup}
-            alt="Ilustrație înregistrare"
-            className="w-[80%] object-cover rounded-lg shadow-lg"
+            alt="Form signup illustration"
+            className="w-[85%] rounded-lg shadow-md"
           />
         </div>
 
-        {/* Right Side */}
+        {/* Form Side */}
         <form
-          className="w-full md:w-1/2 flex flex-col p-8"
           onSubmit={handleRegister}
+          className="w-full md:w-1/2 p-8 space-y-5"
         >
-          <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
-            Creează un Cont
+          <h2 className="text-3xl font-bold text-gray-800 text-center">
+            Creează un cont
           </h2>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-md font-medium">
-              Nume complet
-            </label>
-            <input
-              type="text"
-              name="name"
-              className="w-full border border-gray-300 p-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Introdu numele complet"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          {/* Input Fields */}
+          {[
+            { label: "Nume complet", name: "name", type: "text", placeholder: "Introdu numele complet" },
+            { label: "Email", name: "email", type: "email", placeholder: "Introdu adresa de email" },
+            { label: "Parolă", name: "password", type: "password", placeholder: "Introdu parola" }
+          ].map(({ label, name, type, placeholder }) => (
+            <div key={name}>
+              <label className="block text-sm font-medium text-gray-700">{label}</label>
+              <input
+                type={type}
+                name={name}
+                value={formData[name]}
+                onChange={handleChange}
+                placeholder={placeholder}
+                className="w-full mt-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 text-gray-800"
+                required
+              />
+            </div>
+          ))}
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-md font-medium">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              className="w-full border border-gray-300 p-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Introdu adresa de email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-md font-medium">
-              Parolă
-            </label>
-            <input
-              type="password"
-              name="password"
-              className="w-full border border-gray-300 p-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Introdu parola"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 text-md font-medium">
-              Selectează rolul
-            </label>
+          {/* Role Select */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Rol</label>
             <select
               name="role"
               value={formData.role}
               onChange={handleChange}
-              className="w-full border border-gray-300 p-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 text-gray-800"
               required
             >
-              <option value="" disabled>
-                -- Selectează rolul --
-              </option>
+              <option value="" disabled>-- Selectează rolul --</option>
               <option value="User">Utilizator</option>
               <option value="Transporter">Transportator</option>
             </select>
           </div>
 
-          <div className="flex items-center justify-between my-4">
-            <div className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                name="rememberMe"
-                id="remember"
-                className="mr-2 cursor-pointer"
-                checked={formData.rememberMe}
-                onChange={handleChange}
-              />
-              <label
-                htmlFor="remember"
-                className="text-gray-600 cursor-pointer text-sm"
-              >
-                Ține-mă minte
-              </label>
-            </div>
+          {/* Remember Me */}
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              name="rememberMe"
+              id="rememberMe"
+              checked={formData.rememberMe}
+              onChange={handleChange}
+              className="h-4 w-4 text-yellow-500 focus:ring-yellow-400 border-gray-300 rounded"
+            />
+            <label htmlFor="rememberMe" className="ml-2 text-sm text-gray-600">
+              Ține-mă minte
+            </label>
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
-            className={`w-full bg-gradient-to-r from-[#FFEE02] to-yellow-500 text-black p-3 rounded-full mt-4 font-semibold hover:from-yellow-400 hover:to-[#FFEE02] transition duration-300 shadow-md cursor-pointer ${
-              isLoading ? "cursor-not-allowed opacity-70" : ""
-            }`}
             disabled={isLoading}
+            className={`w-full py-3 rounded-full font-semibold transition duration-300 shadow-md ${
+              isLoading
+                ? "bg-yellow-300 text-gray-600 cursor-not-allowed"
+                : "bg-gradient-to-r from-yellow-300 to-yellow-500 hover:from-yellow-400 hover:to-yellow-400 text-black"
+            }`}
           >
             {isLoading ? "Se încarcă..." : "Creează cont"}
           </button>
 
-          <div className="flex items-center my-6">
-            <div className="flex-grow h-px bg-gray-300"></div>
-            <span className="px-3 text-gray-500">SAU</span>
-            <div className="flex-grow h-px bg-gray-300"></div>
+          {/* Divider */}
+          <div className="flex items-center gap-3 my-4">
+            <hr className="flex-grow border-gray-300" />
+            <span className="text-gray-400 text-sm">SAU</span>
+            <hr className="flex-grow border-gray-300" />
           </div>
 
-          {/* Google Sign-up Button */}
+          {/* Google Signup */}
           <button
             type="button"
-            className="flex items-center justify-center w-full border border-gray-300 p-3 rounded-lg font-medium hover:bg-gray-100 transition duration-300"
+            className="flex items-center justify-center gap-3 w-full py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition duration-300 shadow-sm"
           >
-            <div className="p-2 bg-red-500 rounded-full flex items-center justify-center">
-              <FaGoogle className="text-white" />
+            <div className="p-2 bg-red-500 rounded-full text-white">
+              <FaGoogle />
             </div>
-            <span className="ml-3 text-gray-700 font-medium">
-              Înscrie-te cu Google
-            </span>
+            <span className="text-gray-700 font-medium">Înscrie-te cu Google</span>
           </button>
         </form>
       </div>

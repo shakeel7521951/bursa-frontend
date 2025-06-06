@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { FaChevronRight, FaChevronDown } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
-import faq1 from "../../assets/home/faq1-1.jpg";
+// import faq1 from "../../assets/home/faq1-1.jpg";
+import faq1 from '../../assets/home/testimonials.jpg'
 
 const Faqs = () => {
   const [openIndex, setOpenIndex] = useState(null);

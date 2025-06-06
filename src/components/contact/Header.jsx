@@ -12,7 +12,7 @@ const Header = ({name,title}) => {
         className="w-full h-auto min-h-[300px] max-h-[400px] object-fit"
       />
 
-      <div className="absolute inset-0 flex flex-col justify-center items-center bg-[#000000b3] bg-opacity-60 px-4">
+      <div className="absolute inset-0 flex flex-col justify-center items-center bg-[#00000081] bg-opacity-60 px-4">
         <h1 className="text-3xl md:text-5xl font-bold text-white text-center mb-3">
         {name}
         </h1>

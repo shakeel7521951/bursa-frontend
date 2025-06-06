@@ -11,7 +11,7 @@ const GetApp = () => {
         <img
           src={bgImage}
           alt="Background"
-          className="w-full h-full object-cover min-h-[300px]"
+          className="w-full h-full max-h-[300px] object-cover min-h-[300px]"
         />
         <div className="absolute inset-0 bg-[#000000ad]"></div>
       </div>
@@ -29,9 +29,9 @@ const GetApp = () => {
           ></div>
         </div>
 
-        <div className="hidden md:block absolute right-10 bottom-[-40px] w-[250px] md:w-[330px]">
+        {/* <div className="hidden md:block absolute right-10 bottom-[-40px] w-[250px] md:w-[330px]">
           <img src={iconCar} className="car-animation w-full" alt="Car Icon" />
-        </div>
+        </div> */}
 
         <div className="w-full md:w-[40%] my-auto">
           <h1 className="text-2xl md:text-5xl font-bold text-white">

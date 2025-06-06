@@ -66,73 +66,74 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white shadow-lg rounded-xl overflow-hidden">
-
+    <div className="flex min-h-screen items-center justify-center p-4 bg-gradient-to-r from-black to-gray-900">
+      <div className="flex flex-col md:flex-row w-full max-w-5xl bg-white shadow-2xl rounded-2xl overflow-hidden border-t-[6px] border-[#FFCE00]">
         {/* Left Side - Login Form */}
-        <div className="w-full md:w-1/2 flex flex-col p-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
-            Bine ai revenit
+        <div className="w-full md:w-1/2 flex flex-col p-10 justify-center bg-white">
+          <h2 className="text-4xl font-extrabold text-black mb-2 text-center tracking-tight">
+            Bine ai revenit la Bursa Trans
           </h2>
-          <p className="text-gray-600 text-sm text-center mb-6">
-            Începe-ți călătoria cu noi. Nu ai un cont?{" "}
+          <p className="text-gray-600 text-sm text-center mb-8">
+            Continuă călătoria ta spre Italia. Nu ai un cont?{" "}
             <Link
               to="/sign-up"
-              className="text-red-600 hover:underline font-semibold cursor-pointer"
+              className="text-[#FFCE00] hover:underline font-semibold"
             >
               Creează cont
             </Link>
           </p>
 
-          <form method="post" onSubmit={handleLogin}>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-md font-medium">
+          <form onSubmit={handleLogin} className="space-y-5">
+            <div>
+              <label className="block text-black text-sm font-semibold mb-1">
                 Email
               </label>
               <input
                 type="email"
                 name="email"
-                className="w-full border border-gray-300 p-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFCE00]"
                 placeholder="Introdu adresa de email"
                 value={formData.email}
                 onChange={handleChange}
               />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
 
-            <div className="mb-4 relative">
-              <label className="block text-gray-700 text-md font-medium">
+            <div>
+              <label className="block text-black text-sm font-semibold mb-1">
                 Parolă
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  className="w-full border border-gray-300 p-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10"
+                  className="w-full border border-gray-300 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFCE00] pr-10"
                   placeholder="Introdu parola"
                   value={formData.password}
                   onChange={handleChange}
                 />
                 <span
-                  className="absolute top-3 right-3 cursor-pointer text-gray-600"
+                  className="absolute top-3 right-3 text-gray-600 cursor-pointer"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </span>
               </div>
-              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              )}
             </div>
 
-            <div className="flex items-center justify-between my-4">
-              <div className="flex items-center">
-                <input type="checkbox" id="remember" className="mr-2" />
-                <label htmlFor="remember" className="text-gray-600 text-sm">
-                  Ține-mă minte
-                </label>
-              </div>
+            <div className="flex items-center justify-between text-sm text-gray-600">
+              <label className="flex items-center">
+                <input type="checkbox" className="mr-2" />
+                Ține-mă minte
+              </label>
               <Link
                 to="/forgot-password"
-                className="text-red-600 hover:underline font-medium cursor-pointer text-sm"
+                className="text-[#FFCE00] hover:underline font-medium"
               >
                 Ai uitat parola?
               </Link>
@@ -140,42 +141,43 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className={`w-full bg-gradient-to-r from-[#FFEE02] to-yellow-500 text-black p-3 rounded-full mt-4 font-semibold hover:from-yellow-400 hover:to-[#FFEE02] transition duration-300 shadow-md cursor-pointer ${
+              disabled={isLoading}
+              className={`w-full bg-[#FFCE00] text-black font-semibold py-3 rounded-full shadow-md hover:bg-yellow-400 transition duration-300 cursor-pointer ${
                 isLoading ? "cursor-not-allowed opacity-70" : ""
               }`}
-              disabled={isLoading}
             >
               {isLoading ? "Se conectează..." : "Conectează-te la contul tău"}
             </button>
           </form>
 
           <div className="flex items-center my-6">
-            <div className="flex-grow h-px bg-gray-300"></div>
-            <span className="px-3 text-gray-500">SAU</span>
-            <div className="flex-grow h-px bg-gray-300"></div>
+            <div className="flex-grow h-px bg-gray-300" />
+            <span className="px-3 text-gray-500 text-sm">SAU</span>
+            <div className="flex-grow h-px bg-gray-300" />
           </div>
 
-          {/* Google Sign-in Button */}
           <button
-            className="flex items-center cursor-pointer justify-center w-full border border-gray-300 p-3 rounded-lg font-medium hover:bg-gray-100 transition duration-300"
+            className="flex items-center justify-center w-full border border-gray-300 p-3 rounded-full font-semibold text-gray-800 hover:bg-gray-100 transition duration-300"
             onClick={handleGoogleLogin}
             disabled={googleLoading}
           >
-            <div className="p-2 bg-red-500 rounded-full flex items-center justify-center">
+            <div className="p-2 bg-red-500 rounded-full">
               <FaGoogle className="text-white" />
             </div>
-            <span className="ml-3 text-gray-700 font-medium">
-              {googleLoading ? "Se conectează cu Google..." : "Conectează-te cu Google"}
+            <span className="ml-3">
+              {googleLoading
+                ? "Se conectează cu Google..."
+                : "Conectează-te cu Google"}
             </span>
           </button>
         </div>
 
         {/* Right Side - Image */}
-        <div className="hidden md:flex w-1/2 bg-gray-50 items-center justify-center">
+        <div className="hidden md:flex w-1/2 items-center justify-center bg-black">
           <img
             src={loginImage}
-            alt="Ilustrație autentificare"
-            className="w-[80%] object-cover rounded-lg shadow-lg"
+            alt="Autentificare Bursa Trans"
+            className="w-[90%] h-auto object-cover rounded-lg shadow-lg"
           />
         </div>
       </div>
