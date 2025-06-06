@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useCreateServiceMutation } from "../../redux/slices/ServiceApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { FiX, FiUpload, FiCalendar, FiClock, FiMapPin, FiDollarSign, FiUsers } from "react-icons/fi";
 
 const AddNewService = ({ isOpen, onClose, userId }) => {
   const [createService, { isLoading }] = useCreateServiceMutation();
@@ -21,7 +22,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
     totalSeats: "",
     availableSeats: "",
     parcelLoadCapacity: "",
-    pickupOption: "no", // e.g. "yes" or "no"
+    pickupOption: "no",
     pricePerSeat: "",
     servicePic: null,
   });
@@ -40,7 +41,6 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
 
   if (!isOpen) return null;
 
-  // Update form fields on input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProduct((prev) => ({
@@ -49,7 +49,6 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
     }));
   };
 
-  // Handle image file selection and preview
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -61,12 +60,10 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
     }
   };
 
-  // Submit form data
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Convert and validate availability days inputs
       const romaniaDaysArray = product.availabilityDaysRomania
         .split(",")
         .map((day) => day.trim())
@@ -103,14 +100,12 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
       formData.append("departureTime", product.departureTime);
       formData.append("arrivalDate", product.arrivalDate);
 
-      // Add availability days as stringified object (because FormData requires string)
       const availabilityDays = {
         romania: romaniaDaysArray,
         italy: italyDaysArray,
       };
       formData.append("availabilityDays", JSON.stringify(availabilityDays));
 
-      // Seats (only for 'people' category)
       if (product.serviceCategory === "people") {
         formData.append("totalSeats", product.totalSeats);
         formData.append("availableSeats", product.availableSeats);
@@ -119,7 +114,6 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
         formData.append("availableSeats", "");
       }
 
-      // Parcel load capacity (only for 'parcels' category)
       if (product.serviceCategory === "parcels") {
         formData.append("parcelLoadCapacity", product.parcelLoadCapacity);
       } else {
@@ -137,7 +131,6 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
         formData.append("servicePic", product.servicePic);
       }
 
-      // Send request using your RTK query mutation or axios
       const response = await createService(formData).unwrap();
       console.log(response);
       if (response.error) {
@@ -158,379 +151,277 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[999] bg-[#00000098] flex items-center justify-center overflow-y-auto">
-      <div className="w-full max-w-3xl mx-auto px-4 relative">
-        {/* Overlay for clicking outside modal to close */}
-        <motion.div
-          className="absolute inset-0"
-          onClick={onClose}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        />
-
-        <motion.div
-          initial={{ opacity: 0, y: -30, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -30, scale: 0.95 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="bg-white p-6 rounded-lg shadow-xl relative z-10 max-h-[90vh] overflow-y-auto"
-        >
+    <div className="fixed inset-0 z-[999] bg-black/80 flex items-center justify-center overflow-y-auto p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.2 }}
+        className="relative w-full max-w-3xl bg-white rounded-xl shadow-2xl overflow-hidden"
+      >
+        {/* Modal Header */}
+        <div className="bg-gray-900 text-white p-6 flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Create New Trip</h2>
           <button
-            type="button"
-            className="absolute top-2 right-2 text-gray-600 hover:text-gray-800 cursor-pointer"
             onClick={onClose}
+            className="text-gray-300 hover:text-white transition-colors"
             aria-label="Close modal"
           >
-            ❌
+            <FiX size={24} />
           </button>
+        </div>
 
-          <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-            Add New Service
-          </h2>
-
+        {/* Modal Content */}
+        <div className="p-6 max-h-[80vh] overflow-y-auto">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Service Name */}
-              <div>
-                <label
-                  htmlFor="serviceName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Service Name:
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiMapPin className="text-gray-500" />
+                  Service Name
                 </label>
                 <input
                   type="text"
-                  id="serviceName"
                   name="serviceName"
                   value={product.serviceName}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
+                  placeholder="e.g. Express Bus to Italy"
                 />
               </div>
 
-              {/* Service Category */}
-              {/* <div>
-                <label
-                  htmlFor="serviceCategory"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Category:
-                </label>
-                <select
-                  id="serviceCategory"
-                  name="serviceCategory"
-                  value={product.serviceCategory}
-                  onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                  required
-                >
-                  <option value="">Select a category</option>
-                  <option value="people">People</option>
-                  <option value="parcels">Parcels</option>
-                  <option value="vehicles">Vehicles</option>
-                </select>
-              </div> */}
-
               {/* Destination From */}
-              <div>
-                <label
-                  htmlFor="destinationFrom"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Destination From:
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiMapPin className="text-gray-500" />
+                  From (Romania)
                 </label>
                 <input
                   type="text"
-                  id="destinationFrom"
                   name="destinationFrom"
                   value={product.destinationFrom}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
+                  placeholder="e.g. Bucharest"
                 />
               </div>
 
               {/* Destination To */}
-              <div>
-                <label
-                  htmlFor="destinationTo"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Destination To:
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiMapPin className="text-gray-500" />
+                  To (Italy)
                 </label>
                 <input
                   type="text"
-                  id="destinationTo"
                   name="destinationTo"
                   value={product.destinationTo}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
+                  placeholder="e.g. Rome"
                 />
               </div>
 
               {/* Travel Date */}
-              <div>
-                <label
-                  htmlFor="travelDate"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Travel Date:
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiCalendar className="text-gray-500" />
+                  Travel Date
                 </label>
                 <input
                   type="date"
-                  id="travelDate"
                   name="travelDate"
                   value={product.travelDate}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
                 />
               </div>
 
               {/* Departure Time */}
-              <div>
-                <label
-                  htmlFor="departureTime"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Departure Time:
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiClock className="text-gray-500" />
+                  Departure Time
                 </label>
                 <input
                   type="time"
-                  id="departureTime"
                   name="departureTime"
                   value={product.departureTime}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
                 />
               </div>
 
               {/* Arrival Date */}
-              <div>
-                <label
-                  htmlFor="arrivalDate"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Arrival Date:
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiCalendar className="text-gray-500" />
+                  Arrival Date
                 </label>
                 <input
                   type="date"
-                  id="arrivalDate"
                   name="arrivalDate"
                   value={product.arrivalDate}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
                 />
               </div>
 
               {/* Route Cities */}
-              <div className="md:col-span-2">
-                <label
-                  htmlFor="routeCities"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Route Cities (comma separated):
+              <div className="md:col-span-2 space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Route Cities (comma separated)
                 </label>
                 <input
                   type="text"
-                  id="routeCities"
                   name="routeCities"
                   value={product.routeCities}
                   onChange={handleChange}
-                  placeholder="City1, City2, City3"
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  placeholder="e.g. Brasov, Sibiu, Timisoara"
                 />
               </div>
 
-              {/* Availability Days Romania */}
-              <div>
-                <label
-                  htmlFor="availabilityDaysRomania"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Availability Days Romania (comma separated):
+              {/* Availability Days */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Availability Days (Romania)
                 </label>
                 <input
                   type="text"
-                  id="availabilityDaysRomania"
                   name="availabilityDaysRomania"
                   value={product.availabilityDaysRomania}
                   onChange={handleChange}
-                  placeholder="Monday, Wednesday, Friday"
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  placeholder="e.g. Monday, Wednesday"
                   required
                 />
               </div>
 
-              {/* Availability Days Italy */}
-              <div>
-                <label
-                  htmlFor="availabilityDaysItaly"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Availability Days Italy (comma separated):
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Availability Days (Italy)
                 </label>
                 <input
                   type="text"
-                  id="availabilityDaysItaly"
                   name="availabilityDaysItaly"
                   value={product.availabilityDaysItaly}
                   onChange={handleChange}
-                  placeholder="Tuesday, Thursday"
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  placeholder="e.g. Tuesday, Thursday"
                   required
                 />
               </div>
 
-              {/* Total Seats (only for people) */}
-              {product.serviceCategory === "people" && (
-                <>
-                  <div>
-                    <label
-                      htmlFor="totalSeats"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Total Seats:
-                    </label>
-                    <input
-                      type="number"
-                      id="totalSeats"
-                      name="totalSeats"
-                      value={product.totalSeats}
-                      onChange={handleChange}
-                      min="1"
-                      className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="availableSeats"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Available Seats:
-                    </label>
-                    <input
-                      type="number"
-                      id="availableSeats"
-                      name="availableSeats"
-                      value={product.availableSeats}
-                      onChange={handleChange}
-                      min="0"
-                      max={product.totalSeats || undefined}
-                      className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                      required
-                    />
-                  </div>
-                </>
-              )}
-
-              {/* Parcel Load Capacity (only for parcels) */}
-              {product.serviceCategory === "parcels" && (
-                <div className="md:col-span-2">
-                  <label
-                    htmlFor="parcelLoadCapacity"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Parcel Load Capacity:
-                  </label>
-                  <input
-                    type="text"
-                    id="parcelLoadCapacity"
-                    name="parcelLoadCapacity"
-                    value={product.parcelLoadCapacity}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                    required
-                  />
-                </div>
-              )}
-
-              {/* Pickup Option */}
-              {/* <div className="md:col-span-2">
-                <label
-                  htmlFor="pickupOption"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Pickup Option:
-                </label>
-                <select
-                  id="pickupOption"
-                  name="pickupOption"
-                  value={product.pickupOption}
-                  onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                  required
-                >
-                  <option value="">Select option</option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </select>
-              </div> */}
-
-              {/* Price Per Seat */}
-              <div>
-                <label
-                  htmlFor="pricePerSeat"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Price Per Seat:
+              {/* Seats Information */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiUsers className="text-gray-500" />
+                  Total Seats
                 </label>
                 <input
                   type="number"
-                  id="pricePerSeat"
+                  name="totalSeats"
+                  value={product.totalSeats}
+                  onChange={handleChange}
+                  min="1"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiUsers className="text-gray-500" />
+                  Available Seats
+                </label>
+                <input
+                  type="number"
+                  name="availableSeats"
+                  value={product.availableSeats}
+                  onChange={handleChange}
+                  min="0"
+                  max={product.totalSeats || undefined}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  required
+                />
+              </div>
+
+              {/* Price */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiDollarSign className="text-gray-500" />
+                  Price Per Seat (€)
+                </label>
+                <input
+                  type="number"
                   name="pricePerSeat"
                   value={product.pricePerSeat}
                   onChange={handleChange}
                   min="0"
                   step="0.01"
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
                 />
               </div>
 
-              {/* Service Picture */}
-              <div className="md:col-span-2">
-                <label
-                  htmlFor="servicePic"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Service Picture:
+              {/* Image Upload */}
+              <div className="md:col-span-2 space-y-2">
+                <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiUpload className="text-gray-500" />
+                  Vehicle Image
                 </label>
-                <input
-                  type="file"
-                  id="servicePic"
-                  name="servicePic"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="w-full"
-                />
-                {imagePreview && (
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="mt-2 max-h-40 object-contain rounded"
-                  />
-                )}
+                <div className="flex items-center gap-4">
+                  <label className="flex-1 cursor-pointer">
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-yellow-400 transition-colors">
+                      <FiUpload className="mx-auto text-gray-400 mb-2" />
+                      <p className="text-sm text-gray-500">
+                        Click to upload image
+                      </p>
+                      <input
+                        type="file"
+                        name="servicePic"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="hidden"
+                      />
+                    </div>
+                  </label>
+                  {imagePreview && (
+                    <div className="w-24 h-24 rounded-lg overflow-hidden border border-gray-200">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className={`w-full bg-blue-600 cursor-pointer text-white py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50`}
-            >
-              {isLoading ? "Adding..." : "Add Service"}
-            </button>
+            {/* Submit Button */}
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`w-full py-3 px-6 bg-yellow-400 hover:bg-yellow-500 text-black font-bold rounded-lg transition-colors ${
+                  isLoading ? "opacity-70 cursor-not-allowed" : ""
+                }`}
+              >
+                {isLoading ? "Creating Trip..." : "Create Trip"}
+              </button>
+            </div>
           </form>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     </div>
   );
 };
