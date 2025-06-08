@@ -7,7 +7,7 @@ const Header = () => {
   return (
     <div className="relative w-full bg-gray-50">
       {/* Hero Section with Images */}
-      <div className="flex flex-col lg:flex-row w-full max-w-7xl mx-auto">
+      <div className="flex flex-col lg:flex-row w-full mx-auto">
         {/* Left Image with Overlay Text */}
         <div className="relative w-full lg:w-1/2 h-96 lg:h-[500px] justify-center items-center overflow-hidden">
           <img 

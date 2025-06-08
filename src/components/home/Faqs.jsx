@@ -35,7 +35,7 @@ const Faqs = () => {
   };
 
   return (
-    <div className="container flex flex-col md:flex-row gap-10 my-10 mx-auto items-center md:h-[90vh]">
+    <div className="container flex flex-col md:flex-row gap-10 my-10 mx-auto items-center">
       {/* FAQ Text Section */}
       <div className="w-full md:w-1/2 px-5">
         <p className="text-gray-600 mb-2">Ai întrebări despre platformă?</p>
