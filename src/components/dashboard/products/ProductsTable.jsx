@@ -7,6 +7,15 @@ import AlertDialog from "../alert/AlertDialog";
 import AddProduct from "../popup/Add";
 import UpdateService from "./UpdateProduct";
 
+const categoryFeatures = {
+  passenger: ["totalSeats", "availableSeats", "pricePerSeat"],
+  parcel: ["parcelLoadCapacity", "price"],
+  car_towing: ["vehicleType", "price"],
+  vehicle_trailer: ["trailerType", "price"],
+  furniture: ["furnitureDetails", "price"],
+  animal: ["animalType", "price"]
+};
+
 const ProductsTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -51,6 +60,27 @@ const ProductsTable = () => {
       service.serviceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       service.serviceCategory.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const renderCategorySpecificFeatures = (service) => {
+    const features = categoryFeatures[service.serviceCategory] || [];
+    
+    return features.map((feature) => {
+      if (!service[feature]) return null;
+      
+      let displayValue = service[feature];
+      
+      // Format specific fields
+      if (feature === 'price' || feature === 'pricePerSeat') {
+        displayValue = `Rs. ${service[feature]}`;
+      }
+      
+      return (
+        <div key={feature} className="text-sm text-gray-600">
+          <span className="font-medium capitalize">{feature.replace(/([A-Z])/g, ' $1').trim()}:</span> {displayValue}
+        </div>
+      );
+    });
+  };
 
   if (isLoading) return <p className="text-blue-700 text-lg">Loading services...</p>;
 
@@ -97,8 +127,7 @@ const ProductsTable = () => {
                     <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Name</th>
                     <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Category</th>
                     <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">From → To</th>
-                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Price/Seat</th>
-                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Seats</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Category Specific Features</th>
                     <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Departure</th>
                     <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Route</th>
                     <th className="px-4 py-3 font-medium uppercase whitespace-nowrap text-center">Actions</th>
@@ -113,7 +142,7 @@ const ProductsTable = () => {
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <td className="px-4 py-3 flex items-center gap-3">
+                      <td className="px-4 py-3 flex items-center gap-4">
                         <img
                           src={service.servicePic || "https://via.placeholder.com/50"}
                           alt={service.serviceName}
@@ -121,11 +150,14 @@ const ProductsTable = () => {
                         />
                         <span className="font-medium">{service.serviceName}</span>
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap">{service.serviceCategory}</td>
+                      <td className="px-10 py-3 whitespace-nowrap capitalize">
+                        {service.serviceCategory.replace(/_/g, ' ')}
+                      </td>
                       <td className="px-4 py-3 whitespace-nowrap">{service.destinationFrom} → {service.destinationTo}</td>
-                      <td className="px-4 py-3 whitespace-nowrap">Rs. {service.pricePerSeat}</td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        {service.availableSeats}/{service.totalSeats}
+                      <td className="px-4 py-3">
+                        <div className="flex flex-col gap-1">
+                          {renderCategorySpecificFeatures(service)}
+                        </div>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         {new Date(service.travelDate).toLocaleDateString()} at {service.departureTime}
@@ -134,12 +166,12 @@ const ProductsTable = () => {
                         {service.routeCities?.join(" → ")}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap text-center">
-                        <button
+                        {/* <button
                           className="text-indigo-500 hover:text-indigo-600 mr-2"
                           onClick={() => handleUpdate(service)}
                         >
                           <Edit size={18} />
-                        </button>
+                        </button> */}
                         <button
                           className="text-red-500 hover:text-red-600"
                           onClick={() => {
@@ -162,7 +194,7 @@ const ProductsTable = () => {
       )}
 
       {/* Modals */}
-      <UpdateService isOpen={isOpenUpdate} onClose={() => setOpenUpdate(false)} serviceData={selectedProduct} />
+      {/* <UpdateService isOpen={isOpenUpdate} onClose={() => setOpenUpdate(false)} serviceData={selectedProduct} /> */}
       <AddProduct isOpen={addProductOpen} onClose={() => setAddProductOpen(false)} />
       <AlertDialog isOpen={dialogOpen} onClose={() => setDialogOpen(false)} onConfirm={handleDelete} />
     </>
