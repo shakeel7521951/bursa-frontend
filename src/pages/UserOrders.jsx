@@ -33,9 +33,10 @@ const UserOrders = () => {
       filteredOrders.filter(
         (order) =>
           order._id.toLowerCase().includes(searchTerm) ||
-          order.customerId?.name.toLowerCase().includes(searchTerm) ||
-          order.customerId?.email.toLowerCase().includes(searchTerm) ||
-          order.serviceId?.serviceName.toLowerCase().includes(searchTerm)
+          order.customerId?.name?.toLowerCase().includes(searchTerm) ||
+          order.customerId?.email?.toLowerCase().includes(searchTerm) ||
+          order.serviceId?.serviceName?.toLowerCase().includes(searchTerm) ||
+          order.serviceCategory?.toLowerCase().includes(searchTerm)
       )
     );
   }, [searchTerm, filteredOrders]);
@@ -45,11 +46,10 @@ const UserOrders = () => {
   };
 
   const handleEditOrder = (order) => {
-    if (order.orderStatus === "Fulfilled" || order.orderStatus === "Rejected") {
-      alert("You cannot edit a fulfilled or rejected order.");
+    if (order.orderStatus === "completed" || order.orderStatus === "rejected") {
+      alert("You cannot edit a completed or rejected order.");
       return;
     }
-    // Format any date if needed here
     navigate(`/update-order/${order._id}`, {
       state: { order },
     });
@@ -85,6 +85,101 @@ const UserOrders = () => {
     setSelectedOrder(null);
   };
 
+  const getCategorySpecificDetails = (order) => {
+    switch(order.serviceCategory) {
+      case 'passenger':
+        return (
+          <>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+              {order.seatsBooked || 0}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+              {order.luggageQuantity || 0}
+            </td>
+          </>
+        );
+      case 'parcel':
+        return (
+          <>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+              {order.parcelQuantity || 0}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+              {order.parcelWeight ? `${order.parcelWeight}kg` : 'N/A'}
+            </td>
+          </>
+        );
+      case 'car_towing':
+        return (
+          <>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+              {order.vehicleDetails || 'N/A'}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+              {order.towingRequirements || 'None'}
+            </td>
+          </>
+        );
+      case 'vehicle_trailer':
+        return (
+          <>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+              {order.vehicleType || 'N/A'}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+              {order.trailerRequirements || 'None'}
+            </td>
+          </>
+        );
+      case 'furniture':
+        return (
+          <>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+              {order.furnitureItemCount || 0}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+              {order.fragileItems ? 'Yes' : 'No'}
+            </td>
+          </>
+        );
+      case 'animal':
+        return (
+          <>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+              {order.animalCount || 0}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+              {order.cageRequired ? 'Yes' : 'No'}
+            </td>
+          </>
+        );
+      default:
+        return (
+          <>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+              N/A
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+              N/A
+            </td>
+          </>
+        );
+    }
+  };
+
+  const getTableHeaders = () => {
+    return [
+      "Service Name",
+      "Category",
+      "Customer Email",
+      ...(searchTerm ? [] : ["Details 1", "Details 2"]),
+      "Total Price",
+      "Order Status",
+      "Order Date",
+      "Actions"
+    ];
+  };
+
   if (isLoading) {
     return <div className="text-[#000]">Loading orders...</div>;
   }
@@ -101,13 +196,13 @@ const UserOrders = () => {
             transition={{ duration: 0.3 }}
           >
             <h2 className="text-xl font-semibold text-[#000] mb-4">
-              {selectedOrder?.orderStatus === "Pending"
+              {selectedOrder?.orderStatus === "pending"
                 ? "Cancel Order"
                 : "Delete Order"}
             </h2>
             <p className="text-gray-700 mb-6">
               Are you sure you want to{" "}
-              {selectedOrder?.orderStatus === "Pending"
+              {selectedOrder?.orderStatus === "pending"
                 ? "cancel this order?"
                 : "delete this order?"}
             </p>
@@ -154,15 +249,7 @@ const UserOrders = () => {
           <table className="min-w-full divide-y divide-gray-700">
             <thead>
               <tr>
-                {[
-                  "Service Name",
-                  "Customer Email",
-                  "Seats Booked",
-                  "Luggage Quantity",
-                  "Total Price",
-                  "Order Status",
-                  "Order Date",
-                ].map((header) => (
+                {getTableHeaders().map((header) => (
                   <th
                     key={header}
                     className="px-6 py-3 text-left text-xs font-bold text-[#000] uppercase tracking-wider"
@@ -177,7 +264,7 @@ const UserOrders = () => {
               {finalFilteredOrders.length === 0 && (
                 <tr>
                   <td
-                    colSpan={8}
+                    colSpan={getTableHeaders().length}
                     className="text-center py-4 text-gray-500 text-sm"
                   >
                     No orders found.
@@ -195,47 +282,47 @@ const UserOrders = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
                     {order.serviceId?.serviceName || "N/A"}
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black capitalize">
+                    {order.serviceCategory?.replace('_', ' ') || "N/A"}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
                     {order.customerId?.email || "N/A"}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                    {order.seatsBooked ?? 0}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                    {order.luggageQuantity ?? 0}
-                  </td>
+                  
+                  {!searchTerm && getCategorySpecificDetails(order)}
+                  
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
-                    ${order.totalPrice?.toFixed(2) ?? "0.00"}
+                    ${order.totalPrice?.toFixed(2) || "0.00"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <span
                       className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        order.orderStatus === "Fulfilled"
+                        order.orderStatus === "completed"
                           ? "bg-green-100 text-green-800"
-                          : order.orderStatus === "Pending"
+                          : order.orderStatus === "pending"
                           ? "bg-yellow-100 text-yellow-800"
-                          : order.orderStatus === "Shipped"
+                          : order.orderStatus === "confirmed"
                           ? "bg-blue-100 text-blue-800"
                           : "bg-red-100 text-red-800"
                       }`}
                     >
-                      {order.orderStatus}
+                      {order.orderStatus?.charAt(0).toUpperCase() + order.orderStatus?.slice(1)}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-[#000]">
                     {new Date(order.createdAt).toLocaleDateString()}
                   </td>
-                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <button
                       onClick={() => handleEditOrder(order)}
                       title="Edit"
                       disabled={
-                        order.orderStatus === "Fulfilled" ||
-                        order.orderStatus === "Rejected"
+                        order.orderStatus === "completed" ||
+                        order.orderStatus === "rejected"
                       }
                       className={`text-indigo-400 cursor-pointer hover:text-indigo-300 mr-2 ${
-                        order.orderStatus === "Fulfilled" ||
-                        order.orderStatus === "Rejected"
+                        order.orderStatus === "completed" ||
+                        order.orderStatus === "rejected"
                           ? "opacity-50 cursor-not-allowed"
                           : ""
                       }`}
@@ -246,14 +333,14 @@ const UserOrders = () => {
                       onClick={() => handleDeleteClick(order)}
                       className="text-red-500 cursor-pointer hover:text-red-300"
                       title={
-                        order.orderStatus === "Pending"
+                        order.orderStatus === "pending"
                           ? "Cancel Order"
                           : "Delete Order"
                       }
                     >
                       <Trash2 size={18} />
                     </button>
-                  </td> */}
+                  </td>
                 </motion.tr>
               ))}
             </tbody>

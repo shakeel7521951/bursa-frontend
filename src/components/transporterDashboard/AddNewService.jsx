@@ -3,30 +3,65 @@ import { motion } from "framer-motion";
 import { useCreateServiceMutation } from "../../redux/slices/ServiceApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { FiX, FiUpload, FiCalendar, FiClock, FiMapPin, FiDollarSign, FiUsers } from "react-icons/fi";
+import {
+  FiX,
+  FiUpload,
+  FiCalendar,
+  FiClock,
+  FiMapPin,
+  FiDollarSign,
+  FiUsers,
+  FiTruck,
+  FiPackage,
+  // FiCar,
+  FiHome,
+  FiGitMerge,
+} from "react-icons/fi";
 
 const AddNewService = ({ isOpen, onClose, userId }) => {
   const [createService, { isLoading }] = useCreateServiceMutation();
   const navigate = useNavigate();
   const [product, setProduct] = useState({
     serviceName: "",
-    serviceCategory: "people",
+    serviceCategory: "",
     destinationFrom: "",
     destinationTo: "",
     routeCities: "",
     travelDate: "",
     departureTime: "",
     arrivalDate: "",
-    availabilityDaysRomania: "", 
+    availabilityDaysRomania: "",
     availabilityDaysItaly: "",
     totalSeats: "",
     availableSeats: "",
     parcelLoadCapacity: "",
+    vehicleType: "",
+    trailerType: "",
+    furnitureDetails: "",
+    animalType: "",
     pickupOption: "no",
-    pricePerSeat: "",
+    price: "",
     servicePic: null,
   });
   const [imagePreview, setImagePreview] = useState(null);
+
+  // Category options
+  const categories = [
+    { value: "passenger", label: "Passenger Transport", icon: <FiUsers /> },
+    { value: "parcel", label: "Parcel Transport", icon: <FiPackage /> },
+    // { value: "car_towing", label: "Car Towing", icon: <FiCar /> },
+    {
+      value: "vehicle_trailer",
+      label: "Vehicle Transport on Trailer",
+      icon: <FiTruck />,
+    },
+    {
+      value: "furniture",
+      label: "Furniture Transport / Relocation",
+      icon: <FiHome />,
+    },
+    { value: "animal", label: "Animal Transport", icon: <FiGitMerge /> },
+  ];
 
   // Close modal on Escape key press
   useEffect(() => {
@@ -64,6 +99,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
     e.preventDefault();
 
     try {
+      // Convert comma-separated days to arrays
       const romaniaDaysArray = product.availabilityDaysRomania
         .split(",")
         .map((day) => day.trim())
@@ -75,54 +111,67 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
         .filter(Boolean);
 
       if (romaniaDaysArray.length === 0 || italyDaysArray.length === 0) {
-        toast.error(
-          "Availability days for Romania and Italy are required as arrays.",
-          { position: "top-center" }
-        );
+        toast.error("Availability days for Romania and Italy are required.", {
+          position: "top-center",
+        });
         return;
       }
 
       const formData = new FormData();
+
+      // Append basic service information
       formData.append("serviceName", product.serviceName);
-      formData.append("serviceCategory", 'people');
+      formData.append("serviceCategory", product.serviceCategory);
       formData.append("destinationFrom", product.destinationFrom);
       formData.append("destinationTo", product.destinationTo);
+      formData.append("travelDate", product.travelDate);
+      formData.append("departureTime", product.departureTime);
+      formData.append("arrivalDate", product.arrivalDate);
+      formData.append("pickupOption", product.pickupOption);
+      formData.append("price", product.price);
 
+      // Append route cities as individual array elements
       const routeCitiesArray = product.routeCities
         .split(",")
         .map((city) => city.trim())
         .filter(Boolean);
-      routeCitiesArray.forEach((city) =>
-        formData.append("routeCities[]", city)
-      );
+      routeCitiesArray.forEach((city) => {
+        formData.append("routeCities", city);
+      });
 
-      formData.append("travelDate", product.travelDate);
-      formData.append("departureTime", product.departureTime);
-      formData.append("arrivalDate", product.arrivalDate);
+      // Append availability days as separate fields
+      romaniaDaysArray.forEach((day) => {
+        formData.append("availabilityDaysRomania", day);
+      });
 
-      const availabilityDays = {
-        romania: romaniaDaysArray,
-        italy: italyDaysArray,
-      };
-      formData.append("availabilityDays", JSON.stringify(availabilityDays));
+      italyDaysArray.forEach((day) => {
+        formData.append("availabilityDaysItaly", day);
+      });
 
-      if (product.serviceCategory === "people") {
-        formData.append("totalSeats", product.totalSeats);
-        formData.append("availableSeats", product.availableSeats);
-      } else {
-        formData.append("totalSeats", "");
-        formData.append("availableSeats", "");
+      // Append category-specific fields
+      switch (product.serviceCategory) {
+        case "passenger":
+          formData.append("totalSeats", product.totalSeats);
+          formData.append("availableSeats", product.availableSeats);
+          break;
+        case "parcel":
+          formData.append("parcelLoadCapacity", product.parcelLoadCapacity);
+          break;
+        case "car_towing":
+          formData.append("vehicleType", product.vehicleType);
+          break;
+        case "vehicle_trailer": // Fixed typo from "vehicle_trailer"
+          formData.append("trailerType", product.trailerType);
+          break;
+        case "furniture":
+          formData.append("furnitureDetails", product.furnitureDetails);
+          break;
+        case "animal":
+          formData.append("animalType", product.animalType);
+          break;
       }
 
-      if (product.serviceCategory === "parcels") {
-        formData.append("parcelLoadCapacity", product.parcelLoadCapacity);
-      } else {
-        formData.append("parcelLoadCapacity", "");
-      }
-
-      formData.append("pickupOption", 'no');
-      formData.append("pricePerSeat", product.pricePerSeat);
-
+      // Append user and image data
       if (userId) {
         formData.append("transporter", userId);
       }
@@ -131,8 +180,9 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
         formData.append("servicePic", product.servicePic);
       }
 
+      // Make the API call
       const response = await createService(formData).unwrap();
-      console.log(response);
+
       if (response.error) {
         toast.error(response.error?.message || "Error adding service", {
           position: "top-center",
@@ -141,12 +191,158 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
         toast.success(response.message || "Service added successfully", {
           position: "top-center",
         });
-        navigate("/transporter-dashboard")
+        navigate("/transporter-dashboard");
         onClose();
       }
     } catch (err) {
       console.error("Error adding service:", err);
-      toast.error(err.data.message, { position: "top-center" });
+      toast.error(err.data?.message || "Failed to add service", {
+        position: "top-center",
+      });
+    }
+  };
+  // Render category-specific fields
+  const renderCategoryFields = () => {
+    switch (product.serviceCategory) {
+      case "passenger":
+        return (
+          <>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <FiUsers className="text-gray-500" />
+                Total Seats
+              </label>
+              <input
+                type="number"
+                name="totalSeats"
+                value={product.totalSeats}
+                onChange={handleChange}
+                min="1"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <FiUsers className="text-gray-500" />
+                Available Seats
+              </label>
+              <input
+                type="number"
+                name="availableSeats"
+                value={product.availableSeats}
+                onChange={handleChange}
+                min="0"
+                max={product.totalSeats || undefined}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                required
+              />
+            </div>
+          </>
+        );
+      case "parcel":
+        return (
+          <div className="md:col-span-2 space-y-2">
+            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <FiPackage className="text-gray-500" />
+              Parcel Load Capacity (kg)
+            </label>
+            <input
+              type="number"
+              name="parcelLoadCapacity"
+              value={product.parcelLoadCapacity}
+              onChange={handleChange}
+              min="1"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+              required
+            />
+          </div>
+        );
+      case "car_towing":
+        return (
+          <div className="md:col-span-2 space-y-2">
+            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              {/* <FiCar className="text-gray-500" /> */}
+              Vehicle Type
+            </label>
+            <select
+              name="vehicleType"
+              value={product.vehicleType}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+              required
+            >
+              <option value="">Select vehicle type</option>
+              <option value="sedan">Sedan</option>
+              <option value="suv">SUV</option>
+              <option value="truck">Truck</option>
+              <option value="van">Van</option>
+            </select>
+          </div>
+        );
+      case "vehicle_trailer":
+        return (
+          <div className="md:col-span-2 space-y-2">
+            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <FiTruck className="text-gray-500" />
+              Trailer Type
+            </label>
+            <select
+              name="trailerType"
+              value={product.trailerType}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+              required
+            >
+              <option value="">Select trailer type</option>
+              <option value="flatbed">Flatbed</option>
+              <option value="enclosed">Enclosed</option>
+              <option value="lowboy">Lowboy</option>
+            </select>
+          </div>
+        );
+      case "furniture":
+        return (
+          <div className="md:col-span-2 space-y-2">
+            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <FiHome className="text-gray-500" />
+              Furniture Details
+            </label>
+            <textarea
+              name="furnitureDetails"
+              value={product.furnitureDetails}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+              placeholder="Describe the furniture items and dimensions"
+              required
+            />
+          </div>
+        );
+      case "animal":
+        return (
+          <div className="md:col-span-2 space-y-2">
+            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <FiGitMerge className="text-gray-500" />
+              Animal Type
+            </label>
+            <select
+              name="animalType"
+              value={product.animalType}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+              required
+            >
+              <option value="">Select animal type</option>
+              <option value="dog">Dog</option>
+              <option value="cat">Cat</option>
+              <option value="bird">Bird</option>
+              <option value="livestock">Livestock</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        );
+      default:
+        return null;
     }
   };
 
@@ -161,7 +357,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
       >
         {/* Modal Header */}
         <div className="bg-gray-900 text-white p-6 flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Create New Trip</h2>
+          <h2 className="text-2xl font-bold">Create New Service</h2>
           <button
             onClick={onClose}
             className="text-gray-300 hover:text-white transition-colors"
@@ -177,7 +373,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Service Name */}
               <div className="space-y-2">
-                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiMapPin className="text-gray-500" />
                   Service Name
                 </label>
@@ -188,13 +384,35 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
-                  placeholder="e.g. Express Bus to Italy"
+                  placeholder="e.g. Express Transport to Italy"
                 />
               </div>
 
-              {/* Destination From */}
+              {/* Service Category */}
               <div className="space-y-2">
-                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiTruck className="text-gray-500" />
+                  Service Category
+                </label>
+                <select
+                  name="serviceCategory"
+                  value={product.serviceCategory}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  required
+                >
+                  <option value="">Select a category</option>
+                  {categories.map((category) => (
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Common Fields */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiMapPin className="text-gray-500" />
                   From (Romania)
                 </label>
@@ -209,9 +427,8 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
                 />
               </div>
 
-              {/* Destination To */}
               <div className="space-y-2">
-                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiMapPin className="text-gray-500" />
                   To (Italy)
                 </label>
@@ -226,9 +443,8 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
                 />
               </div>
 
-              {/* Travel Date */}
               <div className="space-y-2">
-                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiCalendar className="text-gray-500" />
                   Travel Date
                 </label>
@@ -242,9 +458,8 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
                 />
               </div>
 
-              {/* Departure Time */}
               <div className="space-y-2">
-                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiClock className="text-gray-500" />
                   Departure Time
                 </label>
@@ -258,9 +473,8 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
                 />
               </div>
 
-              {/* Arrival Date */}
               <div className="space-y-2">
-                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiCalendar className="text-gray-500" />
                   Arrival Date
                 </label>
@@ -274,9 +488,8 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
                 />
               </div>
 
-              {/* Route Cities */}
               <div className="md:col-span-2 space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-gray-700">
                   Route Cities (comma separated)
                 </label>
                 <input
@@ -289,9 +502,8 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
                 />
               </div>
 
-              {/* Availability Days */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-gray-700">
                   Availability Days (Romania)
                 </label>
                 <input
@@ -306,7 +518,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="text-sm font-medium text-gray-700">
                   Availability Days (Italy)
                 </label>
                 <input
@@ -320,63 +532,54 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
                 />
               </div>
 
-              {/* Seats Information */}
-              <div className="space-y-2">
-                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
-                  <FiUsers className="text-gray-500" />
-                  Total Seats
-                </label>
-                <input
-                  type="number"
-                  name="totalSeats"
-                  value={product.totalSeats}
-                  onChange={handleChange}
-                  min="1"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
-                  <FiUsers className="text-gray-500" />
-                  Available Seats
-                </label>
-                <input
-                  type="number"
-                  name="availableSeats"
-                  value={product.availableSeats}
-                  onChange={handleChange}
-                  min="0"
-                  max={product.totalSeats || undefined}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-                  required
-                />
-              </div>
+              {/* Category-specific fields */}
+              {renderCategoryFields()}
 
               {/* Price */}
               <div className="space-y-2">
-                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiDollarSign className="text-gray-500" />
-                  Price Per Seat (€)
+                  Price (€)
                 </label>
                 <input
                   type="number"
-                  name="pricePerSeat"
-                  value={product.pricePerSeat}
+                  name="price"
+                  value={product.price}
                   onChange={handleChange}
                   min="0"
                   step="0.01"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
+                  placeholder={
+                    product.serviceCategory === "passenger"
+                      ? "Price per seat"
+                      : "Total price"
+                  }
                 />
+              </div>
+
+              {/* Pickup Option */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Pickup Option
+                </label>
+                <select
+                  name="pickupOption"
+                  value={product.pickupOption}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  required
+                >
+                  <option value="no">No Pickup Service</option>
+                  <option value="yes">With Pickup Service</option>
+                </select>
               </div>
 
               {/* Image Upload */}
               <div className="md:col-span-2 space-y-2">
-                <label className=" text-sm font-medium text-gray-700 flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiUpload className="text-gray-500" />
-                  Vehicle Image
+                  Service Image
                 </label>
                 <div className="flex items-center gap-4">
                   <label className="flex-1 cursor-pointer">
@@ -416,7 +619,7 @@ const AddNewService = ({ isOpen, onClose, userId }) => {
                   isLoading ? "opacity-70 cursor-not-allowed" : ""
                 }`}
               >
-                {isLoading ? "Creating Trip..." : "Create Trip"}
+                {isLoading ? "Creating Service..." : "Create Service"}
               </button>
             </div>
           </form>

@@ -22,7 +22,7 @@ const TransporterDashboard = () => {
     ({ serviceName, serviceCategory, destinationFrom, destinationTo }) =>
       [serviceName, serviceCategory, destinationFrom, destinationTo].some(
         (field) =>
-          field.toLowerCase().includes(searchTerm.toLowerCase())
+          field && field.toLowerCase().includes(searchTerm.toLowerCase())
       )
   );
 
@@ -43,10 +43,66 @@ const TransporterDashboard = () => {
     setOpenUpdate(true);
   };
 
+  // Function to render category-specific details
+  const renderCategoryDetails = (service) => {
+    switch(service.serviceCategory) {
+      case 'passenger':
+        return (
+          <div className="space-y-1">
+            <p>Seats: <span className="text-gray-500">{service.availableSeats}/{service.totalSeats}</span></p>
+            <p>Price per seat: <span className="text-gray-500">${service.price}</span></p>
+          </div>
+        );
+      case 'parcel':
+        return (
+          <div className="space-y-1">
+            <p>Capacity: <span className="text-gray-500">{service.parcelLoadCapacity} kg</span></p>
+            <p>Price: <span className="text-gray-500">${service.price}</span></p>
+          </div>
+        );
+      case 'car_towing':
+        return (
+          <div className="space-y-1">
+            <p>Vehicle Type: <span className="text-gray-500">{service.vehicleType || 'N/A'}</span></p>
+            <p>Price: <span className="text-gray-500">${service.price}</span></p>
+          </div>
+        );
+      case 'vehicle_trailer':
+        return (
+          <div className="space-y-1">
+            <p>Trailer Type: <span className="text-gray-500">{service.trailerType || 'N/A'}</span></p>
+            <p>Price: <span className="text-gray-500">${service.price}</span></p>
+          </div>
+        );
+      case 'furniture':
+        return (
+          <div className="space-y-1">
+            <p>Details: <span className="text-gray-500">{service.furnitureDetails || 'N/A'}</span></p>
+            <p>Price: <span className="text-gray-500">${service.price}</span></p>
+          </div>
+        );
+      case 'animal':
+        return (
+          <div className="space-y-1">
+            <p>Animal Type: <span className="text-gray-500">{service.animalType || 'N/A'}</span></p>
+            <p>Price: <span className="text-gray-500">${service.price}</span></p>
+          </div>
+        );
+      default:
+        return <p>Price: ${service.price}</p>;
+    }
+  };
+
+  // Function to format availability days
+  const formatAvailabilityDays = (days) => {
+    if (!days) return 'N/A';
+    return days.join(', ');
+  };
+
   if (isLoading) {
     return <div className="text-center py-10 text-blue-700">Loading services...</div>;
   }
-console.log("Error......",isError)
+
   if (isError) {
     return <div className="text-center py-10 text-red-500">Access denied: not a Transporter</div>;
   }
@@ -89,12 +145,12 @@ console.log("Error......",isError)
               <thead>
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Image</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Service</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Category</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Price/Seat</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Availability</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Route</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Departure Time</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Schedule</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Details</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Availability</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Actions</th>
                 </tr>
               </thead>
@@ -105,6 +161,7 @@ console.log("Error......",isError)
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
+                    className="hover:bg-gray-50"
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <img
@@ -114,45 +171,53 @@ console.log("Error......",isError)
                       />
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                      {service.serviceName}
+                      <p className="font-medium">{service.serviceName}</p>
+                      <p className="text-gray-500 text-xs">
+                        {service.pickupOption === 'yes' ? 'With pickup' : 'No pickup'}
+                      </p>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700 capitalize">
+                      {service.serviceCategory.replace('_', ' ')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                      {service.serviceCategory}
+                      <p>{service.destinationFrom} → {service.destinationTo}</p>
+                      <p className="text-xs text-gray-500">
+                        Via: {service.routeCities?.join(', ') || 'N/A'}
+                      </p>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                      ${service.pricePerSeat}
+                      <p>{new Date(service.travelDate).toLocaleDateString()}</p>
+                      <p className="text-xs text-gray-500">
+                        Depart: {service.departureTime}
+                      </p>
+                    </td>
+                    <td className="px-6 py-4 text-sm whitespace-nowrap text-blue-700">
+                      {renderCategoryDetails(service)}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-nowrap text-blue-700">
+                      <p>Romania: <span className="text-gray-500">{formatAvailabilityDays(service.availabilityDays?.romania)}</span></p>
+                      <p>Italy: <span className="text-gray-500">{formatAvailabilityDays(service.availabilityDays?.italy)}</span></p>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                      {service.serviceCategory.toLowerCase() === "people" ? (
-                        `${service.availableSeats} / ${service.totalSeats}`
-                      ) : service.serviceCategory.toLowerCase() === "parcels" ? (
-                        `${service.parcelLoadCapacity} kg`
-                      ) : (
-                        "N/A"
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                      {service.destinationFrom} → {service.destinationTo}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                      {service.departureTime}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
-                      <button
-                        className="text-indigo-500 hover:text-indigo-300 mr-2"
-                        onClick={() => handleUpdate(service)}
-                      >
-                        <Edit size={18} />
-                      </button>
-                      <button
-                        className="text-red-500 hover:text-red-300"
-                        onClick={() => {
-                          setSelectedProduct(service);
-                          setDialogOpen(true);
-                        }}
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                      <div className="flex space-x-2">
+                        <button
+                          className="text-indigo-500 hover:text-indigo-300"
+                          onClick={() => handleUpdate(service)}
+                          title="Edit"
+                        >
+                          <Edit size={18} />
+                        </button>
+                        <button
+                          className="text-red-500 hover:text-red-300"
+                          onClick={() => {
+                            setSelectedProduct(service);
+                            setDialogOpen(true);
+                          }}
+                          title="Delete"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
                     </td>
                   </motion.tr>
                 ))}
