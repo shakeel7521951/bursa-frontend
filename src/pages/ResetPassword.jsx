@@ -3,6 +3,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useResetPasswordMutation } from '../redux/slices/UserApi';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Loader from '../Loader';
 
 const ResetPassword = () => {
   const [password, setPassword] = useState('');
@@ -13,7 +14,7 @@ const ResetPassword = () => {
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
   const location = useLocation();
   const navigate = useNavigate();
-  const email = location.state?.email; // Use optional chaining to avoid errors
+  const email = location.state?.email;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,6 +38,9 @@ const ResetPassword = () => {
       toast.error(err.data?.message || 'Failed to reset password.', { position: 'top-center' });
     }
   };
+  if(isLoading){
+    return <Loader />
+  }
 
   return (
     <div className="flex justify-center items-center py-20 bg-gray-100">

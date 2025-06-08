@@ -5,6 +5,7 @@ import {
 } from "../redux/slices/UserApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Loader from "../Loader";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ const ForgotPassword = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (error) {

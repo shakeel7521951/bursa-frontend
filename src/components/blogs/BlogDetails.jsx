@@ -10,6 +10,7 @@ import {
   useLikeCommentMutation,
 } from "../../redux/slices/BlogSlice";
 import { toast } from "react-toastify";
+import Loader from "../../Loader";
 
 function BlogDetails() {
   const { id } = useParams();
@@ -33,7 +34,7 @@ function BlogDetails() {
     }
   }, [blog]);
 
-  if (isLoading) return <h2>Loading...</h2>;
+  if (isLoading) return <Loader />;
   if (error) return <h2>Error fetching blog</h2>;
   if (!blog) return <h2>Blog not found</h2>;
 

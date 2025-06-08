@@ -6,13 +6,14 @@ import StatCard from "../../components/dashboard/common/StatCard";
 import DailyOrders from '../../components/dashboard/orders/DailyOrders';
 import OrdersTable from '../../components/dashboard/orders/OrdersTable';
 import { useGetAllOrdersQuery } from "../../redux/slices/OrderSlices";
+import Loader from "../../Loader";
 
 const OrdersPage = () => {
   const { data, isLoading, error } = useGetAllOrdersQuery();
   const orders = data?.orders && Array.isArray(data.orders) ? data.orders : [];
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Loader />;
   }
 
   if (error) {

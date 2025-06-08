@@ -8,6 +8,7 @@ import {
 } from "../redux/slices/ServiceApi";
 import UpdateService from "../components/dashboard/products/UpdateProduct";
 import AlertDialog from "../components/dashboard/alert/AlertDialog";
+import Loader from "../Loader";
 
 const TransporterDashboard = () => {
   const { data, isLoading, isError } = useGetIndividualServicesQuery();
@@ -100,7 +101,7 @@ const TransporterDashboard = () => {
   };
 
   if (isLoading) {
-    return <div className="text-center py-10 text-blue-700">Loading services...</div>;
+    return <Loader />;
   }
 
   if (isError) {

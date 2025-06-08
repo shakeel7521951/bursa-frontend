@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setProfile } from "../redux/slices/UserSlice";
 import { Link, useNavigate } from "react-router-dom";
+import Loader from "../Loader";
 
 export default function LoginPage() {
   const [loginUser, { isLoading }] = useLoginMutation();
@@ -64,6 +65,10 @@ export default function LoginPage() {
       });
     }, 2000);
   };
+
+  if(isLoading){
+    return <Loader />
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4 bg-gradient-to-r from-black to-gray-900">

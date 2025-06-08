@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Search, Eye } from "lucide-react";
 import { useGetAllOrdersQuery } from "../redux/slices/OrderSlices";
 import OrderDetailModal from "../components/dashboard/orders/OrderDetailModel";
+import Loader from "../Loader";
 
 const TransporterOrders = () => {
   const { data, isLoading } = useGetAllOrdersQuery();
@@ -146,7 +147,7 @@ const TransporterOrders = () => {
   };
 
   if (isLoading) {
-    return <div className="text-center py-10 text-blue-700">Loading orders...</div>;
+    return <Loader />;
   }
 
   return (

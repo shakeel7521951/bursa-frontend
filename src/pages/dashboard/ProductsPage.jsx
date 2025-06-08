@@ -6,13 +6,14 @@ import CategoryDistributionChart from "../../components/dashboard/overview/Categ
 import SalesTrendChart from "../../components/dashboard/products/SalesTrendChart";
 import ProductsTable from "../../components/dashboard/products/ProductsTable";
 import { useGetAllServicesQuery } from "../../redux/slices/ServiceApi";
+import Loader from "../../Loader";
 
 const ProductsPage = () => {
   const { data, isLoading, error } = useGetAllServicesQuery();
   const services = Array.isArray(data?.services) ? data.services : [];
 
   if (isLoading) {
-    return <p className="text-blue-700 text-lg">Loading data...</p>;
+    return <Loader />;
   }
 
   if (error) {

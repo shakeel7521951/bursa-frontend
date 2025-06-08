@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setProfile } from "../redux/slices/UserSlice";
+import Loader from "../Loader";
 
 const VerifyUser = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -58,6 +59,9 @@ const VerifyUser = () => {
     }
   };
 
+  if(isLoading){
+    return <Loader />
+  }
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md">

@@ -15,7 +15,6 @@ const Navbar = () => {
   const [logout] = useLogoutMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  console.log(userProfile);
 
   const handleLogout = async (e) => {
     e.preventDefault();

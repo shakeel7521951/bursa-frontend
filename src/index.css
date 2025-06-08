@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@layer utilities {
+  .animation-delay-75 {
+    animation-delay: 75ms;
+  }
+}
+
 .poppins-thin {
   font-family: "Poppins", serif;
   font-weight: 100;

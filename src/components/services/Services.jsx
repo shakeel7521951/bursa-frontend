@@ -16,6 +16,7 @@ import Button from "../Button";
 import { selectUserProfile } from "../../redux/slices/UserSlice";
 import { useSelector } from "react-redux";
 import AddNewService from "../transporterDashboard/AddNewService";
+import Loader from "../../Loader";
 
 const OurServices = () => {
   const userProfile = useSelector(selectUserProfile);
@@ -168,9 +169,7 @@ const OurServices = () => {
   // Loading and error states
   if (isLoading)
     return (
-      <div className="flex justify-center items-center h-64">
-        <p className="text-lg">Loading services...</p>
-      </div>
+      <Loader />
     );
   if (error)
     return (

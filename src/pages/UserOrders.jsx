@@ -7,6 +7,7 @@ import {
 } from "../redux/slices/OrderSlices";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loader from "../Loader";
 
 const UserOrders = () => {
   const { data, isLoading } = useMyOrdersQuery();
@@ -181,7 +182,7 @@ const UserOrders = () => {
   };
 
   if (isLoading) {
-    return <div className="text-[#000]">Loading orders...</div>;
+    return <Loader />;
   }
 
   return (

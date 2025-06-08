@@ -1,12 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetAllBlogsQuery } from "../../redux/slices/BlogSlice";
+import Loader from "../../Loader";
 
 function BlogCards() {
   const navigate = useNavigate();
   const { data, isLoading, isError } = useGetAllBlogsQuery();
 
-  if (isLoading) return <div className="text-center">Loading blogs...</div>;
+  if (isLoading) return <Loader />;
   if (isError) return <div className="text-center text-red-500">Error loading blogs.</div>;
 
   const blogPosts = data?.blogs || [];

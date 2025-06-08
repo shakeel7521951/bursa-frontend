@@ -1,34 +1,68 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { toast } from "react-toastify";
 import { useUpdateServiceMutation } from "../../../redux/slices/ServiceApi";
+import { toast } from "react-toastify";
+import {
+  FiX,
+  FiUpload,
+  FiCalendar,
+  FiClock,
+  FiMapPin,
+  FiDollarSign,
+  FiUsers,
+  FiTruck,
+  FiPackage,
+  FiHome,
+  FiGitMerge,
+} from "react-icons/fi";
 
 const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
   const [updateService, { isLoading }] = useUpdateServiceMutation();
-console.log(updateService)
-  // Initialize form with existing service data
+
+  // Category options
+  const categories = [
+    { value: "passenger", label: "Passenger Transport", icon: <FiUsers /> },
+    { value: "parcel", label: "Parcel Transport", icon: <FiPackage /> },
+    {
+      value: "vehicle_trailer",
+      label: "Vehicle Transport on Trailer",
+      icon: <FiTruck />,
+    },
+    {
+      value: "furniture",
+      label: "Furniture Transport / Relocation",
+      icon: <FiHome />,
+    },
+    { value: "animal", label: "Animal Transport", icon: <FiGitMerge /> },
+  ];
+
+  // Initialize form state
   const [product, setProduct] = useState({
     serviceName: "",
     serviceCategory: "",
     destinationFrom: "",
     destinationTo: "",
-    routeCities: "", // comma separated string
+    routeCities: "",
     travelDate: "",
     departureTime: "",
     arrivalDate: "",
-    availabilityDaysRomania: "", 
+    availabilityDaysRomania: "",
     availabilityDaysItaly: "",
     totalSeats: "",
     availableSeats: "",
     parcelLoadCapacity: "",
-    pickupOption: "",
-    pricePerSeat: "",
-    servicePic: null, // for new image upload
+    vehicleType: "",
+    trailerType: "",
+    furnitureDetails: "",
+    animalType: "",
+    pickupOption: "no",
+    price: "",
+    servicePic: null,
   });
 
   const [imagePreview, setImagePreview] = useState(null);
 
-  // Load serviceData into form state when component mounts or serviceData changes
+  // Load service data into form
   useEffect(() => {
     if (serviceData) {
       setProduct({
@@ -51,13 +85,16 @@ console.log(updateService)
         totalSeats: serviceData.totalSeats || "",
         availableSeats: serviceData.availableSeats || "",
         parcelLoadCapacity: serviceData.parcelLoadCapacity || "",
-        pickupOption: serviceData.pickupOption || "",
-        pricePerSeat: serviceData.pricePerSeat || "",
-        servicePic: null, // reset file input for update
+        vehicleType: serviceData.vehicleType || "",
+        trailerType: serviceData.trailerType || "",
+        furnitureDetails: serviceData.furnitureDetails || "",
+        animalType: serviceData.animalType || "",
+        pickupOption: serviceData.pickupOption || "no",
+        price: serviceData.price || serviceData.pricePerSeat || "",
+        servicePic: null,
       });
 
-      // Set preview to existing image URL if available
-      setImagePreview(serviceData.servicePicUrl || null);
+      setImagePreview(serviceData.servicePic || null);
     }
   }, [serviceData]);
 
@@ -97,7 +134,7 @@ console.log(updateService)
     e.preventDefault();
 
     try {
-      // Convert availability days inputs
+      // Convert comma-separated days to arrays
       const romaniaDaysArray = product.availabilityDaysRomania
         .split(",")
         .map((day) => day.trim())
@@ -109,67 +146,78 @@ console.log(updateService)
         .filter(Boolean);
 
       if (romaniaDaysArray.length === 0 || italyDaysArray.length === 0) {
-        toast.error(
-          "Availability days for Romania and Italy are required as arrays.",
-          { position: "top-center" }
-        );
+        toast.error("Availability days for Romania and Italy are required.", {
+          position: "top-center",
+        });
         return;
       }
 
       const formData = new FormData();
 
+      // Append basic service information
       formData.append("serviceName", product.serviceName);
       formData.append("serviceCategory", product.serviceCategory);
       formData.append("destinationFrom", product.destinationFrom);
       formData.append("destinationTo", product.destinationTo);
+      formData.append("travelDate", product.travelDate);
+      formData.append("departureTime", product.departureTime);
+      formData.append("arrivalDate", product.arrivalDate);
+      formData.append("pickupOption", product.pickupOption);
+      formData.append("price", product.price);
 
+      // Append route cities as individual array elements
       const routeCitiesArray = product.routeCities
         .split(",")
         .map((city) => city.trim())
         .filter(Boolean);
-      routeCitiesArray.forEach((city) =>
-        formData.append("routeCities[]", city)
-      );
+      routeCitiesArray.forEach((city) => {
+        formData.append("routeCities", city);
+      });
 
-      formData.append("travelDate", product.travelDate);
-      formData.append("departureTime", product.departureTime);
-      formData.append("arrivalDate", product.arrivalDate);
+      // Append availability days as separate fields
+      romaniaDaysArray.forEach((day) => {
+        formData.append("availabilityDaysRomania", day);
+      });
 
-      const availabilityDays = {
-        romania: romaniaDaysArray,
-        italy: italyDaysArray,
-      };
-      formData.append("availabilityDays", JSON.stringify(availabilityDays));
+      italyDaysArray.forEach((day) => {
+        formData.append("availabilityDaysItaly", day);
+      });
 
-      if (product.serviceCategory === "people") {
-        formData.append("totalSeats", product.totalSeats);
-        formData.append("availableSeats", product.availableSeats);
-      } else {
-        formData.append("totalSeats", "");
-        formData.append("availableSeats", "");
+      // Append category-specific fields
+      switch (product.serviceCategory) {
+        case "passenger":
+          formData.append("totalSeats", product.totalSeats);
+          formData.append("availableSeats", product.availableSeats);
+          break;
+        case "parcel":
+          formData.append("parcelLoadCapacity", product.parcelLoadCapacity);
+          break;
+        case "vehicle_trailer":
+          formData.append("trailerType", product.trailerType);
+          break;
+        case "furniture":
+          formData.append("furnitureDetails", product.furnitureDetails);
+          break;
+        case "animal":
+          formData.append("animalType", product.animalType);
+          break;
       }
 
-      if (product.serviceCategory === "parcels") {
-        formData.append("parcelLoadCapacity", product.parcelLoadCapacity);
-      } else {
-        formData.append("parcelLoadCapacity", "");
-      }
-
-      formData.append("pickupOption", product.pickupOption);
-      formData.append("pricePerSeat", product.pricePerSeat);
-
+      // Append user and image data
       if (userId) {
         formData.append("transporter", userId);
       }
 
-      // Append image only if new file selected
       if (product.servicePic) {
         formData.append("servicePic", product.servicePic);
       }
 
-      // Include the service id for update
-      const serviceId = serviceData._id;
-      const response = await updateService({id:serviceId,data:formData}).unwrap();
+      // Include the service ID for update
+      const response = await updateService({
+        id: serviceData._id,
+        data: formData,
+      }).unwrap();
+
       if (response.error) {
         toast.error(response.error?.message || "Error updating service", {
           position: "top-center",
@@ -182,386 +230,414 @@ console.log(updateService)
       }
     } catch (err) {
       console.error("Error updating service:", err);
-      toast.error("Failed to update service", { position: "top-center" });
+      toast.error(err.data?.message || "Failed to update service", {
+        position: "top-center",
+      });
+    }
+  };
+
+  // Render category-specific fields
+  const renderCategoryFields = () => {
+    switch (product.serviceCategory) {
+      case "passenger":
+        return (
+          <>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <FiUsers className="text-gray-500" />
+                Total Seats
+              </label>
+              <input
+                type="number"
+                name="totalSeats"
+                value={product.totalSeats}
+                onChange={handleChange}
+                min="1"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <FiUsers className="text-gray-500" />
+                Available Seats
+              </label>
+              <input
+                type="number"
+                name="availableSeats"
+                value={product.availableSeats}
+                onChange={handleChange}
+                min="0"
+                max={product.totalSeats || undefined}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                required
+              />
+            </div>
+          </>
+        );
+      case "parcel":
+        return (
+          <div className="md:col-span-2 space-y-2">
+            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <FiPackage className="text-gray-500" />
+              Parcel Load Capacity (kg)
+            </label>
+            <input
+              type="number"
+              name="parcelLoadCapacity"
+              value={product.parcelLoadCapacity}
+              onChange={handleChange}
+              min="1"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+              required
+            />
+          </div>
+        );
+      case "vehicle_trailer":
+        return (
+          <div className="md:col-span-2 space-y-2">
+            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <FiTruck className="text-gray-500" />
+              Trailer Type
+            </label>
+            <select
+              name="trailerType"
+              value={product.trailerType}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+              required
+            >
+              <option value="">Select trailer type</option>
+              <option value="flatbed">Flatbed</option>
+              <option value="enclosed">Enclosed</option>
+              <option value="lowboy">Lowboy</option>
+            </select>
+          </div>
+        );
+      case "furniture":
+        return (
+          <div className="md:col-span-2 space-y-2">
+            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <FiHome className="text-gray-500" />
+              Furniture Details
+            </label>
+            <textarea
+              name="furnitureDetails"
+              value={product.furnitureDetails}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+              placeholder="Describe the furniture items and dimensions"
+              required
+            />
+          </div>
+        );
+      case "animal":
+        return (
+          <div className="md:col-span-2 space-y-2">
+            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+              <FiGitMerge className="text-gray-500" />
+              Animal Type
+            </label>
+            <select
+              name="animalType"
+              value={product.animalType}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+              required
+            >
+              <option value="">Select animal type</option>
+              <option value="dog">Dog</option>
+              <option value="cat">Cat</option>
+              <option value="bird">Bird</option>
+              <option value="livestock">Livestock</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        );
+      default:
+        return null;
     }
   };
 
   return (
-    <div className="fixed inset-0 z-[999] bg-[#00000098] flex items-center justify-center overflow-y-auto">
-      <div className="w-full max-w-3xl mx-auto px-4 relative">
-        {/* Overlay */}
-        <motion.div
-          className="absolute inset-0"
-          onClick={onClose}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        />
-
-        <motion.div
-          initial={{ opacity: 0, y: -30, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -30, scale: 0.95 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="bg-white p-6 rounded-lg shadow-xl relative z-10 max-h-[90vh] overflow-y-auto"
-        >
+    <div className="fixed inset-0 z-[999] bg-black/80 flex items-center justify-center overflow-y-auto p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.2 }}
+        className="relative w-full max-w-3xl bg-white rounded-xl shadow-2xl overflow-hidden"
+      >
+        {/* Modal Header */}
+        <div className="bg-gray-900 text-white p-6 flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Update Service</h2>
           <button
-            type="button"
-            className="absolute top-2 right-2 text-gray-600 hover:text-gray-800 cursor-pointer"
             onClick={onClose}
+            className="text-gray-300 hover:text-white transition-colors"
             aria-label="Close modal"
           >
-            ❌
+            <FiX size={24} />
           </button>
+        </div>
 
-          <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-            Update Service
-          </h2>
-
+        {/* Modal Content */}
+        <div className="p-6 max-h-[80vh] overflow-y-auto">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Service Name */}
-              <div>
-                <label
-                  htmlFor="serviceName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Service Name:
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiMapPin className="text-gray-500" />
+                  Service Name
                 </label>
                 <input
                   type="text"
-                  id="serviceName"
                   name="serviceName"
                   value={product.serviceName}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
+                  placeholder="e.g. Express Transport to Italy"
                 />
               </div>
 
               {/* Service Category */}
-              <div>
-                <label
-                  htmlFor="serviceCategory"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Category:
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiTruck className="text-gray-500" />
+                  Service Category
                 </label>
                 <select
-                  id="serviceCategory"
                   name="serviceCategory"
                   value={product.serviceCategory}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
                 >
-                  <option value="">Select Category</option>
-                  <option value="people">People</option>
-                  <option value="parcels">Parcels</option>
-                  <option value="vehicles">Vehicles</option>
+                  <option value="">Select a category</option>
+                  {categories.map((category) => (
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 
-              {/* Destination From */}
-              <div>
-                <label
-                  htmlFor="destinationFrom"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Destination From:
+              {/* Common Fields */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiMapPin className="text-gray-500" />
+                  From (Romania)
                 </label>
                 <input
                   type="text"
-                  id="destinationFrom"
                   name="destinationFrom"
                   value={product.destinationFrom}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
+                  placeholder="e.g. Bucharest"
                 />
               </div>
 
-              {/* Destination To */}
-              <div>
-                <label
-                  htmlFor="destinationTo"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Destination To:
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiMapPin className="text-gray-500" />
+                  To (Italy)
                 </label>
                 <input
                   type="text"
-                  id="destinationTo"
                   name="destinationTo"
                   value={product.destinationTo}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
+                  placeholder="e.g. Rome"
                 />
               </div>
 
-              {/* Route Cities */}
-              <div className="md:col-span-2">
-                <label
-                  htmlFor="routeCities"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Route Cities (comma separated):
-                </label>
-                <input
-                  type="text"
-                  id="routeCities"
-                  name="routeCities"
-                  value={product.routeCities}
-                  onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="e.g. City1, City2, City3"
-                />
-              </div>
-
-              {/* Travel Date */}
-              <div>
-                <label
-                  htmlFor="travelDate"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Travel Date:
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiCalendar className="text-gray-500" />
+                  Travel Date
                 </label>
                 <input
                   type="date"
-                  id="travelDate"
                   name="travelDate"
                   value={product.travelDate}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
                 />
               </div>
 
-              {/* Departure Time */}
-              <div>
-                <label
-                  htmlFor="departureTime"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Departure Time:
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiClock className="text-gray-500" />
+                  Departure Time
                 </label>
                 <input
                   type="time"
-                  id="departureTime"
                   name="departureTime"
                   value={product.departureTime}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
                 />
               </div>
 
-              {/* Arrival Date */}
-              <div>
-                <label
-                  htmlFor="arrivalDate"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Arrival Date:
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiCalendar className="text-gray-500" />
+                  Arrival Date
                 </label>
                 <input
                   type="date"
-                  id="arrivalDate"
                   name="arrivalDate"
                   value={product.arrivalDate}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
                 />
               </div>
 
-              {/* Availability Days Romania */}
-              <div>
-                <label
-                  htmlFor="availabilityDaysRomania"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Availability Days Romania (comma separated):
+              <div className="md:col-span-2 space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Route Cities (comma separated)
                 </label>
                 <input
                   type="text"
-                  id="availabilityDaysRomania"
+                  name="routeCities"
+                  value={product.routeCities}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  placeholder="e.g. Brasov, Sibiu, Timisoara"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Availability Days (Romania)
+                </label>
+                <input
+                  type="text"
                   name="availabilityDaysRomania"
                   value={product.availabilityDaysRomania}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="e.g. Monday, Wednesday, Friday"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  placeholder="e.g. Monday, Wednesday"
                   required
                 />
               </div>
 
-              {/* Availability Days Italy */}
-              <div>
-                <label
-                  htmlFor="availabilityDaysItaly"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Availability Days Italy (comma separated):
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Availability Days (Italy)
                 </label>
                 <input
                   type="text"
-                  id="availabilityDaysItaly"
                   name="availabilityDaysItaly"
                   value={product.availabilityDaysItaly}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="e.g. Tuesday, Thursday, Saturday"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  placeholder="e.g. Tuesday, Thursday"
                   required
                 />
               </div>
 
-              {/* Conditionally show seats for people */}
-              {product.serviceCategory === "people" && (
-                <>
-                  <div>
-                    <label
-                      htmlFor="totalSeats"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Total Seats:
-                    </label>
-                    <input
-                      type="number"
-                      id="totalSeats"
-                      name="totalSeats"
-                      value={product.totalSeats}
-                      onChange={handleChange}
-                      min={1}
-                      className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                      required
-                    />
-                  </div>
+              {/* Category-specific fields */}
+              {renderCategoryFields()}
 
-                  <div>
-                    <label
-                      htmlFor="availableSeats"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Available Seats:
-                    </label>
-                    <input
-                      type="number"
-                      id="availableSeats"
-                      name="availableSeats"
-                      value={product.availableSeats}
-                      onChange={handleChange}
-                      min={0}
-                      max={Number(product.totalSeats) || undefined}
-                      className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                      required
-                    />
-                  </div>
-                </>
-              )}
-
-              {/* Conditionally show parcel load capacity */}
-              {product.serviceCategory === "parcels" && (
-                <div className="md:col-span-2">
-                  <label
-                    htmlFor="parcelLoadCapacity"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Parcel Load Capacity:
-                  </label>
-                  <input
-                    type="number"
-                    id="parcelLoadCapacity"
-                    name="parcelLoadCapacity"
-                    value={product.parcelLoadCapacity}
-                    onChange={handleChange}
-                    min={0}
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                    required
-                  />
-                </div>
-              )}
-
-              {/* Pickup Option */}
-              <div>
-                <label
-                  htmlFor="pickupOption"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Pickup Option:
-                </label>
-                <select
-                  id="pickupOption"
-                  name="pickupOption"
-                  value={product.pickupOption}
-                  onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                  required
-                >
-                  <option value="">Select Option</option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </select>
-              </div>
-
-              {/* Price per Seat */}
-              <div>
-                <label
-                  htmlFor="pricePerSeat"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Price per Seat:
+              {/* Price */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiDollarSign className="text-gray-500" />
+                  Price (€)
                 </label>
                 <input
                   type="number"
-                  id="pricePerSeat"
-                  name="pricePerSeat"
-                  value={product.pricePerSeat}
+                  name="price"
+                  value={product.price}
                   onChange={handleChange}
-                  min={0}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  min="0"
+                  step="0.01"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
+                  placeholder={
+                    product.serviceCategory === "passenger"
+                      ? "Price per seat"
+                      : "Total price"
+                  }
                 />
               </div>
 
-              {/* Service Picture */}
-              <div className="md:col-span-2">
-                <label
-                  htmlFor="servicePic"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Service Picture:
+              {/* Pickup Option */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  Pickup Option
                 </label>
-                <input
-                  type="file"
-                  id="servicePic"
-                  name="servicePic"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                />
-                {imagePreview && (
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="mt-2 max-h-40 object-contain rounded-md"
-                  />
-                )}
+                <select
+                  name="pickupOption"
+                  value={product.pickupOption}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                  required
+                >
+                  <option value="no">No Pickup Service</option>
+                  <option value="yes">With Pickup Service</option>
+                </select>
+              </div>
+
+              {/* Image Upload */}
+              <div className="md:col-span-2 space-y-2">
+                <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <FiUpload className="text-gray-500" />
+                  Service Image
+                </label>
+                <div className="flex items-center gap-4">
+                  <label className="flex-1 cursor-pointer">
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-yellow-400 transition-colors">
+                      <FiUpload className="mx-auto text-gray-400 mb-2" />
+                      <p className="text-sm text-gray-500">
+                        {imagePreview ? "Change image" : "Click to upload image"}
+                      </p>
+                      <input
+                        type="file"
+                        name="servicePic"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="hidden"
+                      />
+                    </div>
+                  </label>
+                  {imagePreview && (
+                    <div className="w-24 h-24 rounded-lg overflow-hidden border border-gray-200">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className={`w-full py-3 rounded-lg font-semibold text-white ${
-                isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
-              } transition`}
-            >
-              {isLoading ? "Updating..." : "Update Service"}
-            </button>
+            {/* Submit Button */}
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`w-full py-3 px-6 bg-yellow-400 hover:bg-yellow-500 text-black font-bold rounded-lg transition-colors ${
+                  isLoading ? "opacity-70 cursor-not-allowed" : ""
+                }`}
+              >
+                {isLoading ? "Updating Service..." : "Update Service"}
+              </button>
+            </div>
           </form>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     </div>
   );
 };

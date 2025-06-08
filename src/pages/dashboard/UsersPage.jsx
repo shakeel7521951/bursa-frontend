@@ -5,6 +5,7 @@ import Header from "../../components/dashboard/common/Header";
 import StatCard from "../../components/dashboard/common/StatCard";
 import UsersTable from "../../components/dashboard/users/UsersTable";
 import { useAllUsersQuery } from "../../redux/slices/UserApi";
+import Loader from "../../Loader";
 
 const UsersPage = () => {
   const { data, isLoading, error } = useAllUsersQuery();
@@ -20,6 +21,9 @@ const UsersPage = () => {
     ? (((totalUsers - activeUsers) / totalUsers) * 100).toFixed(1) + "%"
     : "0%";
 
+    if(isLoading){
+      return <Loader />
+    }
   return (
     <div className="flex-1 overflow-auto relative z-10">
       <Header title="Users" />

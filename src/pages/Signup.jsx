@@ -4,6 +4,7 @@ import { FaGoogle } from "react-icons/fa";
 import { useUserRegistrationMutation } from "../redux/slices/UserApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Loader from "../Loader";
 
 export default function RegisterPage() {
   const [userRegistration, { isLoading }] = useUserRegistrationMutation();
@@ -41,6 +42,10 @@ export default function RegisterPage() {
       navigate("/user-verification", { state: { user: formData } });
     }
   };
+
+  if(isLoading){
+    return <Loader />
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4 bg-gradient-to-l from-black to-gray-900">
