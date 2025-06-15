@@ -45,7 +45,7 @@ const Footer = () => {
               <p className="uppercase text-sm md:font-semibold">
                 Sună pentru rezervare
               </p>
-              <p className="text-md md:text-xl lg:text-2xl">5267-214-392</p>
+              <p className="text-md md:text-xl lg:text-2xl">+40763518927</p>
             </div>
           </div>
         </div>
@@ -91,19 +91,45 @@ const Footer = () => {
               <hr className="w-[30%] bg-[#FFEE02] h-1 rounded-full mt-[-2px]" />
             </div>
             <div className="flex flex-col gap-3 mt-2">
-              {["Acasă", "Servicii", "Despre Noi", "Contact"].map(
-                (item, index) => (
-                  <div key={index} className="flex gap-2 items-center">
-                    <LuChevronsLeft className="mt-0.5" />
-                    <Link
-                      to={`/${item.toLowerCase().replace(" ", "-")}`}
-                      className="relative text-white transition-all duration-300 ease-in-out after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-[#FFEE02] after:transition-all after:duration-300 hover:after:w-full rounded-full"
-                    >
-                      {item}
-                    </Link>
-                  </div>
-                )
-              )}
+              <div className="flex gap-2 items-center">
+                <LuChevronsLeft className="mt-0.5" />
+                <Link
+                  to="/"
+                  className="relative text-white transition-all duration-300 ease-in-out after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-[#FFEE02] after:transition-all after:duration-300 hover:after:w-full rounded-full"
+                >
+                  Acasă
+                </Link>
+              </div>
+
+              <div className="flex gap-2 items-center">
+                <LuChevronsLeft className="mt-0.5" />
+                <Link
+                  to="/services"
+                  className="relative text-white transition-all duration-300 ease-in-out after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-[#FFEE02] after:transition-all after:duration-300 hover:after:w-full rounded-full"
+                >
+                  Servicii
+                </Link>
+              </div>
+
+              <div className="flex gap-2 items-center">
+                <LuChevronsLeft className="mt-0.5" />
+                <Link
+                  to="/about-us"
+                  className="relative text-white transition-all duration-300 ease-in-out after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-[#FFEE02] after:transition-all after:duration-300 hover:after:w-full rounded-full"
+                >
+                  Despre Noi
+                </Link>
+              </div>
+
+              <div className="flex gap-2 items-center">
+                <LuChevronsLeft className="mt-0.5" />
+                <Link
+                  to="/contact-us"
+                  className="relative text-white transition-all duration-300 ease-in-out after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-[#FFEE02] after:transition-all after:duration-300 hover:after:w-full rounded-full"
+                >
+                  Contact Us
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -125,7 +151,10 @@ const Footer = () => {
                 className="p-3 mb-4 border border-gray-300 w-full max-w-[250px] rounded-md outline-none"
                 placeholder="Introdu adresa ta de email"
               />
-              <Button onClick={()=>toast("Thank you for your trust!")} text="Abonează-te" />
+              <Button
+                onClick={() => toast("Thank you for your trust!")}
+                text="Abonează-te"
+              />
             </div>
           </div>
         </div>

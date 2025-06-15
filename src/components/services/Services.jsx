@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetAllServicesQuery } from "../../redux/slices/ServiceApi";
-import { 
-  FaSearch, 
-  FaUser, 
-  FaCarSide, 
+import {
+  FaSearch,
+  FaUser,
+  FaCarSide,
   FaDoorOpen,
   FaBox,
   FaTruck,
   FaHome,
-  FaDog
+  FaDog,
 } from "react-icons/fa";
 import { MdMenuOpen } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../Button";
 import { selectUserProfile } from "../../redux/slices/UserSlice";
 import { useSelector } from "react-redux";
@@ -19,16 +19,23 @@ import AddNewService from "../transporterDashboard/AddNewService";
 import Loader from "../../Loader";
 
 const OurServices = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const category = searchParams.get("category");
   const userProfile = useSelector(selectUserProfile);
   const [addProductOpen, setAddProductOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState(category || "All");
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   // Fetch services data
   const { data, isLoading, error } = useGetAllServicesQuery();
   const services = data?.services || [];
-
+  useEffect(() => {
+    if (category) {
+      setSelectedCategory(category);
+    }
+  }, [category]);
   // Filter services based on category and search query
   const filteredServices = services.filter((service) => {
     const query = searchQuery.toLowerCase();
@@ -47,18 +54,18 @@ const OurServices = () => {
 
   // Category icons mapping
   const getCategoryIcon = (category) => {
-    switch(category) {
-      case 'passenger':
+    switch (category) {
+      case "passenger":
         return <FaUser className="text-lg" />;
-      case 'parcel':
+      case "parcel":
         return <FaBox className="text-lg" />;
-      case 'car_towing':
+      case "car_towing":
         return <FaCarSide className="text-lg" />;
-      case 'vehicle_trailer':
+      case "vehicle_trailer":
         return <FaTruck className="text-lg" />;
-      case 'furniture':
+      case "furniture":
         return <FaHome className="text-lg" />;
-      case 'animal':
+      case "animal":
         return <FaDog className="text-lg" />;
       default:
         return <MdMenuOpen className="text-lg" />;
@@ -68,27 +75,36 @@ const OurServices = () => {
   // Generate categories with icons
   const categories = [
     { name: "All", icon: <MdMenuOpen className="text-lg" /> },
-    ...['passenger', 'parcel', 'car_towing', 'vehicle_trailer', 'furniture', 'animal'].map((category) => ({
+    ...[
+      "passenger",
+      "parcel",
+      "car_towing",
+      "vehicle_trailer",
+      "furniture",
+      "animal",
+    ].map((category) => ({
       name: category,
-      icon: getCategoryIcon(category)
+      icon: getCategoryIcon(category),
     })),
   ];
 
   // Handler to proceed to booking page
   const handleBookNow = (service, e) => {
     e.stopPropagation();
-    navigate(`/booking/${service._id}`,{ state: { service } });
+    navigate(`/booking/${service._id}`, { state: { service } });
   };
 
   // Render service details based on category
   const renderServiceDetails = (service) => {
-    switch(service.serviceCategory) {
-      case 'passenger':
+    switch (service.serviceCategory) {
+      case "passenger":
         return (
           <>
             <div className="flex items-center gap-2">
               <FaUser className="w-4 h-4 text-gray-500" />
-              <span>Seats: {service.availableSeats}/{service.totalSeats}</span>
+              <span>
+                Seats: {service.availableSeats}/{service.totalSeats}
+              </span>
             </div>
             <div className="flex items-center gap-2">
               <FaDoorOpen className="w-4 h-4 text-gray-500" />
@@ -96,7 +112,7 @@ const OurServices = () => {
             </div>
           </>
         );
-      case 'parcel':
+      case "parcel":
         return (
           <>
             <div className="flex items-center gap-2">
@@ -109,12 +125,12 @@ const OurServices = () => {
             </div>
           </>
         );
-      case 'car_towing':
+      case "car_towing":
         return (
           <>
             <div className="flex items-center gap-2">
               <FaCarSide className="w-4 h-4 text-gray-500" />
-              <span>Vehicle: {service.vehicleType || 'N/A'}</span>
+              <span>Vehicle: {service.vehicleType || "N/A"}</span>
             </div>
             <div className="flex items-center gap-2">
               <FaDoorOpen className="w-4 h-4 text-gray-500" />
@@ -122,12 +138,12 @@ const OurServices = () => {
             </div>
           </>
         );
-      case 'vehicle_trailer':
+      case "vehicle_trailer":
         return (
           <>
             <div className="flex items-center gap-2">
               <FaTruck className="w-4 h-4 text-gray-500" />
-              <span>Trailer: {service.trailerType || 'N/A'}</span>
+              <span>Trailer: {service.trailerType || "N/A"}</span>
             </div>
             <div className="flex items-center gap-2">
               <FaDoorOpen className="w-4 h-4 text-gray-500" />
@@ -135,7 +151,7 @@ const OurServices = () => {
             </div>
           </>
         );
-      case 'furniture':
+      case "furniture":
         return (
           <>
             <div className="flex items-center gap-2">
@@ -148,12 +164,12 @@ const OurServices = () => {
             </div>
           </>
         );
-      case 'animal':
+      case "animal":
         return (
           <>
             <div className="flex items-center gap-2">
               <FaDog className="w-4 h-4 text-gray-500" />
-              <span>Animal: {service.animalType || 'N/A'}</span>
+              <span>Animal: {service.animalType || "N/A"}</span>
             </div>
             <div className="flex items-center gap-2">
               <FaDoorOpen className="w-4 h-4 text-gray-500" />
@@ -167,10 +183,7 @@ const OurServices = () => {
   };
 
   // Loading and error states
-  if (isLoading)
-    return (
-      <Loader />
-    );
+  if (isLoading) return <Loader />;
   if (error)
     return (
       <div className="flex justify-center items-center h-64">
@@ -222,7 +235,7 @@ const OurServices = () => {
             onClick={() => setSelectedCategory(name)}
           >
             <span className="text-lg">{icon}</span>
-            <span className="capitalize">{name.replace('_', ' ')}</span>
+            <span className="capitalize">{name.replace("_", " ")}</span>
           </button>
         ))}
       </div>
@@ -241,8 +254,10 @@ const OurServices = () => {
                   alt={service.serviceName}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/400x200?text=Transport+Image";
-                    e.target.className = "w-full h-full object-cover bg-gray-100";
+                    e.target.src =
+                      "https://via.placeholder.com/400x200?text=Transport+Image";
+                    e.target.className =
+                      "w-full h-full object-cover bg-gray-100";
                   }}
                 />
               </div>
@@ -255,7 +270,7 @@ const OurServices = () => {
                     <div className="flex items-center gap-2">
                       {getCategoryIcon(service.serviceCategory)}
                       <span className="capitalize">
-                        {service.serviceCategory.replace('_', ' ')}
+                        {service.serviceCategory.replace("_", " ")}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">

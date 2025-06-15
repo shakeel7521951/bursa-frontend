@@ -72,7 +72,7 @@ const ContactForm = () => {
             <ContactInfo
               icon={<FiPhoneMissed />}
               title="Ai întrebări?"
-              text="+40 123 456 789"
+              text="+40 7635 18927"
             />
             <ContactInfo
               icon={<MdEmail />}

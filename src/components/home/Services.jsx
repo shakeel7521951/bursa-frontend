@@ -1,8 +1,6 @@
 import React from "react";
-// import service5 from "../../assets/home/service5-1.jpg";
 import service5 from "../../assets/home/Bursa_Trans_Steaguri_HD.webp";
 import service6 from "../../assets/home/service5-2.jpg";
-// import service7 from "../../assets/home/service5-3.jpg";
 import service7 from "../../assets/home/Transport_Auto_HD.webp";
 import { Link } from "react-router-dom";
 
@@ -13,19 +11,24 @@ const Services = () => {
       description:
         "Găsește curse disponibile postate de transportatori și rezervă-ți locul ușor pentru o călătorie confortabilă.",
       image: service5,
+      link: "/services",
+      category: "passenger",
     },
     {
       title: "Trimite Colete Rapid",
       description:
         "Trimite pachete între România și Italia în siguranță. Transportatori reali și comunicare directă.",
       image: service6,
+      link: "/services",
+      category: "parcel",
     },
     {
       title: "Transport Autovehicule oriunde",
       description:
         "Puteți găsi aici platforme pentru transportul autovehiculelor dumneavoastră de la adresă la adresă, în condiții de siguranță și profesionalism.",
       image: service7,
-      link: "/transporter-dashboard",
+      link: "/services",
+      category: "vehicle_trailer",
     },
   ];
 
@@ -38,12 +41,10 @@ const Services = () => {
         Conectăm pasagerii și transportatorii pentru curse România - Italia
       </h1>
 
-      {/* Services Grid */}
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-12 px-6 md:px-12">
         {services.map((data, index) => (
-          <Link to={data.link}>
+          <Link key={index} to={`${data.link}?category=${data.category}`}>
             <div
-              key={index}
               className="transition-all group duration-500 overflow-hidden relative"
               style={{
                 clipPath: "polygon(0 12%, 100% 0, 100% 100%, 0% 100%)",
@@ -67,7 +68,9 @@ const Services = () => {
                 <h2 className="text-2xl font-semibold text-gray-800">
                   {data.title}
                 </h2>
-                <p className="text-gray-700 mt-3 text-sm">{data.description}</p>
+                <p className="text-gray-700 mt-3 text-sm">
+                  {data.description}
+                </p>
               </div>
             </div>
           </Link>
