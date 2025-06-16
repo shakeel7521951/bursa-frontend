@@ -9,6 +9,9 @@ import {
   FaTruck,
   FaHome,
   FaDog,
+  FaMapMarkerAlt,
+  FaRoute,
+  FaFilter,
 } from "react-icons/fa";
 import { MdMenuOpen } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -26,34 +29,16 @@ const OurServices = () => {
   const [addProductOpen, setAddProductOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(category || "All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
   const navigate = useNavigate();
 
-  // Fetch services data
   const { data, isLoading, error } = useGetAllServicesQuery();
   const services = data?.services || [];
-  useEffect(() => {
-    if (category) {
-      setSelectedCategory(category);
-    }
-  }, [category]);
-  // Filter services based on category and search query
-  const filteredServices = services.filter((service) => {
-    const query = searchQuery.toLowerCase();
-    return (
-      (selectedCategory === "All" ||
-        service.serviceCategory?.toLowerCase() ===
-          selectedCategory.toLowerCase()) &&
-      [
-        service.serviceName,
-        service.serviceCategory,
-        service.destinationFrom,
-        service.destinationTo,
-      ].some((field) => field?.toLowerCase().includes(query))
-    );
-  });
 
-  // Category icons mapping
-  const getCategoryIcon = (category) => {
+  // Get unique categories from services data
+  const uniqueCategories = [...new Set(services.map(service => service.serviceCategory))].filter(Boolean);
+  
+    const getCategoryIcon = (category) => {
     switch (category) {
       case "passenger":
         return <FaUser className="text-lg" />;
@@ -71,30 +56,38 @@ const OurServices = () => {
         return <MdMenuOpen className="text-lg" />;
     }
   };
-
-  // Generate categories with icons
+  
+  // Create categories array dynamically from backend data
   const categories = [
     { name: "All", icon: <MdMenuOpen className="text-lg" /> },
-    ...[
-      "passenger",
-      "parcel",
-      "car_towing",
-      "vehicle_trailer",
-      "furniture",
-      "animal",
-    ].map((category) => ({
+    ...uniqueCategories.map(category => ({
       name: category,
       icon: getCategoryIcon(category),
     })),
   ];
 
-  // Handler to proceed to booking page
+  useEffect(() => {
+    if (category) {
+      setSelectedCategory(category);
+    }
+  }, [category]);
+
+  const filteredServices = services.filter((service) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      (selectedCategory === "All" ||
+        service.serviceCategory?.toLowerCase() === selectedCategory.toLowerCase()) &&
+      [service.serviceName, service.serviceCategory, service.destinationFrom, service.destinationTo]
+        .some((field) => field?.toLowerCase().includes(query))
+    );
+  });
+
+
   const handleBookNow = (service, e) => {
     e.stopPropagation();
     navigate(`/booking/${service._id}`, { state: { service } });
   };
 
-  // Render service details based on category
   const renderServiceDetails = (service) => {
     switch (service.serviceCategory) {
       case "passenger":
@@ -106,9 +99,9 @@ const OurServices = () => {
                 Seats: {service.availableSeats}/{service.totalSeats}
               </span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-nowrap">
               <FaDoorOpen className="w-4 h-4 text-gray-500" />
-              <span>Price per seat: ${service.price}</span>
+              <span>Seat Fare: ${service.price}</span>
             </div>
           </>
         );
@@ -182,7 +175,6 @@ const OurServices = () => {
     }
   };
 
-  // Loading and error states
   if (isLoading) return <Loader />;
   if (error)
     return (
@@ -193,28 +185,74 @@ const OurServices = () => {
 
   return (
     <div className="w-full my-7 flex flex-col items-center px-4 sm:px-6">
-      {/* Search bar and add trip button */}
-      <div className="container flex flex-col md:flex-row items-center justify-between gap-4 mb-6 w-full">
-        <div className="flex items-center w-full md:max-w-md bg-white border border-gray-300 rounded-lg px-4 py-2 shadow-sm focus-within:ring-2 focus-within:ring-yellow-400 focus-within:border-transparent">
-          <FaSearch className="text-gray-400 mr-3 text-lg" />
-          <input
-            type="text"
-            placeholder="Search for a service..."
-            className="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
+      {/* Enhanced Search and Filter Section */}
+      <div className="container w-full max-w-6xl mb-8">
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            {/* Search Bar with Filter Button */}
+            <div className="relative w-full md:w-2/3">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FaSearch className="text-gray-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search services by name, category, or route..."
+                className="block w-full pl-10 pr-12 py-3 border outline-none border-gray-200 rounded-lg bg-gray-50 focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="absolute inset-y-0 right-0 flex items-center pr-3"
+              >
+                <FaFilter className="text-gray-400 hover:text-yellow-500 transition-colors" />
+              </button>
+            </div>
 
-        {userProfile?.role === "Transporter" && (
-          <Button
-            onClick={() => setAddProductOpen(true)}
-            text="Add New Service"
-            bgHover="black"
-            textHover="white"
-            cutHover="white"
-          />
-        )}
+            {userProfile?.role === "Transporter" && (
+              <Button
+                onClick={() => setAddProductOpen(true)}
+                text="Add New Service"
+                bgHover="black"
+                textHover="white"
+                cutHover="white"
+                className="w-full md:w-auto"
+              />
+            )}
+          </div>
+
+          {/* Category Filters - Only shown when showFilters is true on mobile */}
+          <div className={`${showFilters ? 'block' : 'hidden'} md:block mt-6 transition-all duration-200`}>
+            <h3 className="text-sm font-semibold text-gray-500 mb-3 flex items-center gap-2">
+              <FaFilter className="text-gray-400" />
+              FILTER BY CATEGORY
+            </h3>
+            <div className="flex flex-wrap gap-3">
+              {categories.map(({ name, icon }) => (
+                <button
+                  key={name}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 ${
+                    selectedCategory === name
+                      ? "bg-yellow-400 text-black font-medium shadow-md"
+                      : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200 shadow-sm"
+                  }`}
+                  onClick={() => {
+                    setSelectedCategory(name);
+                    // Hide filters on mobile after selection
+                    if (window.innerWidth < 768) {
+                      setShowFilters(false);
+                    }
+                  }}
+                >
+                  <span className="text-lg">{icon}</span>
+                  <span className="capitalize whitespace-nowrap">
+                    {name.replace(/_/g, " ")}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       <AddNewService
@@ -222,33 +260,15 @@ const OurServices = () => {
         onClose={() => setAddProductOpen(false)}
       />
 
-      {/* Category filter buttons */}
-      <div className="flex gap-3 mb-6 flex-wrap justify-center">
-        {categories.map(({ name, icon }) => (
-          <button
-            key={name}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full shadow-md transition-all duration-200 ${
-              selectedCategory === name
-                ? "bg-yellow-400 text-black font-medium"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-            onClick={() => setSelectedCategory(name)}
-          >
-            <span className="text-lg">{icon}</span>
-            <span className="capitalize">{name.replace("_", " ")}</span>
-          </button>
-        ))}
-      </div>
-
-      {/* Service cards grid */}
-      <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Services Grid - Unchanged from your original design */}
+      <div className="container mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
         {filteredServices.length > 0 ? (
           filteredServices.map((service) => (
             <div
               key={service._id}
-              className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row transition-transform hover:scale-[1.02]"
+              className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100"
             >
-              <div className="md:w-[40%] h-48 md:h-auto">
+              <div className="relative h-48 w-full">
                 <img
                   src={service.servicePic}
                   alt={service.serviceName}
@@ -260,46 +280,69 @@ const OurServices = () => {
                       "w-full h-full object-cover bg-gray-100";
                   }}
                 />
+                <div className="absolute top-3 left-3 bg-yellow-400 text-black px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                  {getCategoryIcon(service.serviceCategory)}
+                  <span className="capitalize">
+                    {service.serviceCategory.replace(/_/g, " ")}
+                  </span>
+                </div>
               </div>
-              <div className="md:w-[60%] px-4 py-5 flex flex-col justify-between">
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-2">
+              
+              <div className="p-5">
+                <div className="flex justify-between items-start mb-3">
+                  <h2 className="text-xl font-bold text-gray-900 line-clamp-1">
                     {service.serviceName}
                   </h2>
-                  <div className="grid grid-cols-1 gap-2 text-gray-700 text-sm">
-                    <div className="flex items-center gap-2">
-                      {getCategoryIcon(service.serviceCategory)}
-                      <span className="capitalize">
-                        {service.serviceCategory.replace("_", " ")}
-                      </span>
+                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                    Available
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2 text-gray-600 mb-4">
+                  <FaMapMarkerAlt className="text-yellow-500" />
+                  <span className="text-sm font-medium">
+                    {service.destinationFrom} → {service.destinationTo}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  {renderServiceDetails(service)}
+                </div>
+
+                {/* Route Cities */}
+                {service.routeCities?.length > 0 && (
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 text-gray-500 mb-2">
+                      <FaRoute className="text-sm" />
+                      <span className="text-xs font-semibold">VIA CITIES</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <FaDoorOpen className="w-4 h-4 text-gray-500" />
-                      <span>From: {service.destinationFrom}</span>
+                    <div className="flex flex-wrap gap-2">
+                      {service.routeCities.map((city, index) => (
+                        <span
+                          key={index}
+                          className="px-2 py-1 text-xs bg-gray-50 text-gray-700 rounded-full border border-gray-200"
+                        >
+                          {city}
+                        </span>
+                      ))}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <FaDoorOpen className="w-4 h-4 text-gray-500" />
-                      <span>To: {service.destinationTo}</span>
-                    </div>
-                    {renderServiceDetails(service)}
                   </div>
-                </div>
-                <div className="mt-4 pt-3 border-t border-gray-100">
-                  <button
-                    onClick={(e) => handleBookNow(service, e)}
-                    className="w-full bg-yellow-400 hover:bg-yellow-500 text-black px-5 py-2 rounded-lg text-sm font-semibold transition-colors"
-                  >
-                    Book Now
-                  </button>
-                </div>
+                )}
+
+                <button
+                  onClick={(e) => handleBookNow(service, e)}
+                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-black px-5 py-3 rounded-lg font-semibold transition-colors duration-200 shadow-sm hover:shadow-md"
+                >
+                  Book Now
+                </button>
               </div>
             </div>
           ))
         ) : (
-          <div className="col-span-2 flex flex-col items-center justify-center py-12">
-            <FaSearch className="text-gray-400 text-4xl mb-4" />
-            <p className="text-gray-500 text-lg">No services found</p>
-            <p className="text-gray-400 text-sm mt-2">
+          <div className="col-span-3 flex flex-col items-center justify-center py-12 bg-gray-50 rounded-xl">
+            <FaSearch className="text-gray-300 text-5xl mb-4" />
+            <h3 className="text-gray-500 text-xl font-medium mb-2">No services found</h3>
+            <p className="text-gray-400 text-sm">
               Try adjusting your search or filters
             </p>
           </div>

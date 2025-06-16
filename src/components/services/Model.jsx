@@ -5,7 +5,9 @@ import { toast } from "react-toastify";
 import { 
   FaChair, FaSuitcase, FaArrowRight, FaUser, 
   FaBox, FaCar, FaTruck, FaHome, FaDog,
-  FaWeightHanging, FaCouch, FaPaw
+  FaWeightHanging, FaCouch, FaPaw,
+  FaMapMarkerAlt, FaCalendarAlt, FaRoute,
+  FaInfoCircle
 } from "react-icons/fa";
 
 const BookingModal = () => {
@@ -13,7 +15,7 @@ const BookingModal = () => {
   const navigate = useNavigate();
   const { serviceId } = useParams();
   const service = location.state?.service;
-
+  
   const [createOrder, { isLoading }] = useCreateOrderMutation();
   
   // Initialize form state based on service category
@@ -47,6 +49,68 @@ const BookingModal = () => {
       animal: <FaPaw className="text-yellow-500 mr-2" />
     };
     return icons[service?.serviceCategory] || <FaUser className="text-yellow-500 mr-2" />;
+  };
+
+  // Function to render route cities
+  const renderRouteCities = () => {
+    if (!service?.routeCities || service.routeCities.length === 0) return null;
+    
+    return (
+      <div className="mt-4">
+        <div className="flex items-center text-gray-700 mb-2">
+          <FaRoute className="mr-2 text-yellow-600" />
+          <span className="font-medium">Route Cities:</span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {service.routeCities.map((city, index) => (
+            <span key={index} className="bg-gray-100 px-3 py-1 rounded-full text-sm flex items-center">
+              <FaMapMarkerAlt className="mr-1 text-yellow-500" />
+              {city}
+            </span>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // Function to render availability days
+  const renderAvailabilityDays = () => {
+    if (!service?.availabilityDays) return null;
+    
+    return (
+      <div className="mt-4">
+        <div className="flex items-center text-gray-700 mb-2">
+          <FaCalendarAlt className="mr-2 text-yellow-600" />
+          <span className="font-medium">Available Days:</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {service.availabilityDays.italy && (
+            <div>
+              <p className="text-sm font-medium">Italy:</p>
+              <div className="flex flex-wrap gap-2 mt-1">
+                {service.availabilityDays.italy.map((day, index) => (
+                  <span key={`italy-${index}`} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                    {day}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          {service.availabilityDays.romania && (
+            <div>
+              <p className="text-sm font-medium">Romania:</p>
+              <div className="flex flex-wrap gap-2 mt-1">
+                {service.availabilityDays.romania.map((day, index) => (
+                  <span key={`romania-${index}`} className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
+                    {day}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   };
 
   const renderBookingFields = () => {
@@ -468,7 +532,7 @@ const BookingModal = () => {
         {/* Service Overview */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex flex-col md:flex-row gap-6">
-            <div className="w-full md:w-1/3 h-48 overflow-hidden rounded-lg bg-gray-100">
+            <div className="w-full md:w-1/3 overflow-hidden rounded-lg bg-gray-100">
               <img
                 src={service.servicePic}
                 alt={service.serviceName}
@@ -524,6 +588,23 @@ const BookingModal = () => {
                   </p>
                 </div>
               </div>
+
+              {/* Display route cities */}
+              {renderRouteCities()}
+
+              {/* Display availability days */}
+              {renderAvailabilityDays()}
+
+              {/* Additional service information */}
+              {service.animalType && (
+                <div className="mt-4">
+                  <div className="flex items-center text-gray-700 mb-2">
+                    <FaInfoCircle className="mr-2 text-yellow-600" />
+                    <span className="font-medium">Animal Type:</span>
+                  </div>
+                  <p className="capitalize">{service.animalType}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
