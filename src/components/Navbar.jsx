@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUserProfile, clearProfile } from "../redux/slices/UserSlice";
@@ -38,7 +38,11 @@ const Navbar = () => {
       <div className="container mx-auto py-4 flex justify-between items-center">
         <div>
           <Link to="/">
-            <img src={logo} alt="Company Logo" className="h-8 md:h-12" />
+            <img
+              src={logo}
+              alt="Company Logo"
+              className="h-6 sm:h-8 md:h-10 lg:h-10 max-w-full object-contain"
+            />
           </Link>
         </div>
 
@@ -78,12 +82,14 @@ const Navbar = () => {
 
         {/* Buttons + profile */}
         <div className="hidden md:flex items-center gap-4">
-          {userProfile ? (
-            <Link to="/services">
-              <Button text={"Rezervă Călătorie"} />
+          {userProfile && userProfile.role == "User" ? (
+            <Link to="/transport-request-form">
+              <Button text={"Solicita transport"} />
             </Link>
           ) : (
-            ""
+              <Link to="/all-transport-requests">
+              <Button text={"Cereri de transport"} />
+            </Link>
           )}
 
           {userProfile ? (
@@ -151,15 +157,26 @@ const Navbar = () => {
                       </>
                     )}
                     {userProfile.role === "User" && (
-                      <li
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => {
-                          navigate("/my-orders");
-                          setDropdownOpen(false);
-                        }}
-                      >
-                        Comenzile Mele
-                      </li>
+                      <>
+                        <li
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            navigate("/my-orders");
+                            setDropdownOpen(false);
+                          }}
+                        >
+                          Comenzile Mele
+                        </li>
+                        <li
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            navigate("/my-transport-requests");
+                            setDropdownOpen(false);
+                          }}
+                        >
+                          My Requests
+                        </li>
+                      </>
                     )}
                     <li
                       className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
@@ -241,18 +258,38 @@ const Navbar = () => {
                         >
                           Comenzi
                         </li>
+                        <li
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            navigate("/transporter-accepted-requests");
+                            setDropdownOpen(false);
+                          }}
+                        >
+                          Accepted Requests
+                        </li>
                       </>
                     )}
                     {userProfile.role === "User" && (
-                      <li
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => {
-                          navigate("/my-orders");
-                          setDropdownOpen(false);
-                        }}
-                      >
-                        Comenzile Mele
-                      </li>
+                      <>
+                        <li
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            navigate("/my-orders");
+                            setDropdownOpen(false);
+                          }}
+                        >
+                          Comenzile Mele
+                        </li>
+                        <li
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            navigate("/my-transport-requests");
+                            setDropdownOpen(false);
+                          }}
+                        >
+                          My Transport Requests
+                        </li>
+                      </>
                     )}
                     <li
                       className="px-4 py-2 hover:bg-gray-100 cursor-pointer"

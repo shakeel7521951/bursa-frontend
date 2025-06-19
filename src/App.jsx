@@ -34,6 +34,10 @@ import BlogDetails from "./components/blogs/BlogDetails";
 import AdminBlogs from "./pages/dashboard/AdminBlogs";
 import TransporterDashboard from "./pages/TransporterDashboard";
 import TransporterOrders from "./pages/TransporterOrders";
+import TransportRequestForm from "./pages/TransportRequestForm";
+import AllTransportRequests from "./pages/AllTransportRequests";
+import MyTransportRequests from "./pages/MyTransportRequests";
+import TransporterAcceptedRequests from "./pages/TransporterAcceptedRequests";
 
 const MainLayout = () => {
   return (
@@ -82,6 +86,10 @@ const router = createBrowserRouter([
       { path: "/blog/:id", element: <BlogDetails /> },
       { path: "/transporter-dashboard", element: <TransporterDashboard /> },
       { path: "/transporter-orders", element: <TransporterOrders /> },
+      { path: "/transport-request-form", element: <TransportRequestForm /> },
+      { path: "/all-transport-requests", element: <AllTransportRequests /> },
+      { path: "/my-transport-requests", element: <MyTransportRequests /> },
+      { path: "/transporter-accepted-requests", element: <TransporterAcceptedRequests /> },
     ],
   },
   { path: "/login", element: <LoginPage /> },
