@@ -82,7 +82,8 @@ const Navbar = () => {
 
         {/* Buttons + profile */}
         <div className="hidden md:flex items-center gap-4">
-          {userProfile && userProfile.role == "User" ? (
+          {userProfile &&(
+          userProfile.role == "User" ? (
             <Link to="/transport-request-form">
               <Button text={"Solicita transport"} />
             </Link>
@@ -90,7 +91,7 @@ const Navbar = () => {
               <Link to="/all-transport-requests">
               <Button text={"Cereri de transport"} />
             </Link>
-          )}
+          ))}
 
           {userProfile ? (
             <div className="relative">
