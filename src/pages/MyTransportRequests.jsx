@@ -211,13 +211,13 @@ const MyTransportRequests = () => {
 
                 {request.status === "pending" && (
                   <div className="flex gap-2 mt-4">
-                    <button
+                    {/* <button
                       onClick={() => toast.info("Edit functionality goes here")}
                       className="w-full text-sm py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition"
                     >
                       <FiEdit2 className="inline mb-1 mr-1" />
                       Edit
-                    </button>
+                    </button> */}
                     <button
                       onClick={() => openConfirm(request._id)}
                       className="w-full text-sm py-2 rounded bg-red-600 text-white hover:bg-red-700 transition"
@@ -241,7 +241,7 @@ const MyTransportRequests = () => {
       <AnimatePresence>
         {showConfirm && (
           <motion.div
-            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50"
+            className="fixed inset-0 flex items-center justify-center bg-[#000000a9] bg-opacity-40 z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
