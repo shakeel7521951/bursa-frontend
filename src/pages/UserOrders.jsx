@@ -46,20 +46,20 @@ const UserOrders = () => {
     setSearchTerm(e.target.value.toLowerCase());
   };
 
-  const handleEditOrder = (order) => {
-    if (order.orderStatus === "completed" || order.orderStatus === "rejected") {
-      alert("You cannot edit a completed or rejected order.");
-      return;
-    }
-    navigate(`/update-order/${order._id}`, {
-      state: { order },
-    });
-  };
+  // const handleEditOrder = (order) => {
+  //   if (order.orderStatus === "completed" || order.orderStatus === "rejected") {
+  //     alert("You cannot edit a completed or rejected order.");
+  //     return;
+  //   }
+  //   navigate(`/update-order/${order._id}`, {
+  //     state: { order },
+  //   });
+  // };
 
-  const handleDeleteClick = (order) => {
-    setSelectedOrder(order);
-    setIsModalOpen(true);
-  };
+  // const handleDeleteClick = (order) => {
+  //   setSelectedOrder(order);
+  //   setIsModalOpen(true);
+  // };
 
   const handleDeleteConfirm = async () => {
     if (selectedOrder) {
