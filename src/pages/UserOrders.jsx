@@ -177,7 +177,7 @@ const UserOrders = () => {
       "Total Price",
       "Order Status",
       "Order Date",
-      "Actions"
+      // "Actions"
     ];
   };
 
@@ -314,7 +314,7 @@ const UserOrders = () => {
                     {new Date(order.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <button
+                    {/* <button
                       onClick={() => handleEditOrder(order)}
                       title="Edit"
                       disabled={
@@ -329,8 +329,8 @@ const UserOrders = () => {
                       }`}
                     >
                       <Pencil size={18} />
-                    </button>
-                    <button
+                    </button> */}
+                    {/* <button
                       onClick={() => handleDeleteClick(order)}
                       className="text-red-500 cursor-pointer hover:text-red-300"
                       title={
@@ -340,7 +340,7 @@ const UserOrders = () => {
                       }
                     >
                       <Trash2 size={18} />
-                    </button>
+                    </button> */}
                   </td>
                 </motion.tr>
               ))}
