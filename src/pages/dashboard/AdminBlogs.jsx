@@ -9,8 +9,8 @@ import BlogModal from "../../components/dashboard/blogs/BlogModal";
 import { useGetAllBlogsQuery } from "../../redux/slices/BlogSlice";
 
 const AdminBlogs = () => {
+    const { data, isLoading, isError } = useGetAllBlogsQuery();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
@@ -31,7 +31,7 @@ const AdminBlogs = () => {
           <StatCard
             name="Total Blogs"
             icon={ShoppingBag}
-            value={10}
+            value={data?.blogs?.length || 0}
             color="#6366F1"
           />
         </motion.div>
