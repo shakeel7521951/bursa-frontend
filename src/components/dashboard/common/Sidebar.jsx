@@ -21,7 +21,7 @@ const SIDEBAR_ITEMS = [
   },
   { name: "Services", icon: Car, color: "#8B5CF6", href: "/products" },
   { name: "Users", icon: Users, color: "#EC4899", href: "/users" },
-  { name: "Sales", icon: DollarSign, color: "#10B981", href: "/sales" },
+  // { name: "Sales", icon: DollarSign, color: "#10B981", href: "/sales" },
   { name: "Orders", icon: ShoppingCart, color: "#F59E0B", href: "/orders" },
   { name: "Blogs", icon: ShoppingCart, color: "#F59E0B", href: "/admin-blogs" },
 ];

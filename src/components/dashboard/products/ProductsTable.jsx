@@ -86,7 +86,7 @@ const ProductsTable = () => {
 
   return (
     <>
-      <motion.button
+      {/* <motion.button
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
@@ -94,7 +94,7 @@ const ProductsTable = () => {
         className="px-6 py-2 mb-6 bg-blue-700 text-white rounded-md hover:bg-blue-600 transition-all"
       >
         + Add New Service
-      </motion.button>
+      </motion.button> */}
 
       {error && <p className="text-red-600 text-lg">Failed to fetch data.</p>}
 

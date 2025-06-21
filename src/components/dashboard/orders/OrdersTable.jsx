@@ -227,7 +227,7 @@ console.log(orders)
                   "To",
                   "Date",
                   "Status",
-                  "Actions",
+                  // "Actions",
                 ].map((heading) => (
                   <th
                     key={heading}
@@ -279,7 +279,7 @@ console.log(orders)
                       {order.orderStatus || "unknown"}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-sm">
+                  {/* <td className="px-4 py-3 text-sm">
                     <button
                       onClick={() => openModal(order)}
                       className="text-indigo-500 hover:text-indigo-700"
@@ -287,7 +287,7 @@ console.log(orders)
                     >
                       <Eye size={18} />
                     </button>
-                  </td>
+                  </td> */}
                 </motion.tr>
               ))}
             </tbody>

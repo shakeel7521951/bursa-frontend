@@ -11,7 +11,6 @@ import Loader from "../../Loader";
 const OrdersPage = () => {
   const { data, isLoading, error } = useGetAllOrdersQuery();
   const orders = data?.orders && Array.isArray(data.orders) ? data.orders : [];
-
   if (isLoading) {
     return <Loader />;
   }
