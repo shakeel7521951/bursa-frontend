@@ -20,6 +20,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
+import Loader from "../Loader";
 
 const MyTransportRequests = () => {
   const { data, isLoading, isError } = useGetUserTransportRequestsQuery();
@@ -70,12 +71,7 @@ const MyTransportRequests = () => {
 
   if (isLoading)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="mt-4 text-gray-600 text-sm">Se încarcă cererile tale...</p>
-        </div>
-      </div>
+      <Loader />
     );
 
   if (isError) {

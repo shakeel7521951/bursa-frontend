@@ -18,6 +18,7 @@ import {
 } from "react-icons/fi";
 import { useAcceptTransportRequestMutation } from "../redux/slices/RequestBooking";
 import { useNavigate } from "react-router-dom";
+import Loader from "../Loader";
 
 const AllTransportRequests = () => {
   const { data, isLoading, isError, refetch } = useGetAllTransportRequestsQuery();
@@ -43,12 +44,7 @@ const AllTransportRequests = () => {
 
   if (isLoading)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-black border-t-[#FFCA09] rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-gray-600">Se încarcă cererile de transport...</p>
-        </div>
-      </div>
+      <Loader />
     );
 
   if (isError) {

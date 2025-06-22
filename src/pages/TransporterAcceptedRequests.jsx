@@ -16,6 +16,7 @@ import {
   useGetAcceptedTransporterRequestsQuery,
   useUpdateRequestStatusMutation,
 } from "../redux/slices/RequestBooking";
+import Loader from "../Loader";
 
 const TransporterAcceptedRequests = () => {
   const { data, isLoading, isError, error, refetch } =
@@ -60,12 +61,7 @@ const TransporterAcceptedRequests = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-black border-t-[#FFCA09] rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-gray-600">Se încarcă cererile acceptate...</p>
-        </div>
-      </div>
+      <Loader />
     );
   }
 
