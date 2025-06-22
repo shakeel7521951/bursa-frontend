@@ -11,17 +11,17 @@ import {
 const AlertDialog = ({ message, isOpen, onClose, onConfirm }) => {
   return (
     <Dialog open={isOpen} onClose={onClose}>
-      <DialogTitle>Are you sure you want to delete service</DialogTitle>
+      <DialogTitle>Sunteți sigur că doriți să ștergeți serviciul?</DialogTitle>
       <DialogContent>
         <DialogContentText>{message}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          No
+          Nu
         </Button>
 
         <Button onClick={onConfirm} color="error">
-          Yes
+          Da
         </Button>
       </DialogActions>
     </Dialog>

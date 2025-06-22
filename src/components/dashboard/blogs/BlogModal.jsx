@@ -43,11 +43,11 @@ const BlogModel = ({ isOpen, onClose }) => {
 
       if (res?.blog) {
         toast.success(res.message, { position: "top-center" });
-          onClose();
-          navigate("/admin-blogs");
+        onClose();
+        navigate("/admin-blogs");
       }
     } catch (error) {
-      toast.error(error?.data?.message || "An error occurred");
+      toast.error(error?.data?.message || "A apărut o eroare");
     }
   };
 
@@ -56,11 +56,11 @@ const BlogModel = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#000000a4] bg-opacity-50 overflow-auto py-10">
       <div className="bg-white p-6 rounded-lg shadow-lg w-[440px] h-auto">
-        <h2 className="text-xl font-bold my-4 mt-10">Add New Blog</h2>
+        <h2 className="text-xl font-bold my-4 mt-10">Adaugă un blog nou</h2>
         <form onSubmit={handleFormSubmit} encType="multipart/form-data">
           <input
             name="title"
-            placeholder="Title"
+            placeholder="Titlu"
             value={formData.title}
             onChange={handleChange}
             className="w-full p-2 border mb-2"
@@ -68,7 +68,7 @@ const BlogModel = ({ isOpen, onClose }) => {
           />
           <input
             name="author"
-            placeholder="Author"
+            placeholder="Autor"
             value={formData.author}
             onChange={handleChange}
             className="w-full p-2 border mb-2"
@@ -80,19 +80,19 @@ const BlogModel = ({ isOpen, onClose }) => {
             accept="image/*"
             onChange={handleImageChange}
             className="w-full p-2 border mb-2"
-            aria-label="Upload blog image"
+            aria-label="Încarcă imaginea blogului"
             required
           />
           {formData.previewImage && (
             <img
               src={formData.previewImage}
-              alt="Preview"
+              alt="Previzualizare"
               className="w-full h-32 object-cover rounded mb-2"
             />
           )}
           <textarea
             name="description"
-            placeholder="Content"
+            placeholder="Conținut"
             value={formData.description}
             onChange={handleChange}
             className="w-full p-2 border mb-2"
@@ -104,14 +104,14 @@ const BlogModel = ({ isOpen, onClose }) => {
               className="bg-red-500 text-white px-4 py-2 rounded cursor-pointer"
               onClick={onClose}
             >
-              Cancel
+              Anulează
             </button>
             <button
               type="submit"
               className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer disabled:opacity-50"
               disabled={isLoading}
             >
-              {isLoading ? "Saving..." : "Save"}
+              {isLoading ? "Se salvează..." : "Salvează"}
             </button>
           </div>
         </form>

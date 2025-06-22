@@ -1,29 +1,29 @@
 import React, { useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa"; // Importing icons
+import { FaBars, FaTimes } from "react-icons/fa";
 import logo from "../../assets/footerContent/Frame.png";
 
 function BlogLabel() {
   const categories = [
-    "All Categories",
-    "Tech",
-    "Bio",
-    "New",
-    "Science",
-    "Health",
-    "Travel",
-    "Education",
-    "Business",
-    "Sports",
-    "Finance",
-    "AI",
+    "Toate categoriile",
+    "Tehnologie",
+    "Biologie",
+    "Noutăți",
+    "Știință",
+    "Sănătate",
+    "Călătorii",
+    "Educație",
+    "Afaceri",
+    "Sport",
+    "Finanțe",
+    "Inteligență Artificială",
   ];
 
-  const [selectedCategory, setSelectedCategory] = useState("All Categories");
-  const [isOpen, setIsOpen] = useState(false); // Toggle state for mobile menu
+  const [selectedCategory, setSelectedCategory] = useState("Toate categoriile");
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      {/* Mobile Toggle Button */}
+      {/* Buton mobil pentru meniu */}
       <button
         className="sticky top-[120px] left-5 z-[-10] md:hidden bg-[#00667C] text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:bg-[#004D5A]"
         onClick={() => setIsOpen(true)}
@@ -31,7 +31,7 @@ function BlogLabel() {
         <FaBars size={20} />
       </button>
 
-      {/* Overlay for mobile view when menu is open */}
+      {/* Suprapunere pe mobil când meniul este deschis */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
@@ -39,12 +39,13 @@ function BlogLabel() {
         ></div>
       )}
 
-      {/* Sidebar Menu */}
+      {/* Meniu lateral */}
       <div
-        className={`fixed top-0 right-0 w-72 p-5 shadow-lg md:rounded-xl bg-white transform transition-transform duration-300 ease-in-out z-50 md:sticky md:top-0 md:left-5 md:w-full md:translate-x-0 ${isOpen ? "translate-x-0 w-full" : "translate-x-full"
-          }`}
+        className={`fixed top-0 right-0 w-72 p-5 shadow-lg md:rounded-xl bg-white transform transition-transform duration-300 ease-in-out z-50 md:sticky md:top-0 md:left-5 md:w-full md:translate-x-0 ${
+          isOpen ? "translate-x-0 w-full" : "translate-x-full"
+        }`}
       >
-        {/* Close Button for Mobile */}
+        {/* Buton închidere (mobil) */}
         <button
           className="absolute top-5 right-5 text-gray-600 md:hidden"
           onClick={() => setIsOpen(false)}
@@ -65,24 +66,21 @@ function BlogLabel() {
           />
         </div>
 
-        {/* Search Input */}
-        <label
-          htmlFor="search"
-          className="block text-black font-medium mb-2"
-        >
-          🔍 Search Articles
+        {/* Căutare articole */}
+        <label htmlFor="search" className="block text-black font-medium mb-2">
+          🔍 Caută articole
         </label>
         <input
           type="text"
           id="search"
-          placeholder="Search articles..."
+          placeholder="Caută articole..."
           className="w-full p-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#00667C] transition"
         />
 
-        {/* Filter Section */}
+        {/* Secțiune de filtrare */}
         <div className="mb-5 relative">
           <label htmlFor="filter" className="block text-black font-medium mb-1">
-            📌 Filter
+            📌 Filtru
           </label>
           <div className="relative">
             <button
@@ -97,8 +95,11 @@ function BlogLabel() {
                 {categories.map((category, index) => (
                   <li
                     key={index}
-                    className={`p-2 cursor-pointer hover:bg-[#FFEE02] hover:text-black ${selectedCategory === category ? "bg-[#FFEE02] text-black font-semibold" : "text-white"
-                      }`}
+                    className={`p-2 cursor-pointer hover:bg-[#FFEE02] hover:text-black ${
+                      selectedCategory === category
+                        ? "bg-[#FFEE02] text-black font-semibold"
+                        : "text-white"
+                    }`}
                     onClick={() => {
                       setSelectedCategory(category);
                       setIsOpen(false);
@@ -112,18 +113,19 @@ function BlogLabel() {
           </div>
         </div>
 
-        {/* Browse by Categories */}
+        {/* Navigare pe categorii */}
         <h2 className="text-xl font-semibold mb-4 text-black">
-          📂 Categories
+          📂 Categorii
         </h2>
         <div className="h-[40vh] overflow-y-auto pr-2 space-y-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
           {categories.map((category, index) => (
             <button
               key={index}
-              className={`w-full text-left px-4 py-2 rounded-md transition-all duration-300 ${selectedCategory === category
+              className={`w-full text-left px-4 py-2 rounded-md transition-all duration-300 ${
+                selectedCategory === category
                   ? "bg-[#FFEE02] text-black font-semibold shadow-md"
                   : "bg-black text-white"
-                }`}
+              }`}
               onClick={() => setSelectedCategory(category)}
             >
               {category}

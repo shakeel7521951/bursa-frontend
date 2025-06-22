@@ -19,37 +19,36 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate passwords
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError('Parolele nu se potrivesc.');
       return;
     }
     setError('');
 
     try {
-      // Call the resetPassword mutation
       const response = await resetPassword({ email, password }).unwrap();
       toast.success(response.message, { position: 'top-center' });
-
-      // Redirect to login page or show a success message
-      navigate('/login'); // Adjust the route as needed
+      navigate('/login');
     } catch (err) {
-      console.error('Failed to reset password:', err);
-      toast.error(err.data?.message || 'Failed to reset password.', { position: 'top-center' });
+      console.error('Resetarea parolei a eșuat:', err);
+      toast.error(err.data?.message || 'Resetarea parolei a eșuat.', {
+        position: 'top-center',
+      });
     }
   };
-  if(isLoading){
-    return <Loader />
+
+  if (isLoading) {
+    return <Loader />;
   }
 
   return (
     <div className="flex justify-center items-center py-20 bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Reset Password</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">Resetează parola</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4 relative">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              New Password
+              Parolă nouă
             </label>
             <input
               type={showPassword ? 'text' : 'password'}
@@ -63,14 +62,14 @@ const ResetPassword = () => {
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="absolute cursor-pointer right-3 top-9 text-gray-600"
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={showPassword ? 'Ascunde parola' : 'Afișează parola'}
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
           </div>
           <div className="mb-6 relative">
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-              Confirm Password
+              Confirmă parola
             </label>
             <input
               type={showConfirmPassword ? 'text' : 'password'}
@@ -84,7 +83,7 @@ const ResetPassword = () => {
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               className="absolute cursor-pointer right-3 top-9 text-gray-600"
-              aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+              aria-label={showConfirmPassword ? 'Ascunde confirmarea parolei' : 'Afișează confirmarea parolei'}
             >
               {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -97,7 +96,7 @@ const ResetPassword = () => {
             disabled={isLoading}
             className="w-full bg-blue-500 text-white cursor-pointer py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-300 disabled:cursor-not-allowed"
           >
-            {isLoading ? 'Resetting Password...' : 'Reset Password'}
+            {isLoading ? 'Se resetează parola...' : 'Resetează parola'}
           </button>
         </form>
       </div>

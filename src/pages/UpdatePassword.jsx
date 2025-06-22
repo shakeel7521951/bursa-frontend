@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const UpdatePassword = () => {
   const [updatePassword, { isLoading }] = useUpdatePasswordMutation();
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -35,23 +35,23 @@ const UpdatePassword = () => {
     e.preventDefault();
 
     if (formData.newPassword !== formData.confirmPassword) {
-      toast.error("New password and confirm password must match!");
+      toast.error("Noua parolă și confirmarea parolei trebuie să fie identice!");
       return;
     }
 
     if (!validatePassword(formData.newPassword)) {
-      toast.error("Password must be at least 8 characters long, contain an uppercase letter, and a number.");
+      toast.error("Parola trebuie să aibă cel puțin 8 caractere, o literă mare și un număr.");
       return;
     }
 
     try {
       const response = await updatePassword(formData).unwrap();
-      toast.success(response.message || "Password updated successfully!", {
+      toast.success(response.message || "Parola a fost actualizată cu succes!", {
         position: "top-center",
       });
       navigate("/my-profile");
     } catch (error) {
-      toast.error(error.data?.message || "Password update failed!", {
+      toast.error(error.data?.message || "Actualizarea parolei a eșuat!", {
         position: "top-center",
       });
     }
@@ -61,19 +61,18 @@ const UpdatePassword = () => {
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
         <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">
-          Update Password
+          Actualizează parola
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Password Fields */}
           {["currentPassword", "newPassword", "confirmPassword"].map((field, index) => (
             <div key={index} className="relative">
               <label className="block text-sm font-medium text-gray-600">
                 {field === "currentPassword"
-                  ? "Current Password"
+                  ? "Parola curentă"
                   : field === "newPassword"
-                  ? "New Password"
-                  : "Confirm Password"}
+                  ? "Parolă nouă"
+                  : "Confirmă parola"}
               </label>
               <input
                 type={showPassword[field] ? "text" : "password"}
@@ -92,7 +91,6 @@ const UpdatePassword = () => {
             </div>
           ))}
 
-          {/* Submit Button */}
           <button
             type="submit"
             className={`w-full py-2 text-white rounded-lg transition duration-300 cursor-pointer ${
@@ -100,7 +98,7 @@ const UpdatePassword = () => {
             }`}
             disabled={isLoading}
           >
-            {isLoading ? "Updating..." : "Update Password"}
+            {isLoading ? "Se actualizează..." : "Actualizează parola"}
           </button>
         </form>
       </div>

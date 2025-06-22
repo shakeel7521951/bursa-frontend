@@ -18,7 +18,6 @@ import Sidebar from "./components/dashboard/common/Sidebar";
 import OverviewPage from "./pages/dashboard/OverviewPage";
 import ProductsPage from "./pages/dashboard/ProductsPage";
 import UsersPage from "./pages/dashboard/UsersPage";
-import SalesPage from "./pages/dashboard/SalesPage";
 import OrdersPage from "./pages/dashboard/OrdersPage";
 import { useDispatch } from "react-redux";
 import { useProfileQuery } from "./redux/slices/UserApi";
@@ -105,7 +104,6 @@ const router = createBrowserRouter([
           { path: "/dashboard", element: <OverviewPage /> },
           { path: "/products", element: <ProductsPage /> },
           { path: "/users", element: <UsersPage /> },
-          { path: "/sales", element: <SalesPage /> },
           { path: "/orders", element: <OrdersPage /> },
           { path: "/admin-blogs", element: <AdminBlogs /> },
         ],

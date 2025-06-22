@@ -1,10 +1,7 @@
 import {
   BarChart2,
-  DollarSign,
   Menu,
-  Settings,
   ShoppingCart,
-  TrendingUp,
   Users,
   Car,
 } from "lucide-react";
@@ -14,16 +11,15 @@ import { Link } from "react-router-dom";
 
 const SIDEBAR_ITEMS = [
   {
-    name: "Overview",
+    name: "Prezentare generală", // Overview
     icon: BarChart2,
     color: "#6366f1",
     href: "/dashboard",
   },
-  { name: "Services", icon: Car, color: "#8B5CF6", href: "/products" },
-  { name: "Users", icon: Users, color: "#EC4899", href: "/users" },
-  // { name: "Sales", icon: DollarSign, color: "#10B981", href: "/sales" },
-  { name: "Orders", icon: ShoppingCart, color: "#F59E0B", href: "/orders" },
-  { name: "Blogs", icon: ShoppingCart, color: "#F59E0B", href: "/admin-blogs" },
+  { name: "Servicii", icon: Car, color: "#8B5CF6", href: "/products" }, // Services
+  { name: "Utilizatori", icon: Users, color: "#EC4899", href: "/users" }, // Users
+  { name: "Comenzi", icon: ShoppingCart, color: "#F59E0B", href: "/orders" }, // Orders
+  { name: "Bloguri", icon: ShoppingCart, color: "#F59E0B", href: "/admin-blogs" }, // Blogs
 ];
 
 const Sidebar = () => {
@@ -75,4 +71,5 @@ const Sidebar = () => {
     </motion.div>
   );
 };
+
 export default Sidebar;

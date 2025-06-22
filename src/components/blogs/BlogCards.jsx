@@ -8,7 +8,7 @@ function BlogCards() {
   const { data, isLoading, isError } = useGetAllBlogsQuery();
 
   if (isLoading) return <Loader />;
-  if (isError) return <div className="text-center text-red-500">Error loading blogs.</div>;
+  if (isError) return <div className="text-center text-red-500">Eroare la încărcarea blogurilor.</div>;
 
   const blogPosts = data?.blogs || [];
 
@@ -23,7 +23,7 @@ function BlogCards() {
           >
             <img
               src={item.blogImage}
-              alt="not found"
+              alt="Imagine negăsită"
               className="rounded-xl h-[40vh]"
             />
             <p className="bg-[#ffee0275] py-1 px-2 rounded-full text-black font-semibold w-20 text-center text-sm">

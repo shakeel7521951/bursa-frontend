@@ -35,7 +35,7 @@ const TransporterDashboard = () => {
       setDialogOpen(false);
       setSelectedProduct(null);
     } catch (err) {
-      console.error("Failed to delete service:", err);
+      console.error("Eroare la ștergerea serviciului:", err);
     }
   };
 
@@ -44,69 +44,64 @@ const TransporterDashboard = () => {
     setOpenUpdate(true);
   };
 
-  // Function to render category-specific details
   const renderCategoryDetails = (service) => {
-    switch(service.serviceCategory) {
-      case 'passenger':
+    switch (service.serviceCategory) {
+      case "passenger":
         return (
           <div className="space-y-1">
-            <p>Seats: <span className="text-gray-500">{service.availableSeats}/{service.totalSeats}</span></p>
-            <p>Price per seat: <span className="text-gray-500">${service.price}</span></p>
+            <p>Locuri: <span className="text-gray-500">{service.availableSeats}/{service.totalSeats}</span></p>
+            <p>Preț per loc: <span className="text-gray-500">${service.price}</span></p>
           </div>
         );
-      case 'parcel':
+      case "parcel":
         return (
           <div className="space-y-1">
-            <p>Capacity: <span className="text-gray-500">{service.parcelLoadCapacity} kg</span></p>
-            <p>Price: <span className="text-gray-500">${service.price}</span></p>
+            <p>Capacitate: <span className="text-gray-500">{service.parcelLoadCapacity} kg</span></p>
+            <p>Preț: <span className="text-gray-500">${service.price}</span></p>
           </div>
         );
-      case 'car_towing':
+      case "car_towing":
         return (
           <div className="space-y-1">
-            <p>Vehicle Type: <span className="text-gray-500">{service.vehicleType || 'N/A'}</span></p>
-            <p>Price: <span className="text-gray-500">${service.price}</span></p>
+            <p>Tip vehicul: <span className="text-gray-500">{service.vehicleType || 'N/A'}</span></p>
+            <p>Preț: <span className="text-gray-500">${service.price}</span></p>
           </div>
         );
-      case 'vehicle_trailer':
+      case "vehicle_trailer":
         return (
           <div className="space-y-1">
-            <p>Trailer Type: <span className="text-gray-500">{service.trailerType || 'N/A'}</span></p>
-            <p>Price: <span className="text-gray-500">${service.price}</span></p>
+            <p>Tip remorcă: <span className="text-gray-500">{service.trailerType || 'N/A'}</span></p>
+            <p>Preț: <span className="text-gray-500">${service.price}</span></p>
           </div>
         );
-      case 'furniture':
+      case "furniture":
         return (
           <div className="space-y-1">
-            <p>Details: <span className="text-gray-500">{service.furnitureDetails || 'N/A'}</span></p>
-            <p>Price: <span className="text-gray-500">${service.price}</span></p>
+            <p>Detalii: <span className="text-gray-500">{service.furnitureDetails || 'N/A'}</span></p>
+            <p>Preț: <span className="text-gray-500">${service.price}</span></p>
           </div>
         );
-      case 'animal':
+      case "animal":
         return (
           <div className="space-y-1">
-            <p>Animal Type: <span className="text-gray-500">{service.animalType || 'N/A'}</span></p>
-            <p>Price: <span className="text-gray-500">${service.price}</span></p>
+            <p>Tip animal: <span className="text-gray-500">{service.animalType || 'N/A'}</span></p>
+            <p>Preț: <span className="text-gray-500">${service.price}</span></p>
           </div>
         );
       default:
-        return <p>Price: ${service.price}</p>;
+        return <p>Preț: ${service.price}</p>;
     }
   };
 
-  // Function to format availability days
   const formatAvailabilityDays = (days) => {
-    if (!days) return 'N/A';
-    return days.join(', ');
+    if (!days) return "N/A";
+    return days.join(", ");
   };
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  if (isLoading) return <Loader />;
 
-  if (isError) {
-    return <div className="text-center py-10 text-red-500">Access denied: not a Transporter</div>;
-  }
+  if (isError)
+    return <div className="text-center py-10 text-red-500">Acces refuzat: nu sunteți Transportator</div>;
 
   return (
     <div className="container mx-auto px-5 md:px-0 py-10">
@@ -117,7 +112,7 @@ const TransporterDashboard = () => {
         onClick={() => setAddProductOpen(true)}
         className="px-4 py-2 mb-10 bg-blue-700 text-white rounded-lg hover:bg-blue-500 transition"
       >
-        + Add New Service
+        + Adaugă serviciu nou
       </motion.button>
 
       <motion.div
@@ -127,11 +122,11 @@ const TransporterDashboard = () => {
         transition={{ delay: 0.2 }}
       >
         <div className="flex flex-col gap-4 sm:flex-row justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-blue-700">Services List</h2>
+          <h2 className="text-xl font-semibold text-blue-700">Listă servicii</h2>
           <div className="relative">
             <input
               type="text"
-              placeholder="Search services..."
+              placeholder="Caută servicii..."
               className="bg-white text-blue-700 placeholder-blue-700 rounded-lg pl-10 pr-4 border py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               onChange={(e) => setSearchTerm(e.target.value)}
               value={searchTerm}
@@ -145,14 +140,14 @@ const TransporterDashboard = () => {
             <table className="min-w-full divide-y divide-gray-700">
               <thead>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Image</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Service</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Category</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Route</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Schedule</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Details</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Availability</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Actions</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Imagine</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Serviciu</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Categorie</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Rută</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Program</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Detalii</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Disponibilitate</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase">Acțiuni</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-700">
@@ -174,37 +169,37 @@ const TransporterDashboard = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
                       <p className="font-medium">{service.serviceName}</p>
                       <p className="text-gray-500 text-xs">
-                        {service.pickupOption === 'yes' ? 'With pickup' : 'No pickup'}
+                        {service.pickupOption === "yes" ? "Cu preluare" : "Fără preluare"}
                       </p>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700 capitalize">
-                      {service.serviceCategory.replace('_', ' ')}
+                      {service.serviceCategory.replace("_", " ")}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
                       <p>{service.destinationFrom} → {service.destinationTo}</p>
                       <p className="text-xs text-gray-500">
-                        Via: {service.routeCities?.join(', ') || 'N/A'}
+                        Via: {service.routeCities?.join(", ") || "N/A"}
                       </p>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
                       <p>{new Date(service.travelDate).toLocaleDateString()}</p>
                       <p className="text-xs text-gray-500">
-                        Depart: {service.departureTime}
+                        Plecare: {service.departureTime}
                       </p>
                     </td>
                     <td className="px-6 py-4 text-sm whitespace-nowrap text-blue-700">
                       {renderCategoryDetails(service)}
                     </td>
                     <td className="px-6 py-4 text-sm text-nowrap text-blue-700">
-                      <p>Romania: <span className="text-gray-500">{formatAvailabilityDays(service.availabilityDays?.romania)}</span></p>
-                      <p>Italy: <span className="text-gray-500">{formatAvailabilityDays(service.availabilityDays?.italy)}</span></p>
+                      <p>România: <span className="text-gray-500">{formatAvailabilityDays(service.availabilityDays?.romania)}</span></p>
+                      <p>Italia: <span className="text-gray-500">{formatAvailabilityDays(service.availabilityDays?.italy)}</span></p>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-700">
                       <div className="flex space-x-2">
                         <button
                           className="text-indigo-500 hover:text-indigo-300"
                           onClick={() => handleUpdate(service)}
-                          title="Edit"
+                          title="Editează"
                         >
                           <Edit size={18} />
                         </button>
@@ -214,7 +209,7 @@ const TransporterDashboard = () => {
                             setSelectedProduct(service);
                             setDialogOpen(true);
                           }}
-                          title="Delete"
+                          title="Șterge"
                         >
                           <Trash2 size={18} />
                         </button>
@@ -225,7 +220,7 @@ const TransporterDashboard = () => {
               </tbody>
             </table>
           ) : (
-            <p className="text-center text-gray-500 py-4">No services found.</p>
+            <p className="text-center text-gray-500 py-4">Nu au fost găsite servicii.</p>
           )}
         </div>
       </motion.div>

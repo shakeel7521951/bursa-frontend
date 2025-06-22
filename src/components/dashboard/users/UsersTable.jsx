@@ -51,7 +51,7 @@ const UsersTable = () => {
   const changeUserRole = async (id, newRole) => {
     try {
       const res = await updateUserRole({ userId: id, role: newRole }).unwrap();
-      toast.success(res.message,{position:'top-center'});
+      toast.success(res.message, { position: 'top-center' });
 
       setFilteredUsers((prevUsers) =>
         prevUsers.map((user) =>
@@ -59,12 +59,12 @@ const UsersTable = () => {
         )
       );
     } catch (err) {
-      toast.error(err?.data?.message || "Failed to update user role");
+      toast.error(err?.data?.message || "Actualizarea rolului utilizatorului a eșuat");
     }
     setOpenDropdown(null);
   };
 
-  if (isLoading) return <p>Loading users...</p>;
+  if (isLoading) return <p>Se încarcă utilizatorii...</p>;
 
   return (
     <motion.div
@@ -74,11 +74,11 @@ const UsersTable = () => {
       transition={{ delay: 0.2 }}
     >
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-blue-700">Users</h2>
+        <h2 className="text-xl font-semibold text-blue-700">Utilizatori</h2>
         <div className="relative">
           <input
             type="text"
-            placeholder="Search users..."
+            placeholder="Caută utilizatori..."
             className="bg-white text-blue-700 placeholder-blue-700 rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={handleSearch}
@@ -91,7 +91,7 @@ const UsersTable = () => {
         <table className="min-w-full divide-y divide-gray-700">
           <thead>
             <tr>
-              {["Name", "Email", "Role", "Status", "Actions"].map(
+              {["Nume", "Email", "Rol", "Stare", "Acțiuni"].map(
                 (header, index) => (
                   <th
                     key={index}
@@ -152,7 +152,7 @@ const UsersTable = () => {
                         : "bg-red-800 text-red-100"
                     }`}
                   >
-                    {user.status}
+                    {user.status === "verified" ? "Verificat" : "Neverificat"}
                   </span>
                 </td>
 
@@ -161,7 +161,7 @@ const UsersTable = () => {
                     onClick={() => toggleDropdown(user._id)}
                     className="flex items-center text-indigo-600 hover:text-indigo-300"
                   >
-                    Manage <ChevronDown className="ml-1" size={16} />
+                    Gestionează <ChevronDown className="ml-1" size={16} />
                   </button>
 
                   {openDropdown === user._id && (
@@ -170,13 +170,13 @@ const UsersTable = () => {
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         onClick={() => changeUserRole(user._id, "Admin")}
                       >
-                        Make Admin
+                        Fă Admin
                       </button>
                       <button
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         onClick={() => changeUserRole(user._id, "User")}
                       >
-                        Make User
+                        Fă Utilizator
                       </button>
                     </div>
                   )}

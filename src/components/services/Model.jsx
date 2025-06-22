@@ -59,7 +59,7 @@ const BookingModal = () => {
       <div className="mt-4">
         <div className="flex items-center text-gray-700 mb-2">
           <FaRoute className="mr-2 text-yellow-600" />
-          <span className="font-medium">Route Cities:</span>
+          <span className="font-medium">Orașe pe traseu:</span>
         </div>
         <div className="flex flex-wrap gap-2">
           {service.routeCities.map((city, index) => (
@@ -81,12 +81,12 @@ const BookingModal = () => {
       <div className="mt-4">
         <div className="flex items-center text-gray-700 mb-2">
           <FaCalendarAlt className="mr-2 text-yellow-600" />
-          <span className="font-medium">Available Days:</span>
+          <span className="font-medium">Zile disponibile:</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {service.availabilityDays.italy && (
             <div>
-              <p className="text-sm font-medium">Italy:</p>
+              <p className="text-sm font-medium">Italia:</p>
               <div className="flex flex-wrap gap-2 mt-1">
                 {service.availabilityDays.italy.map((day, index) => (
                   <span key={`italy-${index}`} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
@@ -98,7 +98,7 @@ const BookingModal = () => {
           )}
           {service.availabilityDays.romania && (
             <div>
-              <p className="text-sm font-medium">Romania:</p>
+              <p className="text-sm font-medium">România:</p>
               <div className="flex flex-wrap gap-2 mt-1">
                 {service.availabilityDays.romania.map((day, index) => (
                   <span key={`romania-${index}`} className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
@@ -121,7 +121,7 @@ const BookingModal = () => {
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
                 <FaChair className="mr-2 text-yellow-600" />
-                Seats to Book*
+                Locuri de rezervat*
               </label>
               <input
                 type="number"
@@ -135,14 +135,14 @@ const BookingModal = () => {
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
               />
               <p className="text-sm text-gray-500 mt-2">
-                {service.availableSeats || 0} seats available
+                {service.availableSeats || 0} locuri disponibile
               </p>
             </div>
 
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
                 <FaSuitcase className="mr-2 text-yellow-600" />
-                Luggage Quantity
+                Număr bagaje
               </label>
               <input
                 type="number"
@@ -154,7 +154,7 @@ const BookingModal = () => {
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
               />
               <p className="text-sm text-gray-500 mt-2">
-                Max 2 pieces per seat
+                Maxim 2 bucăți per loc
               </p>
             </div>
           </>
@@ -166,7 +166,7 @@ const BookingModal = () => {
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
                 <FaBox className="mr-2 text-yellow-600" />
-                Number of Parcels*
+                Număr de colete*
               </label>
               <input
                 type="number"
@@ -182,7 +182,7 @@ const BookingModal = () => {
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
                 <FaWeightHanging className="mr-2 text-yellow-600" />
-                Total Weight (kg)
+                Greutate totală (kg)
               </label>
               <input
                 type="number"
@@ -194,7 +194,7 @@ const BookingModal = () => {
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
               />
               <p className="text-sm text-gray-500 mt-2">
-                Max capacity: {service.parcelLoadCapacity} kg
+                Capacitate maximă: {service.parcelLoadCapacity} kg
               </p>
             </div>
           </>
@@ -206,12 +206,12 @@ const BookingModal = () => {
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100 col-span-2">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
                 <FaCar className="mr-2 text-yellow-600" />
-                Vehicle Details*
+                Detalii vehicul*
               </label>
               <input
                 type="text"
                 name="vehicleDetails"
-                placeholder="Make, model, and condition"
+                placeholder="Marca, model și stare"
                 required
                 value={orderData.vehicleDetails}
                 onChange={handleChange}
@@ -221,11 +221,11 @@ const BookingModal = () => {
 
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100 col-span-2">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
-                Special Requirements
+                Cerințe speciale
               </label>
               <textarea
                 name="specialRequirements"
-                placeholder="Any special towing requirements"
+                placeholder="Orice cerințe speciale de remorcare"
                 value={orderData.specialRequirements}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
@@ -241,7 +241,7 @@ const BookingModal = () => {
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
                 <FaTruck className="mr-2 text-yellow-600" />
-                Vehicle Type*
+                Tip vehicul*
               </label>
               <select
                 name="vehicleType"
@@ -250,17 +250,17 @@ const BookingModal = () => {
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                 required
               >
-                <option value="">Select vehicle type</option>
+                <option value="">Selectați tipul vehiculului</option>
                 <option value="sedan">Sedan</option>
                 <option value="suv">SUV</option>
-                <option value="truck">Truck</option>
-                <option value="van">Van</option>
+                <option value="truck">Camion</option>
+                <option value="van">Dubă</option>
               </select>
             </div>
 
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
-                Trailer Requirements
+                Cerințe remorcă
               </label>
               <select
                 name="trailerRequirements"
@@ -268,9 +268,9 @@ const BookingModal = () => {
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
               >
-                <option value="">Select requirements</option>
-                <option value="flatbed">Flatbed</option>
-                <option value="enclosed">Enclosed</option>
+                <option value="">Selectați cerințele</option>
+                <option value="flatbed">Platformă</option>
+                <option value="enclosed">Închisă</option>
                 <option value="lowboy">Lowboy</option>
               </select>
             </div>
@@ -283,7 +283,7 @@ const BookingModal = () => {
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
                 <FaCouch className="mr-2 text-yellow-600" />
-                Number of Items*
+                Număr de articole*
               </label>
               <input
                 type="number"
@@ -298,12 +298,12 @@ const BookingModal = () => {
 
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
-                Approximate Dimensions
+                Dimensiuni aproximative
               </label>
               <input
                 type="text"
                 name="dimensions"
-                placeholder="e.g. 2m x 1.5m x 0.5m"
+                placeholder="ex. 2m x 1.5m x 0.5m"
                 value={orderData.dimensions}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
@@ -319,7 +319,7 @@ const BookingModal = () => {
                 className="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300 rounded"
               />
               <label className="ml-2 block text-sm text-gray-700">
-                Contains fragile items
+                Conține obiecte fragile
               </label>
             </div>
           </>
@@ -331,7 +331,7 @@ const BookingModal = () => {
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
                 <FaPaw className="mr-2 text-yellow-600" />
-                Number of Animals*
+                Număr de animale*
               </label>
               <input
                 type="number"
@@ -346,7 +346,7 @@ const BookingModal = () => {
 
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
-                Animal Type
+                Tip animal
               </label>
               <select
                 name="animalType"
@@ -354,21 +354,21 @@ const BookingModal = () => {
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
               >
-                <option value="dog">Dog</option>
-                <option value="cat">Cat</option>
-                <option value="bird">Bird</option>
-                <option value="livestock">Livestock</option>
-                <option value="other">Other</option>
+                <option value="dog">Câine</option>
+                <option value="cat">Pisică</option>
+                <option value="bird">Pasăre</option>
+                <option value="livestock">Animal de fermă</option>
+                <option value="other">Altul</option>
               </select>
             </div>
 
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100 col-span-2">
               <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
-                Special Needs
+                Necesități speciale
               </label>
               <textarea
                 name="specialNeeds"
-                placeholder="Any special requirements for the animals"
+                placeholder="Orice cerințe speciale pentru animale"
                 value={orderData.specialNeeds}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
@@ -385,7 +385,7 @@ const BookingModal = () => {
                 className="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300 rounded"
               />
               <label className="ml-2 block text-sm text-gray-700">
-                Cage/Transport box required
+                Este necesară cușcă/transportor
               </label>
             </div>
           </>
@@ -394,7 +394,7 @@ const BookingModal = () => {
       default:
         return (
           <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-100 col-span-2">
-            <p className="text-gray-700">Please contact us directly for booking this service.</p>
+            <p className="text-gray-700">Vă rugăm să ne contactați direct pentru rezervarea acestui serviciu.</p>
           </div>
         );
     }
@@ -423,33 +423,33 @@ const BookingModal = () => {
     switch(service.serviceCategory) {
       case 'passenger':
         if (orderData.seatsBooked < 1) {
-          toast.error("Please book at least 1 seat");
+          toast.error("Vă rugăm să rezervați cel puțin 1 loc");
           return;
         }
         if (orderData.seatsBooked > service.availableSeats) {
-          toast.error(`Only ${service.availableSeats} seats available`);
+          toast.error(`Doar ${service.availableSeats} locuri disponibile`);
           return;
         }
         break;
       case 'parcel':
         if (orderData.quantity < 1) {
-          toast.error("Please book at least 1 parcel");
+          toast.error("Vă rugăm să rezervați cel puțin 1 colet");
           return;
         }
         if (orderData.weight > service.parcelLoadCapacity) {
-          toast.error(`Maximum capacity is ${service.parcelLoadCapacity} kg`);
+          toast.error(`Capacitatea maximă este de ${service.parcelLoadCapacity} kg`);
           return;
         }
         break;
       case 'furniture':
         if (orderData.itemCount < 1) {
-          toast.error("Please specify at least 1 item");
+          toast.error("Vă rugăm să specificați cel puțin 1 articol");
           return;
         }
         break;
       case 'animal':
         if (orderData.animalCount < 1) {
-          toast.error("Please specify at least 1 animal");
+          toast.error("Vă rugăm să specificați cel puțin 1 animal");
           return;
         }
         break;
@@ -470,20 +470,20 @@ const BookingModal = () => {
       });
 
       if (response.error) {
-        toast.error(response.error.data?.message || "Booking failed");
+        toast.error(response.error.data?.message || "Rezervarea a eșuat");
       } else {
-        toast.success("Booking successful!");
+        toast.success("Rezervare efectuată cu succes!");
         navigate("/my-orders");
       }
     } catch (error) {
-      toast.error("Unexpected error occurred!");
+      toast.error("A apărut o eroare neașteptată!");
     }
   };
 
   if (!service) {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-xl text-gray-500">Service not found.</p>
+        <p className="text-xl text-gray-500">Serviciul nu a fost găsit.</p>
       </div>
     );
   }
@@ -494,13 +494,13 @@ const BookingModal = () => {
   const getPriceDescription = () => {
     switch(service.serviceCategory) {
       case 'passenger':
-        return `${orderData.seatsBooked} seat${orderData.seatsBooked !== 1 ? "s" : ""} × ${displayPrice(service.price)}`;
+        return `${orderData.seatsBooked} loc${orderData.seatsBooked !== 1 ? "uri" : ""} × ${displayPrice(service.price)}`;
       case 'parcel':
-        return `${orderData.quantity} parcel${orderData.quantity !== 1 ? "s" : ""} × ${displayPrice(service.price)}`;
+        return `${orderData.quantity} colet${orderData.quantity !== 1 ? "e" : ""} × ${displayPrice(service.price)}`;
       case 'furniture':
-        return `${orderData.itemCount} item${orderData.itemCount !== 1 ? "s" : ""} × ${displayPrice(service.price)}`;
+        return `${orderData.itemCount} articol${orderData.itemCount !== 1 ? "e" : ""} × ${displayPrice(service.price)}`;
       case 'animal':
-        return `${orderData.animalCount} animal${orderData.animalCount !== 1 ? "s" : ""} × ${displayPrice(service.price)}`;
+        return `${orderData.animalCount} animal${orderData.animalCount !== 1 ? "e" : ""} × ${displayPrice(service.price)}`;
       default:
         return displayPrice(service.price);
     }
@@ -513,7 +513,7 @@ const BookingModal = () => {
         <div className="bg-black text-white p-6">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-2xl font-bold">Complete Your Booking</h1>
+              <h1 className="text-2xl font-bold">Finalizați rezervarea</h1>
               <div className="flex items-center mt-2 text-yellow-400">
                 <span className="font-medium">{service.destinationFrom}</span>
                 <FaArrowRight className="mx-2" />
@@ -523,7 +523,7 @@ const BookingModal = () => {
             <div className="flex items-center bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-medium">
               {getCategoryIcon()}
               <span className="capitalize">
-                {service.serviceCategory?.replace('_', ' ') || 'service'}
+                {service.serviceCategory?.replace('_', ' ') || 'serviciu'}
               </span>
             </div>
           </div>
@@ -544,24 +544,24 @@ const BookingModal = () => {
             </div>
             <div className="w-full md:w-2/3">
               <h2 className="text-xl font-bold text-gray-800 mb-2">
-                {service.serviceName || 'Unnamed Service'}
+                {service.serviceName || 'Serviciu fără nume'}
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-600">
                 <div>
-                  <p className="font-medium">Departure</p>
+                  <p className="font-medium">Plecare</p>
                   <p>
-                    {service.travelDate ? new Date(service.travelDate).toLocaleDateString('en-US', {
+                    {service.travelDate ? new Date(service.travelDate).toLocaleDateString('ro-RO', {
                       weekday: 'short',
                       year: 'numeric',
                       month: 'short',
                       day: 'numeric'
-                    }) : 'N/A'} at {service.departureTime || 'N/A'}
+                    }) : 'N/A'} la {service.departureTime || 'N/A'}
                   </p>
                 </div>
                 <div>
-                  <p className="font-medium">Arrival</p>
+                  <p className="font-medium">Sosire</p>
                   <p>
-                    {service.arrivalDate ? new Date(service.arrivalDate).toLocaleDateString('en-US', {
+                    {service.arrivalDate ? new Date(service.arrivalDate).toLocaleDateString('ro-RO', {
                       weekday: 'short',
                       year: 'numeric',
                       month: 'short',
@@ -570,20 +570,20 @@ const BookingModal = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="font-medium">Transporter</p>
+                  <p className="font-medium">Transportator</p>
                   <p>{service.transporter?.name || "N/A"}</p>
                 </div>
                 <div>
-                  <p className="font-medium">Available</p>
+                  <p className="font-medium">Disponibilitate</p>
                   <p>
                     {service.serviceCategory === 'parcel' 
-                      ? `${service.parcelLoadCapacity} kg capacity` 
+                      ? `${service.parcelLoadCapacity} kg capacitate` 
                       : service.serviceCategory === 'passenger'
-                      ? `${service.availableSeats || 0} seats`
+                      ? `${service.availableSeats || 0} locuri`
                       : service.serviceCategory === 'furniture'
-                      ? 'Custom quote'
+                      ? 'Preț la cerere'
                       : service.serviceCategory === 'animal'
-                      ? 'Custom quote'
+                      ? 'Preț la cerere'
                       : 'N/A'}
                   </p>
                 </div>
@@ -600,7 +600,7 @@ const BookingModal = () => {
                 <div className="mt-4">
                   <div className="flex items-center text-gray-700 mb-2">
                     <FaInfoCircle className="mr-2 text-yellow-600" />
-                    <span className="font-medium">Animal Type:</span>
+                    <span className="font-medium">Tip animal:</span>
                   </div>
                   <p className="capitalize">{service.animalType}</p>
                 </div>
@@ -641,7 +641,7 @@ const BookingModal = () => {
                 className="mt-1 mr-2"
               />
               <label htmlFor="terms" className="text-sm text-gray-600">
-                I agree to the Terms and Conditions and understand that bookings are non-refundable.
+                Sunt de acord cu Termenii și Condițiile și înțeleg că rezervările nu sunt rambursabile.
               </label>
             </div>
           </div>
@@ -654,7 +654,7 @@ const BookingModal = () => {
               disabled={isLoading}
               className="px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition-colors flex-1"
             >
-              Back
+              Înapoi
             </button>
             <button
               type="submit"
@@ -665,7 +665,7 @@ const BookingModal = () => {
                   : "bg-yellow-400 hover:bg-yellow-500 shadow-md"
               }`}
             >
-              {isLoading ? "Processing..." : "Confirm Booking"}
+              {isLoading ? "Se procesează..." : "Confirmă rezervarea"}
             </button>
           </div>
         </form>

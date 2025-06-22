@@ -9,41 +9,40 @@ const categoryFields = {
   passenger: {
     primary: "seatsBooked",
     secondary: "luggageQuantity",
-    label: "Passengers"
+    label: "Pasageri"
   },
   parcel: {
     primary: "parcelQuantity",
     secondary: "parcelWeight",
-    label: "Parcels",
+    label: "Colete",
     unit: "kg"
   },
   car_towing: {
     primary: "vehicleDetails",
     secondary: "towingRequirements",
-    label: "Vehicle"
+    label: "Vehicul"
   },
   vehicle_trailer: {
     primary: "vehicleType",
     secondary: "trailerRequirements",
-    label: "Trailer"
+    label: "Remorcă"
   },
   furniture: {
     primary: "furnitureItemCount",
     secondary: "fragileItems",
-    label: "Items",
-    fragileLabel: "Fragile"
+    label: "Obiecte",
+    fragileLabel: "Fragil"
   },
   animal: {
     primary: "animalCount",
     secondary: "animalType",
-    label: "Animals"
+    label: "Animale"
   }
 };
 
 const OrdersTable = () => {
   const { data, isLoading, error: queryError } = useGetAllOrdersQuery();
   const orders = Array.isArray(data?.orders) ? data.orders : [];
-console.log(orders)
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [showDetailModel, setShowDetailModel] = useState(false);
@@ -56,7 +55,7 @@ console.log(orders)
       setFilteredOrders(orders);
       setLocalError(null);
     } catch (err) {
-      setLocalError("Failed to process orders data");
+      setLocalError("Eroare la procesarea comenzilor");
       console.error("Orders processing error:", err);
     }
   }, [orders]);
@@ -75,7 +74,7 @@ console.log(orders)
       });
       setFilteredOrders(filtered);
     } catch (err) {
-      setLocalError("Search failed");
+      setLocalError("Căutarea a eșuat");
       console.error("Search error:", err);
     }
   };
@@ -88,7 +87,7 @@ console.log(orders)
         : orders.filter(order => (order.serviceCategory || "").toLowerCase() === category);
       setFilteredOrders(filtered);
     } catch (err) {
-      setLocalError("Filtering failed");
+      setLocalError("Filtrarea a eșuat");
       console.error("Filter error:", err);
     }
   };
@@ -104,7 +103,7 @@ console.log(orders)
   };
 
   const formatCategoryName = (category) => {
-    if (!category) return "Unknown";
+    if (!category) return "Necunoscut";
     return String(category).replace(/_/g, ' ');
   };
 
@@ -134,14 +133,14 @@ console.log(orders)
       );
     } catch (err) {
       console.error("Error rendering order details:", err);
-      return <div className="text-sm text-red-500">Error loading details</div>;
+      return <div className="text-sm text-red-500">Eroare la încărcarea detaliilor</div>;
     }
   };
 
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="text-blue-700 animate-pulse">Loading orders...</div>
+        <div className="text-blue-700 animate-pulse">Se încarcă comenzile...</div>
       </div>
     );
   }
@@ -153,16 +152,16 @@ console.log(orders)
           <AlertCircle className="text-red-500" size={32} />
         </div>
         <h3 className="text-lg font-medium text-red-700 mb-2">
-          {queryError?.data?.message || localError || "Failed to load orders"}
+          {queryError?.data?.message || localError || "Nu s-au putut încărca comenzile"}
         </h3>
         <p className="text-red-600 mb-4">
-          Please try refreshing the page or contact support if the problem persists.
+          Vă rugăm să reîmprospătați pagina sau contactați asistența dacă problema persistă.
         </p>
         <button
           onClick={() => window.location.reload()}
           className="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors"
         >
-          Refresh Page
+          Reîmprospătează pagina
         </button>
       </div>
     );
@@ -177,18 +176,18 @@ console.log(orders)
     >
       {/* Header with Search and Filters */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        <h2 className="text-xl font-semibold text-blue-700">Order List</h2>
+        <h2 className="text-xl font-semibold text-blue-700">Lista Comenzilor</h2>
         
         <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
           {/* Category Filter */}
           <div className="flex items-center gap-2">
-            <label className="text-sm text-blue-700">Filter:</label>
+            <label className="text-sm text-blue-700">Filtru:</label>
             <select
               className="bg-white text-blue-700 rounded-lg px-3 py-2 border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={selectedCategory}
               onChange={(e) => handleCategoryFilter(e.target.value)}
             >
-              <option value="all">All Categories</option>
+              <option value="all">Toate categoriile</option>
               {Object.keys(categoryFields).map((category) => (
                 <option key={category} value={category}>
                   {formatCategoryName(category)}
@@ -201,7 +200,7 @@ console.log(orders)
           <div className="relative w-full md:w-64">
             <input
               type="text"
-              placeholder="Search orders..."
+              placeholder="Caută comenzi..."
               className="bg-white text-blue-700 placeholder-blue-700 rounded-lg pl-10 pr-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={searchTerm}
               onChange={handleSearch}
@@ -218,16 +217,15 @@ console.log(orders)
             <thead>
               <tr>
                 {[
-                  "Customer",
-                  "Category",
-                  "Service",
-                  "Details",
+                  "Client",
+                  "Categorie",
+                  "Serviciu",
+                  "Detalii",
                   "Total",
-                  "From",
-                  "To",
-                  "Date",
+                  "De la",
+                  "Până la",
+                  "Data",
                   "Status",
-                  // "Actions",
                 ].map((heading) => (
                   <th
                     key={heading}
@@ -248,7 +246,7 @@ console.log(orders)
                   transition={{ duration: 0.3 }}
                 >
                   <td className="px-4 py-3 text-sm">
-                    <div className="font-medium">{order.customerId?.name || "Guest"}</div>
+                    <div className="font-medium">{order.customerId?.name || "Vizitator"}</div>
                     <div className="text-xs text-gray-500">{order.customerId?.email || "N/A"}</div>
                   </td>
                   <td className="px-4 py-3 text-sm capitalize">
@@ -263,7 +261,7 @@ console.log(orders)
                   <td className="px-4 py-3 text-sm">{order?.serviceId?.destinationTo || "N/A"}</td>
                   <td className="px-4 py-3 text-sm">
                     {order.travelDate || order.createdAt
-                      ? new Date(order.travelDate || order.createdAt).toLocaleDateString("en-IN")
+                      ? new Date(order.travelDate || order.createdAt).toLocaleDateString("ro-RO")
                       : "N/A"}
                   </td>
                   <td className="px-4 py-3 text-sm">
@@ -276,31 +274,22 @@ console.log(orders)
                           : "bg-yellow-200 text-yellow-800"
                       }`}
                     >
-                      {order.orderStatus || "unknown"}
+                      {order.orderStatus || "necunoscut"}
                     </span>
                   </td>
-                  {/* <td className="px-4 py-3 text-sm">
-                    <button
-                      onClick={() => openModal(order)}
-                      className="text-indigo-500 hover:text-indigo-700"
-                      title="View Order Details"
-                    >
-                      <Eye size={18} />
-                    </button>
-                  </td> */}
                 </motion.tr>
               ))}
             </tbody>
           </table>
         ) : (
           <div className="text-center py-12">
-            <div className="text-gray-500 mb-4">No orders found</div>
+            <div className="text-gray-500 mb-4">Nu au fost găsite comenzi</div>
             {selectedCategory !== "all" && (
               <button
                 onClick={() => handleCategoryFilter("all")}
                 className="text-blue-600 hover:text-blue-800 text-sm"
               >
-                Clear filters
+                Șterge filtrele
               </button>
             )}
           </div>

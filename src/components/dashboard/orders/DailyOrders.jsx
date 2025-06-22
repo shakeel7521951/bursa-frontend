@@ -42,7 +42,7 @@ const DailyOrders = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <h2 className="text-xl font-semibold text-blue-700 mb-4">Daily Orders</h2>
+      <h2 className="text-xl font-semibold text-blue-700 mb-4">Comenzi zilnice</h2>
 
       <div style={{ width: "100%", height: 300 }}>
         <ResponsiveContainer>

@@ -15,7 +15,7 @@ const COLORS = ["#6366F1", "#8B5CF6", "#EC4899", "#10B981", "#F59E0B"];
 // Function to count occurrences of Services
 const getCategoryData = (services) => {
   const categoryCounts = services.reduce((acc, service) => {
-    const category = service.serviceName || "Unknown";
+    const category = service.serviceName || "Necunoscut";
     acc[category] = (acc[category] || 0) + 1;
     return acc;
   }, {});
@@ -37,7 +37,7 @@ const CategoryDistributionChart = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
     >
-      <h2 className="text-lg font-medium mb-4 text-blue-700">Services Distribution</h2>
+      <h2 className="text-lg font-medium mb-4 text-blue-700">Distribuția Serviciilor</h2>
       <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>

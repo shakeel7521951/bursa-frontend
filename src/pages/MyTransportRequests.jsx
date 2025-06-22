@@ -38,9 +38,9 @@ const MyTransportRequests = () => {
   const handleDelete = async () => {
     try {
       await deleteRequest(selectedId).unwrap();
-      toast.success("Request deleted successfully");
+      toast.success("Cererea a fost ștearsă cu succes");
     } catch (error) {
-      toast.error(error?.data?.message || "Failed to delete request");
+      toast.error(error?.data?.message || "Nu s-a putut șterge cererea");
     } finally {
       setShowConfirm(false);
       setSelectedId(null);
@@ -73,19 +73,19 @@ const MyTransportRequests = () => {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="mt-4 text-gray-600 text-sm">Loading your requests...</p>
+          <p className="mt-4 text-gray-600 text-sm">Se încarcă cererile tale...</p>
         </div>
       </div>
     );
 
   if (isError) {
-    toast.error("Failed to load requests");
+    toast.error("Nu s-au putut încărca cererile");
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center bg-white p-6 rounded-lg shadow">
           <FiAlertCircle className="mx-auto h-8 w-8 text-red-500" />
           <h2 className="mt-4 text-lg font-semibold text-gray-800">
-            Error loading data
+            Eroare la încărcarea datelor
           </h2>
         </div>
       </div>
@@ -96,7 +96,7 @@ const MyTransportRequests = () => {
     <div className="min-h-screen bg-gray-50 py-10 px-4 overflow-x-hidden">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-6">
-          My Transport Requests
+          Cererile mele de transport
         </h1>
 
         {/* Search and Filter Bar */}
@@ -106,7 +106,7 @@ const MyTransportRequests = () => {
             <FiSearch className="absolute left-3 top-2.5 text-gray-400" />
             <input
               type="text"
-              placeholder="Search by location, service, or notes..."
+              placeholder="Căutați după locație, serviciu sau note..."
               className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -126,7 +126,7 @@ const MyTransportRequests = () => {
               className="flex items-center justify-center w-full md:w-auto px-4 py-2 text-sm border border-gray-300 rounded-md bg-white hover:bg-gray-100 md:me-20"
             >
               <FiFilter className="mr-2" />
-              Filter
+              Filtre
               <FiChevronDown
                 className={`ml-2 transition-transform ${
                   showFilter ? "rotate-180" : ""
@@ -142,18 +142,18 @@ const MyTransportRequests = () => {
                 className="absolute left-0 top-full mt-2 z-10 w-44 bg-white border border-gray-200 rounded-md shadow-md p-3"
               >
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Filter by Status
+                  Filtrează după stare
                 </label>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
                   className="w-full border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="all">All</option>
-                  <option value="pending">Pending</option>
-                  <option value="accepted">Accepted</option>
-                  <option value="rejected">Rejected</option>
-                  <option value="fulfilled">Fulfilled</option>
+                  <option value="all">Toate</option>
+                  <option value="pending">În așteptare</option>
+                  <option value="accepted">Acceptate</option>
+                  <option value="rejected">Respinse</option>
+                  <option value="fulfilled">Finalizate</option>
                 </select>
               </motion.div>
             )}
@@ -178,23 +178,26 @@ const MyTransportRequests = () => {
                     <span
                       className={`text-xs font-medium px-2 py-1 rounded-full ${statusColors[request.status]}`}
                     >
-                      {request.status}
+                      {request.status === "pending" ? "În așteptare" : 
+                       request.status === "accepted" ? "Acceptată" :
+                       request.status === "rejected" ? "Respinsă" :
+                       "Finalizată"}
                     </span>
                   </div>
 
                   <p className="text-sm text-gray-500 flex items-center gap-1">
                     <FiClock className="text-gray-400" />
-                    {new Date(request.createdAt).toLocaleDateString()}
+                    {new Date(request.createdAt).toLocaleDateString('ro-RO')}
                   </p>
 
                   <div className="mt-3 text-md text-gray-600 space-y-2">
                     <p className="flex items-center gap-2">
                       <FiCalendar className="text-gray-400" />
-                      {new Date(request.date).toLocaleDateString()}
+                      {new Date(request.date).toLocaleDateString('ro-RO')}
                     </p>
                     <p className="flex items-center gap-2">
                       <FiUsers className="text-gray-400" />
-                      {request.passengers} Passenger(s)
+                      {request.passengers} Pasager(i)
                     </p>
                     <p className="flex items-center gap-2">
                       <FiTruck className="text-gray-400" />
@@ -202,7 +205,7 @@ const MyTransportRequests = () => {
                     </p>
                     {request.notes && (
                       <p className="text-gray-500 text-xs mt-1 line-clamp-2">
-                        <span className="font-medium text-gray-600">Notes:</span>{" "}
+                        <span className="font-medium text-gray-600">Note:</span>{" "}
                         {request.notes}
                       </p>
                     )}
@@ -223,7 +226,7 @@ const MyTransportRequests = () => {
                       className="w-full text-sm py-2 rounded bg-red-600 text-white hover:bg-red-700 transition"
                     >
                       <FiTrash2 className="inline mb-1 mr-1" />
-                      Delete
+                      Șterge
                     </button>
                   </div>
                 )}
@@ -232,7 +235,7 @@ const MyTransportRequests = () => {
           </div>
         ) : (
           <div className="text-center text-gray-600 mt-10">
-            No requests found.
+            Nu s-au găsit cereri.
           </div>
         )}
       </div>
@@ -253,20 +256,20 @@ const MyTransportRequests = () => {
               exit={{ scale: 0.9 }}
             >
               <h2 className="text-lg font-semibold text-gray-800 mb-3">
-                Are you sure you want to delete this request?
+                Sigur doriți să ștergeți această cerere?
               </h2>
               <div className="flex justify-end gap-3 mt-4">
                 <button
                   className="px-4 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300"
                   onClick={() => setShowConfirm(false)}
                 >
-                  Cancel
+                  Anulează
                 </button>
                 <button
                   className="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700"
                   onClick={handleDelete}
                 >
-                  Confirm Delete
+                  Confirmă ștergerea
                 </button>
               </div>
             </motion.div>
@@ -278,4 +281,3 @@ const MyTransportRequests = () => {
 };
 
 export default MyTransportRequests;
- 

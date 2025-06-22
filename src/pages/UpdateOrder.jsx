@@ -17,7 +17,6 @@ const UpdateOrder = () => {
     dropoffLocation: "",
   });
 
-  // Get today's date in YYYY-MM-DD format
   const getTodayDate = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -26,7 +25,6 @@ const UpdateOrder = () => {
     return `${year}-${month}-${day}`;
   };
 
-  // Get current time in HH:MM format
   const getCurrentTime = () => {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, "0");
@@ -59,21 +57,18 @@ const UpdateOrder = () => {
   const orderCar = async (e) => {
     e.preventDefault();
     if (!order?._id) {
-      toast.error("Order ID is missing!");
+      toast.error("ID-ul comenzii lipsește!");
       return;
     }
 
-    // Combine date and time into a single datetime object
     const pickupDateTime = new Date(`${user.pickupDate}T${user.pickupTime}`);
     const currentDateTime = new Date();
 
-    // Validate if the selected date and time are in the future
     if (pickupDateTime <= currentDateTime) {
-      toast.error("Please select a future date and time.");
+      toast.error("Te rugăm să selectezi o dată și oră viitoare.");
       return;
     }
 
-    // Convert to UTC before saving
     const pickupTimeUTC = pickupDateTime.toISOString();
 
     try {
@@ -84,18 +79,25 @@ const UpdateOrder = () => {
       toast.success(response.message, { position: "top-center" });
       navigate("/my-orders");
     } catch (error) {
-      toast.error(error.data?.message || "Failed to update order!");
+      toast.error(error.data?.message || "Actualizarea comenzii a eșuat!");
     }
   };
 
   if (!order) {
-    return <div className="text-center text-red-600 text-lg">Order details not found!</div>;
+    return (
+      <div className="text-center text-red-600 text-lg">
+        Detaliile comenzii nu au fost găsite!
+      </div>
+    );
   }
 
   return (
     <div className="flex items-center justify-center p-12">
       <div className="mx-auto w-full max-w-[550px] bg-white p-6 rounded-lg shadow-lg">
-        <div key={carId} className="relative flex flex-col justify-center items-center gap-4 mb-4">
+        <div
+          key={carId}
+          className="relative flex flex-col justify-center items-center gap-4 mb-4"
+        >
           <h1 className="absolute text-3xl bottom-0 pb-4 font-semibold text-white">
             {order?.serviceId?.serviceName}
           </h1>
@@ -110,8 +112,11 @@ const UpdateOrder = () => {
           <div className="-mx-3 flex flex-wrap">
             <div className="w-full px-3 sm:w-1/2">
               <div className="mb-5">
-                <label htmlFor="pickupDate" className="mb-3 block text-base font-medium text-[#07074D]">
-                  Date
+                <label
+                  htmlFor="pickupDate"
+                  className="mb-3 block text-base font-medium text-[#07074D]"
+                >
+                  Dată
                 </label>
                 <input
                   type="date"
@@ -127,8 +132,11 @@ const UpdateOrder = () => {
             </div>
             <div className="w-full px-3 sm:w-1/2">
               <div className="mb-5">
-                <label htmlFor="pickupTime" className="mb-3 block text-base font-medium text-[#07074D]">
-                  Time
+                <label
+                  htmlFor="pickupTime"
+                  className="mb-3 block text-base font-medium text-[#07074D]"
+                >
+                  Oră
                 </label>
                 <input
                   type="time"
@@ -136,7 +144,9 @@ const UpdateOrder = () => {
                   value={user.pickupTime}
                   onChange={handleChange}
                   id="pickupTime"
-                  min={user.pickupDate === getTodayDate() ? getCurrentTime() : "00:00"}
+                  min={
+                    user.pickupDate === getTodayDate() ? getCurrentTime() : "00:00"
+                  }
                   required
                   className="w-full rounded-md border border-gray-300 bg-white py-3 px-6 text-base font-medium text-gray-700 outline-none focus:border-blue-500 focus:shadow-md"
                 />
@@ -146,7 +156,7 @@ const UpdateOrder = () => {
 
           <div className="mb-5 pt-3">
             <label className="mb-5 block text-base font-semibold text-[#07074D] sm:text-xl">
-              Address Details
+              Detalii adresă
             </label>
             <div className="-mx-3 flex flex-wrap">
               <div className="w-full px-3 sm:w-1/2">
@@ -157,7 +167,7 @@ const UpdateOrder = () => {
                   onChange={handleChange}
                   id="pickupLocation"
                   required
-                  placeholder="From"
+                  placeholder="De la"
                   className="w-full rounded-md border border-gray-300 bg-white py-3 px-6 text-base font-medium text-gray-700 outline-none focus:border-blue-500 focus:shadow-md"
                 />
               </div>
@@ -169,7 +179,7 @@ const UpdateOrder = () => {
                   onChange={handleChange}
                   id="dropoffLocation"
                   required
-                  placeholder="To"
+                  placeholder="Până la"
                   className="w-full rounded-md border border-gray-300 bg-white py-3 px-6 text-base font-medium text-gray-700 outline-none focus:border-blue-500 focus:shadow-md"
                 />
               </div>
@@ -177,16 +187,22 @@ const UpdateOrder = () => {
           </div>
 
           <div className="w-full flex justify-between px-3 mb-5">
-            <div className="text-2xl font-bold text-gray-800">Total Price</div>
-            <div className="text-3xl font-semibold text-gray-900">${order.price?.toFixed(2) || "0.00"}</div>
+            <div className="text-2xl font-bold text-gray-800">Preț total</div>
+            <div className="text-3xl font-semibold text-gray-900">
+              ${order.price?.toFixed(2) || "0.00"}
+            </div>
           </div>
 
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full cursor-pointer rounded-md py-3 px-8 text-center text-base font-semibold text-white outline-none transition duration-200 ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 hover:shadow-md"}`}
+            className={`w-full cursor-pointer rounded-md py-3 px-8 text-center text-base font-semibold text-white outline-none transition duration-200 ${
+              isLoading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 hover:shadow-md"
+            }`}
           >
-            {isLoading ? "Updating..." : "Update Order"}
+            {isLoading ? "Se actualizează..." : "Actualizează comanda"}
           </button>
         </form>
       </div>

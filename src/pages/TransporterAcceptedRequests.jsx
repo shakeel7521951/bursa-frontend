@@ -28,18 +28,18 @@ const TransporterAcceptedRequests = () => {
 
   useEffect(() => {
     if (isError) {
-      toast.error(error?.data?.message || "Failed to load accepted requests");
+      toast.error(error?.data?.message || "Eroare la încărcarea cererilor acceptate");
     }
   }, [isError, error]);
 
   const handleConfirm = async () => {
     try {
       await updateRequestStatus(selectedRequestId).unwrap();
-      toast.success("Request marked as fulfilled");
+      toast.success("Cererea a fost marcată ca finalizată");
       setShowModal(false);
       refetch();
     } catch (err) {
-      toast.error(err?.data?.message || "Failed to update request status");
+      toast.error(err?.data?.message || "Eroare la actualizarea cererii");
     }
   };
 
@@ -63,7 +63,7 @@ const TransporterAcceptedRequests = () => {
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-black border-t-[#FFCA09] rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading accepted requests...</p>
+          <p className="mt-4 text-gray-600">Se încarcă cererile acceptate...</p>
         </div>
       </div>
     );
@@ -79,14 +79,14 @@ const TransporterAcceptedRequests = () => {
           className="text-center mb-12"
         >
           <h1 className="text-3xl font-bold text-black">
-            Accepted Transport Requests
+            Cereri de Transport Acceptate
           </h1>
           <p className="text-gray-500 mt-2 max-w-2xl mx-auto">
-            Manage your currently accepted transport jobs and update their status
+            Gestionează cererile de transport acceptate și actualizează starea acestora
           </p>
         </motion.div>
 
-        {/* Search and Filter */}
+        {/* Căutare și Filtru */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
           <div className="relative w-full md:w-1/2">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -94,7 +94,7 @@ const TransporterAcceptedRequests = () => {
             </div>
             <input
               type="text"
-              placeholder="Search requests..."
+              placeholder="Caută cereri..."
               className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FFCA09] focus:border-[#FFCA09] sm:text-sm"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -107,9 +107,9 @@ const TransporterAcceptedRequests = () => {
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="appearance-none block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-2 focus:ring-[#FFCA09] focus:border-[#FFCA09] sm:text-sm"
               >
-                <option value="all">All Statuses</option>
-                <option value="accepted">Accepted</option>
-                <option value="fulfilled">Fulfilled</option>
+                <option value="all">Toate statusurile</option>
+                <option value="accepted">Acceptate</option>
+                <option value="fulfilled">Finalizate</option>
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <FiFilter className="text-gray-400" />
@@ -144,11 +144,11 @@ const TransporterAcceptedRequests = () => {
                     </div>
                     {request.status === "fulfilled" ? (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        Completed
+                        Finalizat
                       </span>
                     ) : (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#FFCA09] text-black">
-                        Active
+                        Activ
                       </span>
                     )}
                   </div>
@@ -157,7 +157,7 @@ const TransporterAcceptedRequests = () => {
                     <div className="flex items-center">
                       <FiCalendar className="text-gray-400 mr-2" />
                       <span>
-                        {new Date(request.date).toLocaleDateString("en-US", {
+                        {new Date(request.date).toLocaleDateString("ro-RO", {
                           weekday: "short",
                           year: "numeric",
                           month: "short",
@@ -167,11 +167,11 @@ const TransporterAcceptedRequests = () => {
                     </div>
                     <div className="flex items-center">
                       <FiUsers className="text-gray-400 mr-2" />
-                      <span>Passengers: {request.passengers}</span>
+                      <span>Pasageri: {request.passengers}</span>
                     </div>
                     <div className="flex items-center">
                       <FiTruck className="text-gray-400 mr-2" />
-                      <span>Service: {request.category}</span>
+                      <span>Serviciu: {request.category}</span>
                     </div>
                   </div>
 
@@ -194,7 +194,7 @@ const TransporterAcceptedRequests = () => {
                       }}
                       className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FFCA09]"
                     >
-                      Mark as Completed
+                      Marchează ca Finalizat
                     </button>
                   </div>
                 )}
@@ -211,18 +211,18 @@ const TransporterAcceptedRequests = () => {
               <FiTruck className="h-6 w-6 text-gray-400" />
             </div>
             <h3 className="mt-3 text-lg font-medium text-black">
-              No requests found
+              Nicio cerere găsită
             </h3>
             <p className="mt-1 text-sm text-gray-500">
               {search || statusFilter !== "all"
-                ? "No requests match your search criteria."
-                : "You currently have no accepted transport requests."}
+                ? "Nicio cerere nu corespunde criteriilor de căutare."
+                : "Momentan nu ai nicio cerere de transport acceptată."}
             </p>
           </motion.div>
         )}
       </div>
 
-      {/* Modal */}
+      {/* Confirmare modală */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <motion.div
@@ -235,11 +235,10 @@ const TransporterAcceptedRequests = () => {
                 <FiCheckCircle className="h-6 w-6 text-black" />
               </div>
               <h3 className="text-lg font-medium text-center text-black mb-2">
-                Confirm Completion
+                Confirmare Finalizare
               </h3>
               <p className="text-sm text-gray-500 text-center mb-6">
-                Are you sure you want to mark this transport request as
-                completed?
+                Ești sigur că dorești să marchezi această cerere ca finalizată?
               </p>
               <div className="flex justify-center space-x-3">
                 <button
@@ -247,14 +246,14 @@ const TransporterAcceptedRequests = () => {
                   className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FFCA09]"
                   onClick={() => setShowModal(false)}
                 >
-                  Cancel
+                  Anulează
                 </button>
                 <button
                   type="button"
                   className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FFCA09]"
                   onClick={handleConfirm}
                 >
-                  Confirm
+                  Confirmă
                 </button>
               </div>
             </div>

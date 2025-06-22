@@ -21,14 +21,12 @@ const UserOrders = () => {
   const navigate = useNavigate();
   const [deleteOrder] = useDeleteOrderMutation();
 
-  // Filter out deleted orders by user on load
   useEffect(() => {
     const filtered = orders.filter((order) => order.deletedBy !== "user");
     setFilteredOrders(filtered);
     setFinalFilteredOrders(filtered);
   }, [orders]);
 
-  // Search filter effect
   useEffect(() => {
     setFinalFilteredOrders(
       filteredOrders.filter(
@@ -70,11 +68,11 @@ const UserOrders = () => {
         }).unwrap();
         setIsModalOpen(false);
         setSelectedOrder(null);
-        toast.success(response.message || "Order deleted successfully", {
+        toast.success(response.message || "Comanda a fost ștearsă cu succes", {
           position: "top-center",
         });
       } catch (error) {
-        toast.error(error.data?.message || "Failed to delete order", {
+        toast.error(error.data?.message || "Ștergerea comenzii a eșuat", {
           position: "top-center",
         });
       }
@@ -117,7 +115,7 @@ const UserOrders = () => {
               {order.vehicleDetails || 'N/A'}
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-              {order.towingRequirements || 'None'}
+              {order.towingRequirements || 'Fără'}
             </td>
           </>
         );
@@ -128,7 +126,7 @@ const UserOrders = () => {
               {order.vehicleType || 'N/A'}
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-              {order.trailerRequirements || 'None'}
+              {order.trailerRequirements || 'Fără'}
             </td>
           </>
         );
@@ -139,7 +137,7 @@ const UserOrders = () => {
               {order.furnitureItemCount || 0}
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-              {order.fragileItems ? 'Yes' : 'No'}
+              {order.fragileItems ? 'Da' : 'Nu'}
             </td>
           </>
         );
@@ -150,7 +148,7 @@ const UserOrders = () => {
               {order.animalCount || 0}
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-              {order.cageRequired ? 'Yes' : 'No'}
+              {order.cageRequired ? 'Da' : 'Nu'}
             </td>
           </>
         );
@@ -170,14 +168,14 @@ const UserOrders = () => {
 
   const getTableHeaders = () => {
     return [
-      "Service Name",
-      "Category",
-      "Customer Email",
-      ...(searchTerm ? [] : ["Details 1", "Details 2"]),
-      "Total Price",
-      "Order Status",
-      "Order Date",
-      // "Actions"
+      "Nume serviciu",
+      "Categorie",
+      "Email client",
+      ...(searchTerm ? [] : ["Detalii 1", "Detalii 2"]),
+      "Preț total",
+      "Stare comandă",
+      "Data comenzii",
+      // "Acțiuni"
     ];
   };
 
@@ -198,27 +196,27 @@ const UserOrders = () => {
           >
             <h2 className="text-xl font-semibold text-[#000] mb-4">
               {selectedOrder?.orderStatus === "pending"
-                ? "Cancel Order"
-                : "Delete Order"}
+                ? "Anulează comanda"
+                : "Șterge comanda"}
             </h2>
             <p className="text-gray-700 mb-6">
-              Are you sure you want to{" "}
+              Ești sigur că vrei să{" "}
               {selectedOrder?.orderStatus === "pending"
-                ? "cancel this order?"
-                : "delete this order?"}
+                ? "anulezi această comandă?"
+                : "ștergi această comandă?"}
             </p>
             <div className="flex justify-end gap-4">
               <button
                 onClick={handleDeleteCancel}
                 className="px-4 py-2 text-sm cursor-pointer font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
               >
-                Cancel
+                Anulează
               </button>
               <button
                 onClick={handleDeleteConfirm}
                 className="px-4 py-2 text-sm cursor-pointer font-medium text-white bg-red-500 rounded-lg hover:bg-red-600"
               >
-                Confirm
+                Confirmă
               </button>
             </div>
           </motion.div>
@@ -233,11 +231,11 @@ const UserOrders = () => {
         transition={{ delay: 0.4 }}
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-[#000]">My Orders</h2>
+          <h2 className="text-xl font-semibold text-[#000]">Comenzile mele</h2>
           <div className="relative">
             <input
               type="text"
-              placeholder="Search orders..."
+              placeholder="Caută comenzi..."
               className="bg-white text-[#000] rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#FFEE02]"
               value={searchTerm}
               onChange={handleSearch}
@@ -268,7 +266,7 @@ const UserOrders = () => {
                     colSpan={getTableHeaders().length}
                     className="text-center py-4 text-gray-500 text-sm"
                   >
-                    No orders found.
+                    Nu s-au găsit comenzi.
                   </td>
                 </tr>
               )}
@@ -307,14 +305,17 @@ const UserOrders = () => {
                           : "bg-red-100 text-red-800"
                       }`}
                     >
-                      {order.orderStatus?.charAt(0).toUpperCase() + order.orderStatus?.slice(1)}
+                      {order.orderStatus === "completed" ? "Finalizată" : 
+                       order.orderStatus === "pending" ? "În așteptare" : 
+                       order.orderStatus === "confirmed" ? "Confirmată" : 
+                       "Respinsă"}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-[#000]">
-                    {new Date(order.createdAt).toLocaleDateString()}
+                    {new Date(order.createdAt).toLocaleDateString('ro-RO')}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    {/* <button
+                     <button
                       onClick={() => handleEditOrder(order)}
                       title="Edit"
                       disabled={
@@ -329,7 +330,7 @@ const UserOrders = () => {
                       }`}
                     >
                       <Pencil size={18} />
-                    </button> */}
+                    </button> 
                     {/* <button
                       onClick={() => handleDeleteClick(order)}
                       className="text-red-500 cursor-pointer hover:text-red-300"

@@ -16,7 +16,7 @@ const VerifyUser = () => {
 
   const location = useLocation();
   const user = location?.state?.user || {};
-  const email = user.email; 
+  const email = user.email;
 
   const handleChange = (index, e) => {
     const value = e.target.value.replace(/[^0-9]/g, "").slice(-1);
@@ -40,7 +40,7 @@ const VerifyUser = () => {
     const otpCode = otp.join("");
 
     if (otpCode.length < 4) {
-      toast.error("Please enter a valid 4-digit OTP.", { position: "top-center" });
+      toast.error("Vă rugăm să introduceți un cod OTP valid de 4 cifre.", { position: "top-center" });
       return;
     }
 
@@ -48,26 +48,27 @@ const VerifyUser = () => {
       const response = await verifyUser({ otp: otpCode, email });
 
       if (response.error) {
-        toast.error(response.error.data?.message || "Invalid OTP", { position: "top-center" });
+        toast.error(response.error.data?.message || "OTP invalid", { position: "top-center" });
       } else {
-        toast.success(response.data?.message || "OTP Verified", { position: "top-center" });
+        toast.success(response.data?.message || "OTP verificat", { position: "top-center" });
         dispatch(setProfile(user));
         navigate("/");
       }
     } catch (error) {
-      toast.error("Something went wrong!", { position: "top-center" });
+      toast.error("Ceva nu a funcționat corect!", { position: "top-center" });
     }
   };
 
-  if(isLoading){
-    return <Loader />
+  if (isLoading) {
+    return <Loader />;
   }
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md">
-        <h1 className="text-2xl font-bold text-center text-gray-800 mb-4">OTP Verification</h1>
+        <h1 className="text-2xl font-bold text-center text-gray-800 mb-4">Verificare OTP</h1>
         <p className="text-gray-600 text-center mb-4">
-          Enter the OTP sent to <strong>{email || "your email"}</strong>
+          Introdu codul OTP trimis la <strong>{email || "emailul tău"}</strong>
         </p>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex justify-center gap-2">
@@ -92,7 +93,7 @@ const VerifyUser = () => {
             }`}
             disabled={isLoading}
           >
-            {isLoading ? "Verifying..." : "Verify OTP"}
+            {isLoading ? "Verificare..." : "Verifică OTP"}
           </button>
         </form>
       </div>

@@ -27,7 +27,7 @@ const OurServices = () => {
   const category = searchParams.get("category");
   const userProfile = useSelector(selectUserProfile);
   const [addProductOpen, setAddProductOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(category || "All");
+  const [selectedCategory, setSelectedCategory] = useState(category || "Toate");
   const [searchQuery, setSearchQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const navigate = useNavigate();
@@ -35,10 +35,9 @@ const OurServices = () => {
   const { data, isLoading, error } = useGetAllServicesQuery();
   const services = data?.services || [];
 
-  // Get unique categories from services data
   const uniqueCategories = [...new Set(services.map(service => service.serviceCategory))].filter(Boolean);
   
-    const getCategoryIcon = (category) => {
+  const getCategoryIcon = (category) => {
     switch (category) {
       case "passenger":
         return <FaUser className="text-lg" />;
@@ -56,10 +55,9 @@ const OurServices = () => {
         return <MdMenuOpen className="text-lg" />;
     }
   };
-  
-  // Create categories array dynamically from backend data
+
   const categories = [
-    { name: "All", icon: <MdMenuOpen className="text-lg" /> },
+    { name: "Toate", icon: <MdMenuOpen className="text-lg" /> },
     ...uniqueCategories.map(category => ({
       name: category,
       icon: getCategoryIcon(category),
@@ -75,13 +73,12 @@ const OurServices = () => {
   const filteredServices = services.filter((service) => {
     const query = searchQuery.toLowerCase();
     return (
-      (selectedCategory === "All" ||
+      (selectedCategory === "Toate" ||
         service.serviceCategory?.toLowerCase() === selectedCategory.toLowerCase()) &&
       [service.serviceName, service.serviceCategory, service.destinationFrom, service.destinationTo]
         .some((field) => field?.toLowerCase().includes(query))
     );
   });
-
 
   const handleBookNow = (service, e) => {
     e.stopPropagation();
@@ -96,12 +93,12 @@ const OurServices = () => {
             <div className="flex items-center gap-2">
               <FaUser className="w-4 h-4 text-gray-500" />
               <span>
-                Seats: {service.availableSeats}/{service.totalSeats}
+                Locuri: {service.availableSeats}/{service.totalSeats}
               </span>
             </div>
             <div className="flex items-center gap-2 text-nowrap">
               <FaDoorOpen className="w-4 h-4 text-gray-500" />
-              <span>Seat Fare: ${service.price}</span>
+              <span>Preț per loc: ${service.price}</span>
             </div>
           </>
         );
@@ -110,11 +107,11 @@ const OurServices = () => {
           <>
             <div className="flex items-center gap-2">
               <FaBox className="w-4 h-4 text-gray-500" />
-              <span>Capacity: {service.parcelLoadCapacity} kg</span>
+              <span>Capacitate: {service.parcelLoadCapacity} kg</span>
             </div>
             <div className="flex items-center gap-2">
               <FaDoorOpen className="w-4 h-4 text-gray-500" />
-              <span>Price: ${service.price}</span>
+              <span>Preț: ${service.price}</span>
             </div>
           </>
         );
@@ -123,11 +120,11 @@ const OurServices = () => {
           <>
             <div className="flex items-center gap-2">
               <FaCarSide className="w-4 h-4 text-gray-500" />
-              <span>Vehicle: {service.vehicleType || "N/A"}</span>
+              <span>Vehicul: {service.vehicleType || "N/A"}</span>
             </div>
             <div className="flex items-center gap-2">
               <FaDoorOpen className="w-4 h-4 text-gray-500" />
-              <span>Price: ${service.price}</span>
+              <span>Preț: ${service.price}</span>
             </div>
           </>
         );
@@ -136,11 +133,11 @@ const OurServices = () => {
           <>
             <div className="flex items-center gap-2">
               <FaTruck className="w-4 h-4 text-gray-500" />
-              <span>Trailer: {service.trailerType || "N/A"}</span>
+              <span>Remorcă: {service.trailerType || "N/A"}</span>
             </div>
             <div className="flex items-center gap-2">
               <FaDoorOpen className="w-4 h-4 text-gray-500" />
-              <span>Price: ${service.price}</span>
+              <span>Preț: ${service.price}</span>
             </div>
           </>
         );
@@ -149,11 +146,11 @@ const OurServices = () => {
           <>
             <div className="flex items-center gap-2">
               <FaHome className="w-4 h-4 text-gray-500" />
-              <span>Furniture transport</span>
+              <span>Transport mobilă</span>
             </div>
             <div className="flex items-center gap-2">
               <FaDoorOpen className="w-4 h-4 text-gray-500" />
-              <span>Price: ${service.price}</span>
+              <span>Preț: ${service.price}</span>
             </div>
           </>
         );
@@ -166,7 +163,7 @@ const OurServices = () => {
             </div>
             <div className="flex items-center gap-2">
               <FaDoorOpen className="w-4 h-4 text-gray-500" />
-              <span>Price: ${service.price}</span>
+              <span>Preț: ${service.price}</span>
             </div>
           </>
         );
@@ -179,24 +176,22 @@ const OurServices = () => {
   if (error)
     return (
       <div className="flex justify-center items-center h-64">
-        <p className="text-lg text-red-600">Error loading services</p>
+        <p className="text-lg text-red-600">Eroare la încărcarea serviciilor</p>
       </div>
     );
 
   return (
     <div className="w-full my-7 flex flex-col items-center px-4 sm:px-6">
-      {/* Enhanced Search and Filter Section */}
       <div className="container w-full max-w-6xl mb-8">
         <div className="bg-white rounded-xl shadow-sm p-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            {/* Search Bar with Filter Button */}
             <div className="relative w-full md:w-2/3">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FaSearch className="text-gray-400" />
               </div>
               <input
                 type="text"
-                placeholder="Search services by name, category, or route..."
+                placeholder="Caută servicii după nume, categorie sau rută..."
                 className="block w-full pl-10 pr-12 py-3 border outline-none border-gray-200 rounded-lg bg-gray-50 focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -212,7 +207,7 @@ const OurServices = () => {
             {userProfile?.role === "Transporter" && (
               <Button
                 onClick={() => setAddProductOpen(true)}
-                text="Add New Service"
+                text="Adaugă Serviciu Nou"
                 bgHover="black"
                 textHover="white"
                 cutHover="white"
@@ -221,11 +216,10 @@ const OurServices = () => {
             )}
           </div>
 
-          {/* Category Filters - Only shown when showFilters is true on mobile */}
           <div className={`${showFilters ? 'block' : 'hidden'} md:block mt-6 transition-all duration-200`}>
             <h3 className="text-sm font-semibold text-gray-500 mb-3 flex items-center gap-2">
               <FaFilter className="text-gray-400" />
-              FILTER BY CATEGORY
+              FILTREAZĂ DUPĂ CATEGORIE
             </h3>
             <div className="flex flex-wrap gap-3">
               {categories.map(({ name, icon }) => (
@@ -238,7 +232,6 @@ const OurServices = () => {
                   }`}
                   onClick={() => {
                     setSelectedCategory(name);
-                    // Hide filters on mobile after selection
                     if (window.innerWidth < 768) {
                       setShowFilters(false);
                     }
@@ -260,7 +253,6 @@ const OurServices = () => {
         onClose={() => setAddProductOpen(false)}
       />
 
-      {/* Services Grid - Unchanged from your original design */}
       <div className="container mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
         {filteredServices.length > 0 ? (
           filteredServices.map((service) => (
@@ -287,14 +279,14 @@ const OurServices = () => {
                   </span>
                 </div>
               </div>
-              
+
               <div className="p-5">
                 <div className="flex justify-between items-start mb-3">
                   <h2 className="text-xl font-bold text-gray-900 line-clamp-1">
                     {service.serviceName}
                   </h2>
                   <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                    Available
+                    Disponibil
                   </span>
                 </div>
 
@@ -309,12 +301,11 @@ const OurServices = () => {
                   {renderServiceDetails(service)}
                 </div>
 
-                {/* Route Cities */}
                 {service.routeCities?.length > 0 && (
                   <div className="mb-4">
                     <div className="flex items-center gap-2 text-gray-500 mb-2">
                       <FaRoute className="text-sm" />
-                      <span className="text-xs font-semibold">VIA CITIES</span>
+                      <span className="text-xs font-semibold">ORAȘE INTERMEDIARE</span>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {service.routeCities.map((city, index) => (
@@ -333,7 +324,7 @@ const OurServices = () => {
                   onClick={(e) => handleBookNow(service, e)}
                   className="w-full bg-yellow-400 hover:bg-yellow-500 text-black px-5 py-3 rounded-lg font-semibold transition-colors duration-200 shadow-sm hover:shadow-md"
                 >
-                  Book Now
+                  Rezervă acum
                 </button>
               </div>
             </div>
@@ -341,9 +332,9 @@ const OurServices = () => {
         ) : (
           <div className="col-span-3 flex flex-col items-center justify-center py-12 bg-gray-50 rounded-xl">
             <FaSearch className="text-gray-300 text-5xl mb-4" />
-            <h3 className="text-gray-500 text-xl font-medium mb-2">No services found</h3>
+            <h3 className="text-gray-500 text-xl font-medium mb-2">Nu s-au găsit servicii</h3>
             <p className="text-gray-400 text-sm">
-              Try adjusting your search or filters
+              Încearcă să ajustezi căutarea sau filtrele
             </p>
           </div>
         )}

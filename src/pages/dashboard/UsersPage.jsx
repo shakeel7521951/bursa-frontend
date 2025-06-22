@@ -17,52 +17,43 @@ const UsersPage = () => {
     ? data.filter(user => user.createdAt.startsWith(today)).length
     : 0;
 
-  const churnRate = totalUsers > 0
-    ? (((totalUsers - activeUsers) / totalUsers) * 100).toFixed(1) + "%"
-    : "0%";
+  if (isLoading) {
+    return <Loader />;
+  }
 
-    if(isLoading){
-      return <Loader />
-    }
   return (
     <div className="flex-1 overflow-auto relative z-10">
-      <Header title="Users" />
+      <Header title="Utilizatori" />
 
       <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
         {/* STATS */}
         <motion.div
-          className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8"
+          className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
           <StatCard
-            name="Total Users"
+            name="Total Utilizatori"
             icon={UsersIcon}
-            value={isLoading ? "Loading..." : totalUsers.toLocaleString()}
+            value={isLoading ? "Se încarcă..." : totalUsers.toLocaleString()}
             color="#6366F1"
           />
           <StatCard
-            name="New Users Today"
+            name="Utilizatori Noi Azi"
             icon={UserPlus}
-            value={isLoading ? "Loading..." : newUsersToday}
+            value={isLoading ? "Se încarcă..." : newUsersToday}
             color="#10B981"
           />
           <StatCard
-            name="Active Users"
+            name="Utilizatori Activi"
             icon={UserCheck}
-            value={isLoading ? "Loading..." : activeUsers.toLocaleString()}
+            value={isLoading ? "Se încarcă..." : activeUsers.toLocaleString()}
             color="#F59E0B"
-          />
-          <StatCard
-            name="Churn Rate"
-            icon={UserX}
-            value={isLoading ? "Loading..." : churnRate}
-            color="#EF4444"
           />
         </motion.div>
 
-        {error && <p className="text-red-500">Failed to load users.</p>}
+        {error && <p className="text-red-500">Eroare la încărcarea utilizatorilor.</p>}
 
         {!isLoading && !error && <UsersTable />}
 

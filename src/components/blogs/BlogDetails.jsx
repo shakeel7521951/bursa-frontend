@@ -35,15 +35,15 @@ function BlogDetails() {
   }, [blog]);
 
   if (isLoading) return <Loader />;
-  if (error) return <h2>Error fetching blog</h2>;
-  if (!blog) return <h2>Blog not found</h2>;
+  if (error) return <h2>Eroare la încărcarea blogului</h2>;
+  if (!blog) return <h2>Blogul nu a fost găsit</h2>;
 
   const handleLikeBlog = async () => {
     try {
       await likeBlog({ blogId: id }).unwrap();
       setLikedBlog(!likedBlog);
     } catch (error) {
-      toast.error(error.data?.message || "Failed to like blog!", {
+      toast.error(error.data?.message || "Eroare la aprecierea blogului!", {
         position: "top-center",
       });
     }
@@ -57,7 +57,7 @@ function BlogDetails() {
         [commentId]: !prev[commentId],
       }));
     } catch (error) {
-      toast.error(error.data?.message || "Failed to like comment!", {
+      toast.error(error.data?.message || "Eroare la aprecierea comentariului!", {
         position: "top-center",
       });
     }
@@ -65,7 +65,7 @@ function BlogDetails() {
 
   const handleAddComment = async () => {
     if (!newComment.trim()) {
-      toast.error("Comment cannot be empty!", { position: "top-center" });
+      toast.error("Comentariul nu poate fi gol!", { position: "top-center" });
       return;
     }
 
@@ -73,7 +73,7 @@ function BlogDetails() {
       await addComment({ blogId: id, commentText: newComment }).unwrap();
       setNewComment("");
     } catch (error) {
-      toast.error(error.data?.message || "Failed to add comment!", {
+      toast.error(error.data?.message || "Eroare la adăugarea comentariului!", {
         position: "top-center",
       });
     }
@@ -83,34 +83,34 @@ function BlogDetails() {
     <div className="bg-[#fff]">
       <div className="mx-4 py-10">
         <h2 className="text-lg sm:text-2xl text-start font-bold mx-2 sm:w-[60%]">
-          {blog?.title || "No title available"}
+          {blog?.title || "Titlu indisponibil"}
         </h2>
         {blog?.blogImage ? (
           <img
             src={blog.blogImage}
-            alt="Blog Cover"
+            alt="Imagine de copertă"
             className="mt-4 w-full h-96 object-cover"
           />
         ) : (
-          <p>No image available</p>
+          <p>Imagine indisponibilă</p>
         )}
 
         <div className="max-w-8xl mx-auto py-10">
           <div className="flex justify-between items-start flex-col sm:flex-row gap-4 sm:gap-0">
             <h2 className="text-lg sm:text-[20px]">
-              {blog?.publishDate || "No date"}
+              {blog?.publishDate || "Data indisponibilă"}
             </h2>
             <h2 className="text-lg sm:text-[20px] md:mr-60 ">
-              Category: {blog?.category || "Uncategorized"}
+              Categorie: {blog?.category || "Necategorizat"}
             </h2>
           </div>
 
           <div className="flex justify-between items-start mt-4 flex-col gap-4 sm:gap-4">
             <h2 className="md:text-2xl text-[18px] font-bold text-black pb-1">
-              Description
+              Descriere
             </h2>
             <p className="text-black text-lg sm:text-[18px]">
-              {blog?.description || "No description available"}
+              {blog?.description || "Descriere indisponibilă"}
             </p>
           </div>
 
@@ -123,7 +123,7 @@ function BlogDetails() {
             ) : (
               <CiHeart className="text-2xl" />
             )}
-            Like Blog ({blog?.likes?.length || 0})
+            Apreciază blogul ({blog?.likes?.length || 0})
           </button>
 
           <div className="mt-3 p-2">
@@ -131,12 +131,12 @@ function BlogDetails() {
               <textarea
                 className="w-full border rounded-md p-2 focus:outline-[#11110f] transition-all"
                 rows="4"
-                placeholder="Enter your comment here..."
+                placeholder="Scrie un comentariu aici..."
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
               />
               <Button
-                text="Comment"
+                text="Comentează"
                 bgHover="black"
                 textHover="white"
                 cutHover="white"
@@ -148,7 +148,7 @@ function BlogDetails() {
           <hr className="my-4" />
 
           <div className="px-2 bg-[#ffee0274] mt-3 p-4 rounded-md">
-            <h3 className="text-lg font-bold">Comments:</h3>
+            <h3 className="text-lg font-bold">Comentarii:</h3>
             {blog?.comments?.length > 0 ? (
               <ul className="mt-2 space-y-2">
                 {blog.comments.map((comment) => (
@@ -160,11 +160,11 @@ function BlogDetails() {
                       <p className="text-xs text-gray-500">
                         {comment.date
                           ? new Date(comment.date).toLocaleString()
-                          : "No date"}
+                          : "Dată indisponibilă"}
                       </p>
                     </div>
                     <p className="text-gray-700">
-                      {comment.text || "No comment text"}
+                      {comment.text || "Text comentariu indisponibil"}
                     </p>
                     <div className="flex justify-start gap-2 items-center">
                       <button
@@ -176,7 +176,7 @@ function BlogDetails() {
                         ) : (
                           <CiHeart className="mt-[6px]" />
                         )}
-                        {comment?.likes?.length || 0} Likes
+                        {comment?.likes?.length || 0} Aprecieri
                       </button>
                     </div>
                   </li>
@@ -184,7 +184,7 @@ function BlogDetails() {
               </ul>
             ) : (
               <p className="text-gray-600">
-                No comments yet. Be the first to comment!
+                Nu există comentarii încă. Fii primul care comentează!
               </p>
             )}
           </div>

@@ -25,7 +25,7 @@ const ForgotPassword = () => {
         setOtpSent(true);
       }
     } catch (err) {
-      toast.error(err.data?.message || "Failed to send OTP.", {
+      toast.error(err.data?.message || "Trimiterea OTP-ului a eșuat.", {
         position: "top-center",
       });
     }
@@ -34,18 +34,18 @@ const ForgotPassword = () => {
   const handleVerifyOtp = async () => {
     const enteredOtp = otp.join("");
     if (enteredOtp.length !== 4) {
-      toast.error("Please enter a valid 4-digit OTP.", {
+      toast.error("Te rugăm să introduci un cod OTP valid de 4 cifre.", {
         position: "top-center",
       });
       return;
     }
-  
+
     try {
       const response = await verifyOTP({ email, otp: enteredOtp }).unwrap();
       toast.success(response.message, { position: "top-center" });
-      navigate("/reset-password", { state: { email } }); 
+      navigate("/reset-password", { state: { email } });
     } catch (err) {
-      toast.error(err.data?.message || "Failed to verify OTP.", {
+      toast.error(err.data?.message || "Verificarea OTP-ului a eșuat.", {
         position: "top-center",
       });
     }
@@ -66,19 +66,19 @@ const ForgotPassword = () => {
   }
 
   if (error) {
-    return <div>Something went wrong. Please try again later!</div>;
+    return <div>Ceva nu a mers bine. Te rugăm să încerci mai târziu!</div>;
   }
 
   return (
     <div className="flex justify-center items-center py-24 bg-gray-100">
       <div className="p-8 shadow-2xl rounded-md bg-white w-[30rem]">
-        <h1 className="text-2xl font-bold mb-6 text-center">Forgot Password</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">Ai uitat parola</h1>
 
         {!otpSent ? (
           <div className="space-y-4">
             <input
               type="email"
-              placeholder="Enter your email"
+              placeholder="Introdu adresa ta de email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="border-2 border-[#ffee0240] p-2 rounded-lg w-full focus:outline-none focus:border-[#FFEE02]"
@@ -89,12 +89,12 @@ const ForgotPassword = () => {
                 isLoading ? "cursor-not-allowed opacity-70" : ""
               }`}
             >
-              Send OTP
+              Trimite OTP
             </button>
           </div>
         ) : (
           <div className="space-y-4">
-            <p className="text-center">Enter the OTP sent to your email</p>
+            <p className="text-center">Introdu OTP-ul trimis pe email</p>
             <div className="flex justify-center space-x-4">
               {otp.map((digit, index) => (
                 <input
@@ -113,7 +113,7 @@ const ForgotPassword = () => {
               disabled={verifyOtpLoading}
               className="bg-blue-500 cursor-pointer text-white p-2 rounded-lg w-full hover:bg-blue-600 focus:outline-none disabled:bg-blue-300"
             >
-              {verifyOtpLoading ? "Verifying..." : "Verify OTP"}
+              {verifyOtpLoading ? "Se verifică..." : "Verifică OTP"}
             </button>
           </div>
         )}

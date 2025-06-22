@@ -21,19 +21,19 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
 
   // Category options
   const categories = [
-    { value: "passenger", label: "Passenger Transport", icon: <FiUsers /> },
-    { value: "parcel", label: "Parcel Transport", icon: <FiPackage /> },
+    { value: "passenger", label: "Transport pasageri", icon: <FiUsers /> },
+    { value: "parcel", label: "Transport colete", icon: <FiPackage /> },
     {
       value: "vehicle_trailer",
-      label: "Vehicle Transport on Trailer",
+      label: "Transport vehicule pe remorcă",
       icon: <FiTruck />,
     },
     {
       value: "furniture",
-      label: "Furniture Transport / Relocation",
+      label: "Transport mobilă / Relocare",
       icon: <FiHome />,
     },
-    { value: "animal", label: "Animal Transport", icon: <FiGitMerge /> },
+    { value: "animal", label: "Transport animale", icon: <FiGitMerge /> },
   ];
 
   // Initialize form state
@@ -146,7 +146,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
         .filter(Boolean);
 
       if (romaniaDaysArray.length === 0 || italyDaysArray.length === 0) {
-        toast.error("Availability days for Romania and Italy are required.", {
+        toast.error("Zilele de disponibilitate pentru România și Italia sunt obligatorii.", {
           position: "top-center",
         });
         return;
@@ -219,18 +219,18 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
       }).unwrap();
 
       if (response.error) {
-        toast.error(response.error?.message || "Error updating service", {
+        toast.error(response.error?.message || "Eroare la actualizarea serviciului", {
           position: "top-center",
         });
       } else {
-        toast.success(response.message || "Service updated successfully", {
+        toast.success(response.message || "Serviciu actualizat cu succes", {
           position: "top-center",
         });
         onClose();
       }
     } catch (err) {
       console.error("Error updating service:", err);
-      toast.error(err.data?.message || "Failed to update service", {
+      toast.error(err.data?.message || "Nu s-a putut actualiza serviciul", {
         position: "top-center",
       });
     }
@@ -245,7 +245,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                 <FiUsers className="text-gray-500" />
-                Total Seats
+                Locuri totale
               </label>
               <input
                 type="number"
@@ -260,7 +260,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                 <FiUsers className="text-gray-500" />
-                Available Seats
+                Locuri disponibile
               </label>
               <input
                 type="number"
@@ -280,7 +280,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
           <div className="md:col-span-2 space-y-2">
             <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
               <FiPackage className="text-gray-500" />
-              Parcel Load Capacity (kg)
+              Capacitate încărcare colete (kg)
             </label>
             <input
               type="number"
@@ -298,7 +298,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
           <div className="md:col-span-2 space-y-2">
             <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
               <FiTruck className="text-gray-500" />
-              Trailer Type
+              Tip remorcă
             </label>
             <select
               name="trailerType"
@@ -307,9 +307,9 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
               required
             >
-              <option value="">Select trailer type</option>
-              <option value="flatbed">Flatbed</option>
-              <option value="enclosed">Enclosed</option>
+              <option value="">Selectați tipul remorcii</option>
+              <option value="flatbed">Platformă</option>
+              <option value="enclosed">Închisă</option>
               <option value="lowboy">Lowboy</option>
             </select>
           </div>
@@ -319,14 +319,14 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
           <div className="md:col-span-2 space-y-2">
             <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
               <FiHome className="text-gray-500" />
-              Furniture Details
+              Detalii mobilă
             </label>
             <textarea
               name="furnitureDetails"
               value={product.furnitureDetails}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-              placeholder="Describe the furniture items and dimensions"
+              placeholder="Descrieți articolele de mobilier și dimensiunile"
               required
             />
           </div>
@@ -336,7 +336,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
           <div className="md:col-span-2 space-y-2">
             <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
               <FiGitMerge className="text-gray-500" />
-              Animal Type
+              Tip animal
             </label>
             <select
               name="animalType"
@@ -345,12 +345,12 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
               required
             >
-              <option value="">Select animal type</option>
-              <option value="dog">Dog</option>
-              <option value="cat">Cat</option>
-              <option value="bird">Bird</option>
-              <option value="livestock">Livestock</option>
-              <option value="other">Other</option>
+              <option value="">Selectați tipul animalului</option>
+              <option value="dog">Câine</option>
+              <option value="cat">Pisică</option>
+              <option value="bird">Pasăre</option>
+              <option value="livestock">Animal de fermă</option>
+              <option value="other">Altul</option>
             </select>
           </div>
         );
@@ -370,11 +370,11 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
       >
         {/* Modal Header */}
         <div className="bg-gray-900 text-white p-6 flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Update Service</h2>
+          <h2 className="text-2xl font-bold">Actualizează serviciu</h2>
           <button
             onClick={onClose}
             className="text-gray-300 hover:text-white transition-colors"
-            aria-label="Close modal"
+            aria-label="Închide"
           >
             <FiX size={24} />
           </button>
@@ -388,7 +388,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiMapPin className="text-gray-500" />
-                  Service Name
+                  Nume serviciu
                 </label>
                 <input
                   type="text"
@@ -397,7 +397,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
-                  placeholder="e.g. Express Transport to Italy"
+                  placeholder="ex. Transport rapid în Italia"
                 />
               </div>
 
@@ -405,7 +405,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiTruck className="text-gray-500" />
-                  Service Category
+                  Categorie serviciu
                 </label>
                 <select
                   name="serviceCategory"
@@ -414,7 +414,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
                 >
-                  <option value="">Select a category</option>
+                  <option value="">Selectați o categorie</option>
                   {categories.map((category) => (
                     <option key={category.value} value={category.value}>
                       {category.label}
@@ -427,7 +427,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiMapPin className="text-gray-500" />
-                  From (Romania)
+                  Plecare (România)
                 </label>
                 <input
                   type="text"
@@ -436,14 +436,14 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
-                  placeholder="e.g. Bucharest"
+                  placeholder="ex. București"
                 />
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiMapPin className="text-gray-500" />
-                  To (Italy)
+                  Sosire (Italia)
                 </label>
                 <input
                   type="text"
@@ -452,14 +452,14 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
-                  placeholder="e.g. Rome"
+                  placeholder="ex. Roma"
                 />
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiCalendar className="text-gray-500" />
-                  Travel Date
+                  Data călătoriei
                 </label>
                 <input
                   type="date"
@@ -474,7 +474,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiClock className="text-gray-500" />
-                  Departure Time
+                  Ora plecării
                 </label>
                 <input
                   type="time"
@@ -489,7 +489,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiCalendar className="text-gray-500" />
-                  Arrival Date
+                  Data sosirii
                 </label>
                 <input
                   type="date"
@@ -503,7 +503,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
 
               <div className="md:col-span-2 space-y-2">
                 <label className="text-sm font-medium text-gray-700">
-                  Route Cities (comma separated)
+                  Orașe pe traseu (separate prin virgulă)
                 </label>
                 <input
                   type="text"
@@ -511,13 +511,13 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
                   value={product.routeCities}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-                  placeholder="e.g. Brasov, Sibiu, Timisoara"
+                  placeholder="ex. Brașov, Sibiu, Timișoara"
                 />
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
-                  Availability Days (Romania)
+                  Zile disponibile (România)
                 </label>
                 <input
                   type="text"
@@ -525,14 +525,14 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
                   value={product.availabilityDaysRomania}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-                  placeholder="e.g. Monday, Wednesday"
+                  placeholder="ex. Luni, Miercuri"
                   required
                 />
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
-                  Availability Days (Italy)
+                  Zile disponibile (Italia)
                 </label>
                 <input
                   type="text"
@@ -540,7 +540,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
                   value={product.availabilityDaysItaly}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-                  placeholder="e.g. Tuesday, Thursday"
+                  placeholder="ex. Marți, Joi"
                   required
                 />
               </div>
@@ -552,7 +552,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiDollarSign className="text-gray-500" />
-                  Price (€)
+                  Preț (€)
                 </label>
                 <input
                   type="number"
@@ -565,8 +565,8 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
                   required
                   placeholder={
                     product.serviceCategory === "passenger"
-                      ? "Price per seat"
-                      : "Total price"
+                      ? "Preț pe loc"
+                      : "Preț total"
                   }
                 />
               </div>
@@ -574,7 +574,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
               {/* Pickup Option */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
-                  Pickup Option
+                  Opțiune ridicare
                 </label>
                 <select
                   name="pickupOption"
@@ -583,8 +583,8 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                   required
                 >
-                  <option value="no">No Pickup Service</option>
-                  <option value="yes">With Pickup Service</option>
+                  <option value="no">Fără serviciu de ridicare</option>
+                  <option value="yes">Cu serviciu de ridicare</option>
                 </select>
               </div>
 
@@ -592,14 +592,14 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
               <div className="md:col-span-2 space-y-2">
                 <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
                   <FiUpload className="text-gray-500" />
-                  Service Image
+                  Imagine serviciu
                 </label>
                 <div className="flex items-center gap-4">
                   <label className="flex-1 cursor-pointer">
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-yellow-400 transition-colors">
                       <FiUpload className="mx-auto text-gray-400 mb-2" />
                       <p className="text-sm text-gray-500">
-                        {imagePreview ? "Change image" : "Click to upload image"}
+                        {imagePreview ? "Schimbă imaginea" : "Faceți clic pentru a încărca imaginea"}
                       </p>
                       <input
                         type="file"
@@ -614,7 +614,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
                     <div className="w-24 h-24 rounded-lg overflow-hidden border border-gray-200">
                       <img
                         src={imagePreview}
-                        alt="Preview"
+                        alt="Previzualizare"
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -632,7 +632,7 @@ const UpdateService = ({ isOpen, onClose, serviceData, userId }) => {
                   isLoading ? "opacity-70 cursor-not-allowed" : ""
                 }`}
               >
-                {isLoading ? "Updating Service..." : "Update Service"}
+                {isLoading ? "Se actualizează..." : "Actualizează serviciu"}
               </button>
             </div>
           </form>

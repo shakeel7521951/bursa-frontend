@@ -1,3 +1,4 @@
+// Romanian translated OrderDetailModal
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -20,62 +21,62 @@ const OrderDetailModal = ({ order, closeModal, isOpen }) => {
         newStatus: status,
       }).unwrap();
 
-      toast.success(response?.message || "Order status updated successfully");
+      toast.success(response?.message || "Starea comenzii a fost actualizată cu succes");
       refetch();
       closeModal?.();
     } catch (error) {
-      console.error("Update failed:", error);
+      console.error("Actualizare eșuată:", error);
       toast.error(
-        error?.data?.message || error.message || "Failed to update order status"
+        error?.data?.message || error.message || "Actualizarea stării comenzii a eșuat"
       );
     }
   };
 
   const renderCategorySpecificDetails = () => {
-    switch(order.serviceCategory) {
-      case 'passenger':
+    switch (order.serviceCategory) {
+      case "passenger":
         return (
           <>
-            <p><strong>Seats Booked:</strong> {order.seatsBooked || 0}</p>
-            <p><strong>Luggage Quantity:</strong> {order.luggageQuantity || 0}</p>
+            <p><strong>Locuri rezervate:</strong> {order.seatsBooked || 0}</p>
+            <p><strong>Număr bagaje:</strong> {order.luggageQuantity || 0}</p>
           </>
         );
-      case 'parcel':
+      case "parcel":
         return (
           <>
-            <p><strong>Parcel Quantity:</strong> {order.parcelQuantity || 0}</p>
-            <p><strong>Total Weight:</strong> {order.parcelWeight ? `${order.parcelWeight}kg` : 'N/A'}</p>
+            <p><strong>Număr colete:</strong> {order.parcelQuantity || 0}</p>
+            <p><strong>Greutate totală:</strong> {order.parcelWeight ? `${order.parcelWeight}kg` : 'N/A'}</p>
           </>
         );
-      case 'car_towing':
+      case "car_towing":
         return (
           <>
-            <p><strong>Vehicle Details:</strong> {order.vehicleDetails || 'N/A'}</p>
-            <p><strong>Towing Requirements:</strong> {order.towingRequirements || 'None'}</p>
+            <p><strong>Detalii vehicul:</strong> {order.vehicleDetails || 'N/A'}</p>
+            <p><strong>Cerințe remorcare:</strong> {order.towingRequirements || 'Niciuna'}</p>
           </>
         );
-      case 'vehicle_trailer':
+      case "vehicle_trailer":
         return (
           <>
-            <p><strong>Vehicle Type:</strong> {order.vehicleType || 'N/A'}</p>
-            <p><strong>Trailer Requirements:</strong> {order.trailerRequirements || 'None'}</p>
+            <p><strong>Tip vehicul:</strong> {order.vehicleType || 'N/A'}</p>
+            <p><strong>Cerințe remorcă:</strong> {order.trailerRequirements || 'Niciuna'}</p>
           </>
         );
-      case 'furniture':
+      case "furniture":
         return (
           <>
-            <p><strong>Item Count:</strong> {order.furnitureItemCount || 0}</p>
-            <p><strong>Dimensions:</strong> {order.furnitureDimensions || 'N/A'}</p>
-            <p><strong>Fragile Items:</strong> {order.fragileItems ? 'Yes' : 'No'}</p>
+            <p><strong>Număr obiecte:</strong> {order.furnitureItemCount || 0}</p>
+            <p><strong>Dimensiuni:</strong> {order.furnitureDimensions || 'N/A'}</p>
+            <p><strong>Obiecte fragile:</strong> {order.fragileItems ? 'Da' : 'Nu'}</p>
           </>
         );
-      case 'animal':
+      case "animal":
         return (
           <>
-            <p><strong>Animal Count:</strong> {order.animalCount || 0}</p>
-            <p><strong>Animal Type:</strong> {order.animalType || 'N/A'}</p>
-            <p><strong>Special Needs:</strong> {order.specialNeeds || 'None'}</p>
-            <p><strong>Cage Required:</strong> {order.cageRequired ? 'Yes' : 'No'}</p>
+            <p><strong>Număr animale:</strong> {order.animalCount || 0}</p>
+            <p><strong>Tip animal:</strong> {order.animalType || 'N/A'}</p>
+            <p><strong>Nevoi speciale:</strong> {order.specialNeeds || 'Niciuna'}</p>
+            <p><strong>Cușcă necesară:</strong> {order.cageRequired ? 'Da' : 'Nu'}</p>
           </>
         );
       default:
@@ -85,15 +86,14 @@ const OrderDetailModal = ({ order, closeModal, isOpen }) => {
 
   const getStatusOptions = () => {
     const baseOptions = [
-      { value: "pending", label: "Pending" },
-      { value: "confirmed", label: "Confirmed" },
-      { value: "completed", label: "Completed" },
-      { value: "cancelled", label: "Cancelled" }
+      { value: "pending", label: "În așteptare" },
+      { value: "confirmed", label: "Confirmată" },
+      { value: "completed", label: "Finalizată" },
+      { value: "cancelled", label: "Anulată" }
     ];
 
-    // Only show rejected if order is pending
     if (order.orderStatus === "pending") {
-      baseOptions.push({ value: "rejected", label: "Rejected" });
+      baseOptions.push({ value: "rejected", label: "Respinsă" });
     }
 
     return baseOptions;
@@ -108,40 +108,39 @@ const OrderDetailModal = ({ order, closeModal, isOpen }) => {
       aria-modal="true"
       role="dialog"
     >
-      <motion.div 
+      <motion.div
         className="bg-white rounded-xl shadow-xl p-6 w-full max-w-lg relative max-h-[90vh] overflow-y-auto"
         initial={{ scale: 0.9 }}
         animate={{ scale: 1 }}
         exit={{ scale: 0.9 }}
       >
-        {/* Close Button */}
         <button
           onClick={closeModal}
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
-          aria-label="Close"
+          aria-label="Închide"
         >
           &times;
         </button>
 
-        <h2 className="text-xl font-bold text-blue-700 mb-4">Order Details</h2>
+        <h2 className="text-xl font-bold text-blue-700 mb-4">Detalii Comandă</h2>
 
         <div className="space-y-3 text-sm text-gray-800">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="font-medium">Order ID:</p>
+              <p className="font-medium">ID Comandă:</p>
               <p className="text-gray-600">{order._id}</p>
             </div>
             <div>
-              <p className="font-medium">Service Category:</p>
+              <p className="font-medium">Categorie Serviciu:</p>
               <p className="text-gray-600 capitalize">
-                {order.serviceCategory?.replace('_', ' ') || "N/A"}
+                {order.serviceCategory?.replace("_", " ") || "N/A"}
               </p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="font-medium">Customer:</p>
+              <p className="font-medium">Client:</p>
               <p className="text-gray-600">{order.customerId?.name || "N/A"}</p>
             </div>
             <div>
@@ -152,66 +151,63 @@ const OrderDetailModal = ({ order, closeModal, isOpen }) => {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="font-medium">Total Price:</p>
+              <p className="font-medium">Preț Total:</p>
               <p className="text-gray-600">₹{order.totalPrice?.toFixed(2) || "0.00"}</p>
             </div>
             <div>
-              <p className="font-medium">Payment Status:</p>
+              <p className="font-medium">Stare Plată:</p>
               <p className="text-gray-600 capitalize">
-                {order.paymentStatus || "unpaid"}
+                {order.paymentStatus || "neplătit"}
               </p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="font-medium">From:</p>
+              <p className="font-medium">De la:</p>
               <p className="text-gray-600">{order.serviceId?.destinationFrom || "N/A"}</p>
             </div>
             <div>
-              <p className="font-medium">To:</p>
+              <p className="font-medium">Până la:</p>
               <p className="text-gray-600">{order.serviceId?.destinationTo || "N/A"}</p>
             </div>
           </div>
 
           <div>
-            <p className="font-medium">Travel Date:</p>
+            <p className="font-medium">Data Călătoriei:</p>
             <p className="text-gray-600">
               {order.serviceId?.travelDate
-                ? new Date(order.serviceId.travelDate).toLocaleDateString("en-GB", {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric'
+                ? new Date(order.serviceId.travelDate).toLocaleDateString("ro-RO", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
                   })
                 : "N/A"}
             </p>
           </div>
 
           <div>
-            <p className="font-medium">Departure Time:</p>
+            <p className="font-medium">Ora Plecării:</p>
             <p className="text-gray-600">
               {order.serviceId?.departureTime || "N/A"}
             </p>
           </div>
 
-          {/* Category-specific details */}
           <div className="pt-2 border-t border-gray-200">
-            <h3 className="font-medium text-gray-800 mb-2">Service Details:</h3>
-            <div className="space-y-2 pl-2">
-              {renderCategorySpecificDetails()}
-            </div>
+            <h3 className="font-medium text-gray-800 mb-2">Detalii Serviciu:</h3>
+            <div className="space-y-2 pl-2">{renderCategorySpecificDetails()}</div>
           </div>
 
           <div className="pt-2 border-t border-gray-200">
-            <p className="font-medium">Order Date:</p>
+            <p className="font-medium">Data Comenzii:</p>
             <p className="text-gray-600">
               {order.createdAt
-                ? new Date(order.createdAt).toLocaleDateString("en-GB", {
-                    day: 'numeric',
-                    month: 'short',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
+                ? new Date(order.createdAt).toLocaleDateString("ro-RO", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
                   })
                 : "N/A"}
             </p>
@@ -219,7 +215,7 @@ const OrderDetailModal = ({ order, closeModal, isOpen }) => {
 
           {order.notes && (
             <div className="pt-2 border-t border-gray-200">
-              <p className="font-medium">Customer Notes:</p>
+              <p className="font-medium">Notițe Client:</p>
               <p className="text-gray-600">{order.notes}</p>
             </div>
           )}
@@ -227,14 +223,14 @@ const OrderDetailModal = ({ order, closeModal, isOpen }) => {
 
         <div className="mt-6 pt-4 border-t border-gray-200">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Update Status:
+            Actualizează Starea:
           </label>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
             className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
           >
-            {getStatusOptions().map(option => (
+            {getStatusOptions().map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
@@ -247,7 +243,7 @@ const OrderDetailModal = ({ order, closeModal, isOpen }) => {
             onClick={closeModal}
             className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
           >
-            Cancel
+            Anulează
           </button>
           <button
             onClick={handleStatusChange}
@@ -258,7 +254,7 @@ const OrderDetailModal = ({ order, closeModal, isOpen }) => {
             }`}
             disabled={isLoading || status === order.orderStatus}
           >
-            {isLoading ? "Updating..." : "Update Status"}
+            {isLoading ? "Se actualizează..." : "Actualizează Starea"}
           </button>
         </div>
       </motion.div>

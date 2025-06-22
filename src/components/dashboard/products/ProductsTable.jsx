@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import { useDeleteServiceMutation, useGetAllServicesQuery } from "../../../redux/slices/ServiceApi";
 import AlertDialog from "../alert/AlertDialog";
 import AddProduct from "../popup/Add";
-import UpdateService from "./UpdateProduct";
 
 const categoryFeatures = {
   passenger: ["totalSeats", "availableSeats", "pricePerSeat"],
@@ -38,13 +37,13 @@ const ProductsTable = () => {
     try {
       const response = await deleteService(selectedProduct._id);
       if (response.error) {
-        toast.error(response.error.data?.message || "Failed to delete service", { position: "top-center" });
+        toast.error(response.error.data?.message || "Ștergerea serviciului a eșuat", { position: "top-center" });
       } else {
-        toast.success("Service deleted successfully", { position: "top-center" });
+        toast.success("Serviciu șters cu succes", { position: "top-center" });
         setServicesList((prev) => prev.filter((s) => s._id !== selectedProduct._id));
       }
     } catch (error) {
-      toast.error("An error occurred while deleting", { position: "top-center" });
+      toast.error("A apărut o eroare la ștergere", { position: "top-center" });
     }
     setDialogOpen(false);
     setSelectedProduct(null);
@@ -63,17 +62,16 @@ const ProductsTable = () => {
 
   const renderCategorySpecificFeatures = (service) => {
     const features = categoryFeatures[service.serviceCategory] || [];
-    
+
     return features.map((feature) => {
       if (!service[feature]) return null;
-      
+
       let displayValue = service[feature];
-      
-      // Format specific fields
+
       if (feature === 'price' || feature === 'pricePerSeat') {
         displayValue = `Rs. ${service[feature]}`;
       }
-      
+
       return (
         <div key={feature} className="text-sm text-gray-600">
           <span className="font-medium capitalize">{feature.replace(/([A-Z])/g, ' $1').trim()}:</span> {displayValue}
@@ -82,21 +80,11 @@ const ProductsTable = () => {
     });
   };
 
-  if (isLoading) return <p className="text-blue-700 text-lg">Loading services...</p>;
+  if (isLoading) return <p className="text-blue-700 text-lg">Se încarcă serviciile...</p>;
 
   return (
     <>
-      {/* <motion.button
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        onClick={() => setAddProductOpen(true)}
-        className="px-6 py-2 mb-6 bg-blue-700 text-white rounded-md hover:bg-blue-600 transition-all"
-      >
-        + Add New Service
-      </motion.button> */}
-
-      {error && <p className="text-red-600 text-lg">Failed to fetch data.</p>}
+      {error && <p className="text-red-600 text-lg">Nu s-au putut prelua datele.</p>}
 
       {!error && (
         <motion.div
@@ -106,11 +94,11 @@ const ProductsTable = () => {
           transition={{ delay: 0.2 }}
         >
           <div className="flex justify-between items-center mb-4 ">
-            <h2 className="text-xl font-semibold text-blue-700">Service List</h2>
+            <h2 className="text-xl font-semibold text-blue-700">Lista Serviciilor</h2>
             <div className="relative w-64">
               <input
                 type="text"
-                placeholder="Search services..."
+                placeholder="Caută servicii..."
                 className="bg-white text-blue-700 border border-blue-300 rounded-lg pl-10 pr-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onChange={(e) => setSearchTerm(e.target.value)}
                 value={searchTerm}
@@ -124,13 +112,13 @@ const ProductsTable = () => {
               <table className="min-w-[1200px] w-full text-sm text-left text-blue-700 border-collapse">
                 <thead className="bg-blue-50 border-b border-blue-200">
                   <tr>
-                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Name</th>
-                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Category</th>
-                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">From → To</th>
-                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Category Specific Features</th>
-                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Departure</th>
-                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Route</th>
-                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap text-center">Actions</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Nume</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Categorie</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">De la → La</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Caracteristici Specifice</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Plecare</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap">Rută</th>
+                    <th className="px-4 py-3 font-medium uppercase whitespace-nowrap text-center">Acțiuni</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -160,18 +148,12 @@ const ProductsTable = () => {
                         </div>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {new Date(service.travelDate).toLocaleDateString()} at {service.departureTime}
+                        {new Date(service.travelDate).toLocaleDateString()} la {service.departureTime}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         {service.routeCities?.join(" → ")}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap text-center">
-                        {/* <button
-                          className="text-indigo-500 hover:text-indigo-600 mr-2"
-                          onClick={() => handleUpdate(service)}
-                        >
-                          <Edit size={18} />
-                        </button> */}
                         <button
                           className="text-red-500 hover:text-red-600"
                           onClick={() => {
@@ -187,14 +169,13 @@ const ProductsTable = () => {
                 </tbody>
               </table>
             ) : (
-              <p className="text-center text-gray-500 py-6">No services found.</p>
+              <p className="text-center text-gray-500 py-6">Niciun serviciu găsit.</p>
             )}
           </div>
         </motion.div>
       )}
 
       {/* Modals */}
-      {/* <UpdateService isOpen={isOpenUpdate} onClose={() => setOpenUpdate(false)} serviceData={selectedProduct} /> */}
       <AddProduct isOpen={addProductOpen} onClose={() => setAddProductOpen(false)} />
       <AlertDialog isOpen={dialogOpen} onClose={() => setDialogOpen(false)} onConfirm={handleDelete} />
     </>

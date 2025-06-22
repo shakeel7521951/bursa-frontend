@@ -28,7 +28,7 @@ export default function EmailOTPForm() {
   };
 
   const handleOtpSubmit = () => {
-    setSuccessMessage("OTP Verified Successfully!");
+    setSuccessMessage("OTP verificat cu succes!");
     setTimeout(() => {
       setSuccessMessage("");
       setEmail("");
@@ -48,11 +48,11 @@ export default function EmailOTPForm() {
       )}
       {!showOTP ? (
         <div className="bg-white p-8 rounded-lg shadow-lg w-96 text-center">
-          <h2 className="text-xl font-semibold mb-6">Enter Your Email</h2>
+          <h2 className="text-xl font-semibold mb-6">Introdu adresa ta de email</h2>
           <input
             type="email"
             className="border p-3 w-full rounded-md mb-3 text-lg"
-            placeholder="Enter your email"
+            placeholder="Introdu adresa ta de email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -63,19 +63,19 @@ export default function EmailOTPForm() {
               checked={isChecked}
               onChange={() => setIsChecked(!isChecked)}
             />
-            <label className="text-md cursor-pointer">Confirm Email</label>
+            <label className="text-md cursor-pointer">Confirmă adresa de email</label>
           </div>
           <button
             onClick={handleEmailSubmit}
             className="bg-blue-700 text-white cursor-pointer px-5 py-3 rounded-md w-full text-lg disabled:opacity-50"
             disabled={!email || !isChecked}
           >
-            Submit
+            Trimite
           </button>
         </div>
       ) : (
         <div className="bg-white p-8 rounded-lg shadow-lg w-96 text-center">
-          <h2 className="text-xl font-semibold mb-6">Enter OTP</h2>
+          <h2 className="text-xl font-semibold mb-6">Introdu codul OTP</h2>
           <div className="flex justify-center gap-3">
             {otp.map((digit, index) => (
               <input
@@ -93,7 +93,7 @@ export default function EmailOTPForm() {
               onClick={handleOtpSubmit}
               className="bg-blue-700 cursor-pointer text-white px-5 py-3 mt-6 rounded-md w-full text-lg"
             >
-              Verify OTP
+              Verifică OTP
             </button>
           )}
         </div>
